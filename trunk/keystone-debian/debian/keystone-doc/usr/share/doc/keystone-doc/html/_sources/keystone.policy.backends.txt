@@ -1,0 +1,11 @@
+backends Package
+================
+
+:mod:`rules` Module
+-------------------
+
+.. automodule:: keystone.policy.backends.rules
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

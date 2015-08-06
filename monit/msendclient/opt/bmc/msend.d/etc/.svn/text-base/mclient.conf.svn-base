@@ -1,0 +1,38 @@
+#
+# BMC Impact Manager 8.5
+# Generic CLI configuration
+# Format : see mcell.conf
+#
+
+#Trace=Yes
+#TraceSrc=No
+#TraceProgram=Yes
+#TraceModule=Yes
+#TraceTime=Yes
+#TraceConfigFileName=mclient.trace
+#TraceDefaultFileName=%T/trace
+#TraceFileSize=0
+#TraceFileHistory=0
+#TraceFileAppend=Yes
+#TraceEvents=
+
+#LocaleConfigFileName=%H/etc/locale/%P.load
+
+#Encryption=Yes
+#EncryptionKey=
+
+#ServerName=
+#ServerLocation=
+#ServerDirectoryName=mcell.dir
+#ServerPort=1828
+
+#ConnectionSetupTimeOut=20
+#ConnectionPortRange=
+#ConnectionPortReuse=Yes
+#SynchronizeTimeOut=5000
+
+#MessageBufferSize=2000
+#MessageBufferReconnectInterval=600
+#MessageBufferKeepWait=3600
+#MessageBufferKeepSent=300
+#MessageBufferResendCount=1

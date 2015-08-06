@@ -1,0 +1,1 @@
+This part is OpenStack Swift Storage part. Written in Python.

@@ -1,0 +1,156 @@
+'''
+Created on Jul 18, 2012
+
+@author: autumn
+'''
+
+from swiftconsole.common.utils import exec_command
+
+
+def __print_ouput__(output):
+    lines = output.split('\n')
+    for line in lines:
+        dict_obj = eval(line)
+        for node, ret in dict_obj:
+            ret_code = ret['retcode']
+            if ret_code == 0:
+                print "%s (OK) : %s" % (node, ret['output'])
+            else:
+                print "%s (ERR) : %s" % (node, ret['errors'])
+
+def show_ring(ring):
+    """
+    Params:
+        ring: The ring name, could be account/container/object
+    """
+    cmd = "salt -G 'servertype:swift-ringbuilder' ringinfor.%s_ring" % ring
+    retcode, output, errors, interval = exec_command(cmd)
+    if retcode != 0:
+        print "Error : %s" % errors
+    else:
+        print "OK : %s" % output
+        #__print_ouput__(output)
+        
+def push_config(servertype):
+    """
+    Params:
+      servertype: The server type which needs to run puppet refresh. It could be storage-node/proxy-node
+    """
+    
+    cmd = "salt -G 'servertype:swift-%s' puppet.run" % servertype
+    retcode, output, errors, interval = exec_command(cmd)
+    if retcode != 0:
+        print "Error : %s" % errors
+    else:
+        print "OK : %s" % output
+        
+    
+    """
+    cmd = "salt -G 'servertype:swift-proxy' service.restart puppet" % servertype
+    retcode, output, errors, interval = exec_command(cmd)
+    if retcode != 0:
+        print "Error : %s" % errors
+    else:
+        print "OK : %s" % output    
+        
+    """
+    
+    
+
+def rebuild_ring():
+    """
+    Multiple steps:
+    1. Turn on the "enforce-rebuild" flag on puppet master server
+    2. Send command to ringbuilder server to refresh puppet agent, so that it starts ring rebuilding
+    3. Send command to all storage node and proxy node to refresh puppet agent
+    """
+    pass
+
+def push_ring():
+    """
+    Just run step 3 of rebuild_ring
+    """
+    
+    cmd = "salt -G 'servertype:swift-*' puppet.run" 
+    retcode, output, errors, interval = exec_command(cmd)
+    if retcode != 0:
+        print "Error : %s" % errors
+    else:
+        print "OK : %s" % output
+    
+    
+    
+
+def rebalance_ring():
+    """
+    1. Turn on "enforce-rebalance" flag on puppet master
+    2. Send command to ringbuilder server to refresh puppet agent, so that it starts ring rebuilding
+    3. Send command to all storage node and proxy node to refresh puppet agent
+    """
+    pass
+
+def remove_device(devices):
+    """
+    Params:
+      devices: The list of devices which we want to remove
+      ['IP:PORT/sda6',.....]
+      
+    Steps:
+      1. Add removed devices into "remove_devices.conf" on puppet master;
+      2. Turn on "remove" flag on puppet master;
+      3. Send command to ringbuilder server to refresh puppet agent, so that it starts ring rebuilding
+      4. Send command to all storage node and proxy node to refresh puppet agent
+    """
+    pass
+
+def add_device(devices):
+    """
+    Params:
+      devices: The list of devices which we want to add into the ring
+      ['IP:PORT/sda6',.....]
+      
+    Steps:
+      1. Remove devices from "remove_devices.conf" on puppet master;
+      2. Turn off "remove" flag on puppet master;
+      3. Send command to ringbuilder server to refresh puppet agent, so that it starts ring rebuilding
+      4. Send command to all storage node and proxy node to refresh puppet agent
+    """
+    pass
+
+def remove_storagenode(node):
+    """
+    Params:
+        node : The hostname of the storage node which we are going to remove from ring
+    steps:
+    1. Remove node from puppet master
+    2. Send command to ringbuilder server to refresh puppet agent, so that it starts ring rebuilding
+    3. Send command to all storage node and proxy node to refresh puppet agent 
+    """
+    pass
+
+def add_storagenode(node):
+    """
+    Params:
+        node : The hostname of the storage node which we are going to remove from ring
+    steps:
+    1. Start the puppet agent on the node
+    2. Send command to ringbuilder server to refresh puppet agent, so that it starts ring rebuilding
+    3. Send command to all storage node and proxy node to refresh puppet agent 
+    """
+    pass
+
+def node_status(servertype):
+    """
+    Params:
+        servertype: Could be proxy-node/storage-node/all
+    """
+    pass
+    
+if __name__ == '__main__':
+    show_ring('account')
+    push_config('proxy')
+    push_config('storagenode')
+    push_ring()
+    
+    
+    

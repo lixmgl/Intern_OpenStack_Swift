@@ -1,0 +1,8 @@
+Package: cisco-ceres
+Version: 0.10.0 
+Section: base
+Priority: optional
+Architecture: all
+Depends: python
+Maintainer: Chad Malfait cmalfait@cisco.com
+Description: cisco-ceres

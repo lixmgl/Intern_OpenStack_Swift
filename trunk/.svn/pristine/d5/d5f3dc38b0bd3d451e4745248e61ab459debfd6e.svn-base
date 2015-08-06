@@ -1,0 +1,511 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Endpoints and Endpoint Templates &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="../index.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Endpoints and Endpoint Templates</a><ul>
+<li><a class="reference internal" href="#what-are-endpoints">What are Endpoints?</a></li>
+<li><a class="reference internal" href="#what-do-the-fields-in-an-endpoint-mean">What do the fields in an Endpoint mean?</a></li>
+<li><a class="reference internal" href="#what-are-endpoint-templates">What are Endpoint Templates?</a></li>
+<li><a class="reference internal" href="#what-parameters-can-i-use-in-a-template-url">What parameters can I use in a Template URL</a></li>
+<li><a class="reference internal" href="#endpoint-template-types-global-or-not">Endpoint Template Types: Global or not</a></li>
+<li><a class="reference internal" href="#who-can-see-the-adminurl">Who can see the AdminURL?</a></li>
+</ul>
+</li>
+</ul>
+
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/old/endpoints.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="endpoints-and-endpoint-templates">
+<h1>Endpoints and Endpoint Templates<a class="headerlink" href="#endpoints-and-endpoint-templates" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<div class="section" id="what-are-endpoints">
+<h2>What are Endpoints?<a class="headerlink" href="#what-are-endpoints" title="Permalink to this headline">¶</a></h2>
+<p>Simply, endpoints are URLs that point to OpenStack services. When you
+authenticate to Keystone you get back a token which has a service catalog in
+it. The service catalog is basically a list of the OpenStack services that
+you have access to and the URLs you can use to get to them; their endpoints.</p>
+<p>Here is an example response from Keystone when you authenticate:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;access&quot;</span><span class="p">:{</span>
+        <span class="s">&quot;token&quot;</span><span class="p">:{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;ab48a9efdfedb23ty3494&quot;</span><span class="p">,</span>
+            <span class="s">&quot;expires&quot;</span><span class="p">:</span><span class="s">&quot;2010-11-01T03:32:15-05:00&quot;</span><span class="p">,</span>
+            <span class="s">&quot;tenant&quot;</span><span class="p">:{</span>
+                <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;t1000&quot;</span><span class="p">,</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;My Project&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s">&quot;user&quot;</span><span class="p">:{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;u123&quot;</span><span class="p">,</span>
+            <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;jqsmith&quot;</span><span class="p">,</span>
+            <span class="s">&quot;roles&quot;</span><span class="p">:[{</span>
+                    <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;100&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;compute:admin&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;101&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;object-store:admin&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;tenantId&quot;</span><span class="p">:</span><span class="s">&quot;t1000&quot;</span>
+                <span class="p">}</span>
+            <span class="p">],</span>
+            <span class="s">&quot;roles_links&quot;</span><span class="p">:[]</span>
+        <span class="p">},</span>
+        <span class="s">&quot;serviceCatalog&quot;</span><span class="p">:[{</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;Nova&quot;</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;compute&quot;</span><span class="p">,</span>
+                <span class="s">&quot;endpoints&quot;</span><span class="p">:[{</span>
+                        <span class="s">&quot;tenantId&quot;</span><span class="p">:</span><span class="s">&quot;t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;publicURL&quot;</span><span class="p">:</span><span class="s">&quot;https://compute.north.host.com/v1/t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;internalURL&quot;</span><span class="p">:</span><span class="s">&quot;https://compute.north.internal/v1/t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;region&quot;</span><span class="p">:</span><span class="s">&quot;North&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionId&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionInfo&quot;</span><span class="p">:</span><span class="s">&quot;https://compute.north.host.com/v1/&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionList&quot;</span><span class="p">:</span><span class="s">&quot;https://compute.north.host.com/&quot;</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="s">&quot;tenantId&quot;</span><span class="p">:</span><span class="s">&quot;t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;publicURL&quot;</span><span class="p">:</span><span class="s">&quot;https://compute.north.host.com/v1.1/t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;internalURL&quot;</span><span class="p">:</span><span class="s">&quot;https://compute.north.internal/v1.1/t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;region&quot;</span><span class="p">:</span><span class="s">&quot;North&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionId&quot;</span><span class="p">:</span><span class="s">&quot;1.1&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionInfo&quot;</span><span class="p">:</span><span class="s">&quot;https://compute.north.host.com/v1.1/&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionList&quot;</span><span class="p">:</span><span class="s">&quot;https://compute.north.host.com/&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="s">&quot;endpoints_links&quot;</span><span class="p">:[]</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;Swift&quot;</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;object-store&quot;</span><span class="p">,</span>
+                <span class="s">&quot;endpoints&quot;</span><span class="p">:[{</span>
+                        <span class="s">&quot;tenantId&quot;</span><span class="p">:</span><span class="s">&quot;t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;publicURL&quot;</span><span class="p">:</span><span class="s">&quot;https://storage.north.host.com/v1/t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;internalURL&quot;</span><span class="p">:</span><span class="s">&quot;https://storage.north.internal/v1/t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;region&quot;</span><span class="p">:</span><span class="s">&quot;North&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionId&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionInfo&quot;</span><span class="p">:</span><span class="s">&quot;https://storage.north.host.com/v1/&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionList&quot;</span><span class="p">:</span><span class="s">&quot;https://storage.north.host.com/&quot;</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="s">&quot;tenantId&quot;</span><span class="p">:</span><span class="s">&quot;t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;publicURL&quot;</span><span class="p">:</span><span class="s">&quot;https://storage.south.host.com/v1/t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;internalURL&quot;</span><span class="p">:</span><span class="s">&quot;https://storage.south.internal/v1/t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;region&quot;</span><span class="p">:</span><span class="s">&quot;South&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionId&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionInfo&quot;</span><span class="p">:</span><span class="s">&quot;https://storage.south.host.com/v1/&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionList&quot;</span><span class="p">:</span><span class="s">&quot;https://storage.south.host.com/&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;DNS-as-a-Service&quot;</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;dnsextension:dns&quot;</span><span class="p">,</span>
+                <span class="s">&quot;endpoints&quot;</span><span class="p">:[{</span>
+                        <span class="s">&quot;tenantId&quot;</span><span class="p">:</span><span class="s">&quot;t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;publicURL&quot;</span><span class="p">:</span><span class="s">&quot;https://dns.host.com/v2.0/t1000&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionId&quot;</span><span class="p">:</span><span class="s">&quot;2.0&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionInfo&quot;</span><span class="p">:</span><span class="s">&quot;https://dns.host.com/v2.0/&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;versionList&quot;</span><span class="p">:</span><span class="s">&quot;https://dns.host.com/&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note the following about this response:</p>
+<ol class="arabic simple">
+<li>There are two endpoints given to the Nova compute service. The only
+difference between them is the version (1.0 vs. 1.1). This allows for code
+written to look for the version 1.0 endpoint to still work even after the 1.1
+version is released.</li>
+<li>There are two endpoints for the Swift object-store service. The difference
+between them is they are in different regions (North and South).</li>
+<li>Note the DNS service is global; it does not have a Region. Also, since DNS
+is not a core OpenStack service, the endpoint type is &#8220;dnsextension:dns&#8221;
+showing it is coming from an extension to the Keystone service.</li>
+<li>The Region, Tenant, and versionId are listed under the endpoint. You do not
+(and should not) have to parse those out of the URL. In fact, they may not be
+embedded in the URL if the service developer so chooses.</li>
+</ol>
+</div>
+<div class="section" id="what-do-the-fields-in-an-endpoint-mean">
+<h2>What do the fields in an Endpoint mean?<a class="headerlink" href="#what-do-the-fields-in-an-endpoint-mean" title="Permalink to this headline">¶</a></h2>
+<p>The schema definition for an endpoint is in endpoints.xsd under
+keystone/content/common/xsd in the Keystone code repo. The fields are:</p>
+<dl class="docutils">
+<dt>id</dt>
+<dd>A unique ID for the endpoint.</dd>
+<dt>type</dt>
+<dd>The OpenStack-registered type (ex. &#8216;compute&#8217;, &#8216;object-store&#8217;, &#8216;image service&#8217;)
+This can also be extended using the OpenStack Extension mechanism to support
+non-core services. Extended services will be in the form <tt class="docutils literal"><span class="pre">extension:type</span></tt>
+(e.g. <tt class="docutils literal"><span class="pre">dnsextension:dns</span></tt>)</dd>
+<dt>name</dt>
+<dd>This can be anything that the operator of OpenStack chooses. It could be a
+brand or marketing name (ex. Rackspace Cloud Servers).</dd>
+<dt>region</dt>
+<dd>This is a string that identifies the region where this endpoint exists.
+Examples are &#8216;North America&#8217;, &#8216;Europe&#8217;, &#8216;Asia&#8217;. Or &#8216;North&#8217; and &#8216;South&#8217;. Or
+&#8216;Data Center 1&#8217;, &#8216;Data Center 2&#8217;.
+The list of regions and what a region means is decided by the operator. The
+spec treats them as opaque strings.</dd>
+<dt>publicURL</dt>
+<dd>This is the URL to use to access that endpoint over the internet.</dd>
+<dt>internalURL</dt>
+<dd>This is the URL to use to communicate between services. This is genenrally
+a way to communicate between services over a high bandwidth, low latency,
+unmetered (free, no bandwidth charges) network. An example would be if you
+want to access a swift cluster from inside your Nova VMs and want to make
+sure the communication stays local and does not go over a public network
+and rack up your bandwidth charges.</dd>
+<dt>adminURL</dt>
+<dd>This is the URL to use to administer the service. In Keystone, this URL
+is only shown to users with the appropriate rights.</dd>
+<dt>tenantId</dt>
+<dd>If an endpoint is specific to a tenant, the tenantId field identifies the
+tenant that URL applies to. Some operators include the tenant in the
+URLs for a service, while others may provide one endpoint and use some
+other mechanism to identify the tenant. This field is therefore optional.
+Having this field also means you do not have to parse the URL to identify
+a tenant if the operator includes it in the URL.</dd>
+<dt>versionId</dt>
+<dd>This identifies the version of the API contract that endpoint supports.
+While many APIs include the version in the URL (ex: <a class="reference external" href="https://compute.host/v1">https://compute.host/v1</a>),
+this field allows you to identify the version without parsing the URL. It
+therefore also allows operators and service developers to publish endpoints
+that do not have versions embedded in the URL.</dd>
+<dt>versionInfo</dt>
+<dd><p class="first">This is the URL to call to get some information on the version. This returns
+information in this format:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="p">{</span>
+<span class="s">&quot;version&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;v2.0&quot;</span><span class="p">,</span>
+  <span class="s">&quot;status&quot;</span><span class="p">:</span> <span class="s">&quot;CURRENT&quot;</span><span class="p">,</span>
+  <span class="s">&quot;updated&quot;</span><span class="p">:</span> <span class="s">&quot;2011-01-21T11:33:21-06:00&quot;</span><span class="p">,</span>
+  <span class="s">&quot;links&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s">&quot;rel&quot;</span><span class="p">:</span> <span class="s">&quot;self&quot;</span><span class="p">,</span>
+      <span class="s">&quot;href&quot;</span><span class="p">:</span> <span class="s">&quot;http://identity.api.openstack.org/v2.0/&quot;</span>
+    <span class="p">},</span> <span class="p">{</span>
+      <span class="s">&quot;rel&quot;</span><span class="p">:</span> <span class="s">&quot;describedby&quot;</span><span class="p">,</span>
+      <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;application/pdf&quot;</span><span class="p">,</span>
+      <span class="s">&quot;href&quot;</span><span class="p">:</span> <span class="s">&quot;http://docs.openstack.org/identity/api/v2.0/identity-latest.pdf&quot;</span>
+    <span class="p">},</span> <span class="p">{</span>
+      <span class="s">&quot;rel&quot;</span><span class="p">:</span> <span class="s">&quot;describedby&quot;</span><span class="p">,</span>
+      <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;application/vnd.sun.wadl+xml&quot;</span><span class="p">,</span>
+      <span class="s">&quot;href&quot;</span><span class="p">:</span> <span class="s">&quot;http://docs.openstack.org/identity/api/v2.0/identity.wadl&quot;</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+    <span class="s">&quot;media-types&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s">&quot;base&quot;</span><span class="p">:</span> <span class="s">&quot;application/xml&quot;</span><span class="p">,</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;application/vnd.openstack.identity+xml;version=2.0&quot;</span>
+      <span class="p">},</span> <span class="p">{</span>
+        <span class="s">&quot;base&quot;</span><span class="p">:</span> <span class="s">&quot;application/json&quot;</span><span class="p">,</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;application/vnd.openstack.identity+json;version=2.0&quot;</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>versionList</p>
+<blockquote>
+<div><p>This is the URL to call to find out which versions are supported at that
+endpoint. The response is in this format:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;versions&quot;</span><span class="p">:[{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;v1.0&quot;</span><span class="p">,</span>
+            <span class="s">&quot;status&quot;</span><span class="p">:</span><span class="s">&quot;DEPRECATED&quot;</span><span class="p">,</span>
+            <span class="s">&quot;updated&quot;</span><span class="p">:</span><span class="s">&quot;2009-10-09T11:30:00Z&quot;</span><span class="p">,</span>
+            <span class="s">&quot;links&quot;</span><span class="p">:[{</span>
+                    <span class="s">&quot;rel&quot;</span><span class="p">:</span><span class="s">&quot;self&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;href&quot;</span><span class="p">:</span><span class="s">&quot;http://identity.api.openstack.org/v1.0/&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;v1.1&quot;</span><span class="p">,</span>
+            <span class="s">&quot;status&quot;</span><span class="p">:</span><span class="s">&quot;CURRENT&quot;</span><span class="p">,</span>
+            <span class="s">&quot;updated&quot;</span><span class="p">:</span><span class="s">&quot;2010-12-12T18:30:02.25Z&quot;</span><span class="p">,</span>
+            <span class="s">&quot;links&quot;</span><span class="p">:[{</span>
+                    <span class="s">&quot;rel&quot;</span><span class="p">:</span><span class="s">&quot;self&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;href&quot;</span><span class="p">:</span><span class="s">&quot;http://identity.api.openstack.org/v1.1/&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;v2.0&quot;</span><span class="p">,</span>
+            <span class="s">&quot;status&quot;</span><span class="p">:</span><span class="s">&quot;BETA&quot;</span><span class="p">,</span>
+            <span class="s">&quot;updated&quot;</span><span class="p">:</span><span class="s">&quot;2011-05-27T20:22:02.25Z&quot;</span><span class="p">,</span>
+            <span class="s">&quot;links&quot;</span><span class="p">:[{</span>
+                    <span class="s">&quot;rel&quot;</span><span class="p">:</span><span class="s">&quot;self&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;href&quot;</span><span class="p">:</span><span class="s">&quot;http://identity.api.openstack.org/v2.0/&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s">&quot;versions_links&quot;</span><span class="p">:[]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here, the response shows that the endpoint supports version 1.0, 1.1, and 2.0.
+It also shows that 1.0 is in DEPRECTAED status and 2.0 is in BETA.</p>
+</div></blockquote>
+</div>
+<div class="section" id="what-are-endpoint-templates">
+<h2>What are Endpoint Templates?<a class="headerlink" href="#what-are-endpoint-templates" title="Permalink to this headline">¶</a></h2>
+<p>Endpoint Templates are a way for an administrator to manage endpoints en masse.
+They provide a way to define Endpoints that apply to many or all tenants
+without having to a create each endpoint on each tenant manually. Without
+Endpoint Templates, if I wanted to create Endpoints for each tenant in my
+OpenStack deployment, I&#8217;d have to manually create a bunch of endpoints on
+each tenant (probably when I created the tenant). And then I&#8217;d have to go change
+them all whenever a service changed versions or I added a new service.</p>
+<p>To provide a simpler mechanism to manage endpoints on tenants, Keystone uses
+Endpoint Templates. I can, for example, define a template with parametrized URLs
+and set its <cite>global</cite> to true and that will show up as an endpoint on all the tenants
+I have. Here is an example:</p>
+<p>Define a global Endpoint Template:</p>
+<div class="highlight-python"><pre>$ ./keystone-manage endpointTemplates add North nova https://compute.north.example.com/v1/%tenant_id%/ https://compute.north.example.corp/v1/ https://compute.north.example.local/v1/%tenant_id%/ 1 1
+
+The arguments are: object_type action 'region' 'service_name' 'publicURL' 'adminURL' 'internalURL' 'enabled' 'global'</pre>
+</div>
+<p>This creates a global endpoint (global means it gets applied to all tenants automatically).</p>
+<p>Now, when a user authenticates, they get that endpoint in their service catalog. Here&#8217;s an example
+authentication request for use against tenant 1:</p>
+<div class="highlight-python"><pre>$ curl -H "Content-type: application/json" -d '{"auth":{"passwordCredentials":{"username":"joeuser","password":"secrete"}, "tenantId": "1"}}' http://localhost:5000/v2.0/tokens</pre>
+</div>
+<p>The response is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;access&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;serviceCatalog&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;endpoints&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s">&quot;internalURL&quot;</span><span class="p">:</span> <span class="s">&quot;https://compute.north.example.local&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;publicURL&quot;</span><span class="p">:</span> <span class="s">&quot;https://compute.north.example.com/v1/1/&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;region&quot;</span><span class="p">:</span> <span class="s">&quot;North&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;nova&quot;</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;compute&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;token&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;expires&quot;</span><span class="p">:</span> <span class="s">&quot;2012-02-05T00:00:00&quot;</span><span class="p">,</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;887665443383838&quot;</span><span class="p">,</span>
+            <span class="s">&quot;tenant&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;customer-x&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;joeuser&quot;</span><span class="p">,</span>
+            <span class="s">&quot;roles&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;3&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;Member&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;tenantId&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Notice the adminURL is not showing (this user is a regular user and does not
+have rights to see the adminURL) and the tenant ID has been substituted in the
+URL:</p>
+<div class="highlight-python"><pre>"publicURL": "https://compute.north.example.com/v1/1/",</pre>
+</div>
+<p>This endpoint will show up for all tenants. The OpenStack administrator does
+not need to create the endpoint manually.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Endpoint Templates are not part of the core Keystone API (but Endpoints are).</p>
+</div>
+</div>
+<div class="section" id="what-parameters-can-i-use-in-a-template-url">
+<h2>What parameters can I use in a Template URL<a class="headerlink" href="#what-parameters-can-i-use-in-a-template-url" title="Permalink to this headline">¶</a></h2>
+<p>Currently the only parameterization available is %tenant_id% which gets
+substituted by the Tenant ID.</p>
+</div>
+<div class="section" id="endpoint-template-types-global-or-not">
+<h2>Endpoint Template Types: Global or not<a class="headerlink" href="#endpoint-template-types-global-or-not" title="Permalink to this headline">¶</a></h2>
+<p>When the global flag is set to true on an Endpoint Template, it means it should
+be available to all tenants. Whenever someone authenticates to a tenant, they
+will see the Endpoint generated by that template.</p>
+<p>When the global flag is not set, the template only shows up when it is added to
+a tenant manually. To add an endpoint to a tenant manually, you must create
+the Endpoint and supply the Endpoint Template ID:</p>
+<p>Create the Endpoint Template:</p>
+<div class="highlight-python"><pre>$ ./keystone-manage endpointTemplates add West nova https://compute.west.example.com/v1/%tenant_id%/ https://compute.west.example.corp https://compute.west.example.local 1 0
+
+Note the 0 at the end - this Endpoint Template is not global. So it will not show up for users authenticating.</pre>
+</div>
+<p>Find the Endpoint Template ID:</p>
+<div class="highlight-python"><pre>$ ./keystone-manage endpointTemplates list
+
+All EndpointTemplates
+id    service    type    region    enabled    is_global    Public URL    Admin URL
+-------------------------------------------------------------------------------
+15    nova    compute    North    True    True    https://compute.north.example.com/v1/%tenant_id%/    https://compute.north.example.corp
+16    nova    compute    West    True    False    https://compute.west.example.com/v1/%tenant_id%/    https://compute.west.example.corp</pre>
+</div>
+<p>Add the Endpoint to the tenant:</p>
+<div class="highlight-python"><pre>$ ./keystone-manage endpoint add customer-x 16</pre>
+</div>
+<p>Now, when the user authenticates, they get the endpoint:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;internalURL&quot;</span><span class="p">:</span> <span class="s">&quot;https://compute.west.example.local&quot;</span><span class="p">,</span>
+    <span class="s">&quot;publicURL&quot;</span><span class="p">:</span> <span class="s">&quot;https://compute.west.example.com/v1/1/&quot;</span><span class="p">,</span>
+    <span class="s">&quot;region&quot;</span><span class="p">:</span> <span class="s">&quot;West&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="who-can-see-the-adminurl">
+<h2>Who can see the AdminURL?<a class="headerlink" href="#who-can-see-the-adminurl" title="Permalink to this headline">¶</a></h2>
+<p>Users who have the Keystone <cite>Admin</cite> or <cite>Service Admin</cite> roles will see the
+AdminURL when they authenticate or when they retrieve token information:</p>
+<p>Using an administrator token to authenticate, GET a client token&#8217;s endpoints:</p>
+<div class="highlight-python"><pre>$ curl -H "X-Auth-Token: 999888777666" http://localhost:35357/v2.0/tokens/887665443383838/endpoints
+
+{
+    "endpoints": [
+        {
+            "adminURL": "https://compute.west.example.corp",
+            "id": 6,
+            "internalURL": "https://compute.west.example.local",
+            "name": "nova",
+            "publicURL": "https://compute.west.example.com/v1/1/",
+            "region": "West",
+            "tenantId": 1,
+            "type": "compute"
+        }
+    ],
+    "endpoints_links": [
+        {
+            "href": "http://127.0.0.1:35357/tokens/887665443383838/endpoints?marker=6&amp;limit=10",
+            "rel": "next"
+        }
+    ]
+}</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

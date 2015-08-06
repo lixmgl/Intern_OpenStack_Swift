@@ -1,0 +1,12 @@
+[main]
+graphite_host = 10.100.18.150
+graphite_port = 2003
+listen_addr = 0.0.0.0
+listen_port = 8125
+debug = true
+flush_interval = 10
+percent_threshold = 90
+#accept multiple events per packet
+combined_events = no
+#log configure file
+log_config=/etc/statsdpy/log.conf

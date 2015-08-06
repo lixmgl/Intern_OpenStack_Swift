@@ -1,0 +1,27 @@
+ldap Package
+============
+
+:mod:`ldap` Package
+-------------------
+
+.. automodule:: keystone.common.ldap
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`core` Module
+------------------
+
+.. automodule:: keystone.common.ldap.core
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`fakeldap` Module
+----------------------
+
+.. automodule:: keystone.common.ldap.fakeldap
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

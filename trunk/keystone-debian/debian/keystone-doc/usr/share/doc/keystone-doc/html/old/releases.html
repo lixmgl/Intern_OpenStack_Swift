@@ -1,0 +1,153 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Release notes &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="../index.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Release notes</a><ul>
+<li><a class="reference internal" href="#e3-january-26-2012">E3 (January 26, 2012)</a></li>
+<li><a class="reference internal" href="#e2-december-15-2011">E2 (December 15, 2011)</a></li>
+</ul>
+</li>
+</ul>
+
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/old/releases.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="release-notes">
+<h1>Release notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="e3-january-26-2012">
+<h2>E3 (January 26, 2012)<a class="headerlink" href="#e3-january-26-2012" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Contract compliance: version response and ATOM, 300 multiple choice</li>
+<li>Global endpoints returned for unscoped calls</li>
+<li>adminUrl only shown to admin clients</li>
+<li>Endpoints have unique ID</li>
+<li>Auth-N/Auth-Z for S3 API (OS-KSS3 extension)</li>
+<li>Default tenant scope optionally returned when authenticating</li>
+<li>Vary header returned for caching proxies</li>
+<li>Portable identifiers: modifiable, string identifiers in database backend</li>
+<li>Much improved keystone-manage command (see &#8211;help and docs)</li>
+<li>OS-KSVALIDATE extension to support not passing tokens in URL</li>
+<li>OS-KSEC2 and OS-KSS3 extensions respond on /tokens</li>
+<li>HP-IDM extension to filter roles to a given service ID</li>
+<li>Additional caching options in middleware (memcache and swift cache)</li>
+<li>Enhanced configuration management (in line with other OpenStack projects)</li>
+<li>Additional logging</li>
+<li>Enhanced tracer tool (-t or &#8211;trace-calls)</li>
+</ul>
+<p>See comprehensive list here <a class="reference external" href="https://launchpad.net/keystone/+milestone/essex-3">https://launchpad.net/keystone/+milestone/essex-3</a></p>
+</div>
+<div class="section" id="e2-december-15-2011">
+<h2>E2 (December 15, 2011)<a class="headerlink" href="#e2-december-15-2011" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>D5 compatibility middleware</li>
+<li>Database versioning</li>
+<li>Much more documentation: <a class="reference external" href="http://keystone.openstack.org">http://keystone.openstack.org</a></li>
+</ul>
+<p>See <a class="reference external" href="https://launchpad.net/keystone/+milestone/essex-2">https://launchpad.net/keystone/+milestone/essex-2</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1 @@
+link ../../../../../share/pyshared/keystone/middleware/s3_token.py

@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Database Migrations &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="../index.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Database Migrations</a><ul>
+<li><a class="reference internal" href="#getting-started">Getting Started</a><ul>
+<li><a class="reference internal" href="#starting-with-an-empty-database">Starting with an empty database</a></li>
+<li><a class="reference internal" href="#starting-with-an-existing-database">Starting with an existing database</a></li>
+<li><a class="reference internal" href="#starting-with-a-pre-diablo-database-cactus">Starting with a pre-diablo database (cactus)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#upgrading-downgrading">Upgrading &amp; Downgrading</a></li>
+<li><a class="reference internal" href="#opting-out-of-migrations">Opting Out of Migrations</a></li>
+<li><a class="reference internal" href="#useful-links">Useful Links</a></li>
+</ul>
+</li>
+</ul>
+
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/old/migration.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="database-migrations">
+<h1>Database Migrations<a class="headerlink" href="#database-migrations" title="Permalink to this headline">¶</a></h1>
+<p>Keystone uses SQLAlchemy Migrate (<tt class="docutils literal"><span class="pre">sqlalchemy-migrate</span></tt>) to manage
+migrations.</p>
+<p>Migrations are tracked using a metadata table (<tt class="docutils literal"><span class="pre">migrate_version</span></tt>), which
+allows keystone to compare the state of your database to the state it
+expects, and to move between versions.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Backup your database before applying migrations. Migrations may
+attempt to modify both your schema and data, and could result in data
+loss.</p>
+<p class="last">Always review the behavior of migrations in a staging environment
+before applying them in production.</p>
+</div>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>Your initial approach to migrations should depend on whether you have an
+empty database or a schema full of data.</p>
+<div class="section" id="starting-with-an-empty-database">
+<h3>Starting with an empty database<a class="headerlink" href="#starting-with-an-empty-database" title="Permalink to this headline">¶</a></h3>
+<p>If you have an empty database for keystone to work with, you can simply
+run:</p>
+<div class="highlight-python"><pre>$ ./bin/keystone-manage database sync</pre>
+</div>
+<p>This command will initialize your metadata table, and run through all the
+schema &amp; data migrations necessary to bring your database in sync with
+keystone. That&#8217;s it!</p>
+</div>
+<div class="section" id="starting-with-an-existing-database">
+<h3>Starting with an existing database<a class="headerlink" href="#starting-with-an-existing-database" title="Permalink to this headline">¶</a></h3>
+<p>Place an existing database under version control to enable migration
+support:</p>
+<div class="highlight-python"><pre>$ ./bin/keystone-manage database version_control</pre>
+</div>
+<p>This command simply creates a <tt class="docutils literal"><span class="pre">migrate_version</span></tt> table, set at
+<tt class="docutils literal"><span class="pre">version_number</span></tt> 0, which indicates that no migrations have been applied.</p>
+<p>If you are starting with an existing schema, you can jump to a specific
+schema version without performing migrations using the <tt class="docutils literal"><span class="pre">database</span> <span class="pre">goto</span></tt>
+command. For example, if you&#8217;re starting from a diablo-compatible
+database, set your current database <tt class="docutils literal"><span class="pre">version_number</span></tt> to <tt class="docutils literal"><span class="pre">1</span></tt> using:</p>
+<div class="highlight-python"><pre>$ ./bin/keystone-manage database goto &lt;version_number&gt;</pre>
+</div>
+<p>Determine your appropriate database <tt class="docutils literal"><span class="pre">version_number</span></tt> by referencing the
+following table:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Release</th>
+<th class="head"><tt class="docutils literal"><span class="pre">version</span></tt></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>pre-diablo</td>
+<td>(see below)</td>
+</tr>
+<tr class="row-odd"><td>diablo</td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td>essex-m1</td>
+<td>3</td>
+</tr>
+<tr class="row-odd"><td>essex-m2</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>From there, you can upgrade normally (see <a class="reference internal" href="#upgrading"><em>Upgrading &amp; Downgrading</em></a>).</p>
+</div>
+<div class="section" id="starting-with-a-pre-diablo-database-cactus">
+<h3>Starting with a pre-diablo database (cactus)<a class="headerlink" href="#starting-with-a-pre-diablo-database-cactus" title="Permalink to this headline">¶</a></h3>
+<p>You&#8217;ll need to manually migrate your database to a diablo-compatible
+schema, and continue forward from there (if desired) using migrations.</p>
+</div>
+</div>
+<div class="section" id="upgrading-downgrading">
+<span id="upgrading"></span><h2>Upgrading &amp; Downgrading<a class="headerlink" href="#upgrading-downgrading" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Attempting to start keystone with an outdated schema will cause
+keystone to abort, to avoid corrupting your data.</p>
+</div>
+<p>Upgrade to the latest version automatically:</p>
+<div class="highlight-python"><pre>$ ./bin/keystone-manage database sync</pre>
+</div>
+<p>Check your current schema version:</p>
+<div class="highlight-python"><pre>$ ./bin/keystone-manage database version</pre>
+</div>
+<p>Jump to a specific version without performing migrations:</p>
+<div class="highlight-python"><pre>$ ./bin/keystone-manage database goto &lt;version_number&gt;</pre>
+</div>
+<p>Upgrade to a specific version:</p>
+<div class="highlight-python"><pre>$ ./bin/keystone-manage database upgrade &lt;version_number&gt;</pre>
+</div>
+<p>Downgrade to a specific version (will likely result in data loss!):</p>
+<div class="highlight-python"><pre>$ ./bin/keystone-manage database downgrade &lt;version_number&gt;</pre>
+</div>
+</div>
+<div class="section" id="opting-out-of-migrations">
+<h2>Opting Out of Migrations<a class="headerlink" href="#opting-out-of-migrations" title="Permalink to this headline">¶</a></h2>
+<p>If you don&#8217;t want to use migrations (e.g. if you want to manage your
+schema manually), keystone will complain in your logs on startup, but
+won&#8217;t actually stop you from doing so.</p>
+<p>It&#8217;s recommended that you use migrations to get up and running, but if
+you want to manage migrations manually after that, simply drop the
+<tt class="docutils literal"><span class="pre">migrate_version</span></tt> table:</p>
+<div class="highlight-python"><pre>DROP TABLE migrate_version;</pre>
+</div>
+</div>
+<div class="section" id="useful-links">
+<h2>Useful Links<a class="headerlink" href="#useful-links" title="Permalink to this headline">¶</a></h2>
+<p>Principles to follow when developing migrations <a class="reference external" href="http://wiki.openstack.org/OpenstackDeployability">OpenStack Deployability</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

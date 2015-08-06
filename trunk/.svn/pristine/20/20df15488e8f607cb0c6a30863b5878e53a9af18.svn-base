@@ -1,0 +1,1 @@
+link ../../../../../../../../share/pyshared/keystone/common/sql/migrate_repo/versions/001_add_initial_tables.py

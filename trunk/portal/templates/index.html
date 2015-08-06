@@ -1,0 +1,83 @@
+$def with (org_name, product_name, product_version)
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+* Copyright (c) 2009-2012 Cisco Systems, Inc.
+* All rights reserved.
+-->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=8">
+        
+	<title>Login</title>
+	
+	<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-base.css">
+	<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-xwt.css">	
+	<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-explorer.css">
+	<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/xwt/form/_basepicker.css">
+	
+	<style type="text/css">
+		@import "../dojo/dijit/themes/futurama/futurama.css";
+	</style>
+	
+	<script type="text/javascript">
+        djConfig = {
+            isDebug: false,
+            debugAtAllCosts: false,
+            parseOnLoad: true,
+            baseUrl: "../dojo/"
+        };
+	</script>
+	<script type="text/javascript" src="../dojo/dojo.js"></script>
+	<script type="text/javascript" src="../xwt/widget/LoginPage.js"></script>
+	<script type="text/javascript">
+		dojo.require("dojo.parser");
+		dojo.require("xwt.widget.LoginPage");
+		dojo.require("xwt.widget._ConfigureTheme");
+		dojo.addOnLoad( function() {
+			var loginPage = dijit.byId("LP");
+			var stop = function () {
+					if(loginPage.getProgressBall){
+						loginPage.stopLoadingIndicator();
+					}
+				};
+			dojo.connect(loginPage, 'onClickSubmit', function(){
+				username = loginPage.getUsername();
+				password = loginPage.getPassword();
+		        var xhrArgs = {
+					url: "/portal/auth/login",
+					content: {"username":username, "password":password},
+					handleAs: "text",
+					load: function(data) {
+						setTimeout(stop, 100);
+						window.location = "/portal/main";
+						console.log("Successfully logged in , will be redirected to main page!");
+					},
+					error: function(error) {
+						var loginPage = dijit.byId("LP");
+						if(loginPage){
+							setTimeout(stop, 100);
+							loginPage.showMessageBox("invalid_credentials");
+							console.log("Authentication failed, reason_code: invalid_credentials.");
+						}
+					}
+				}
+				var deferred = dojo.xhrPost(xhrArgs);
+			});
+		});
+	</script>
+</head>
+<body class="reboot2">
+	<div id="LP" dojoType="xwt.widget.LoginPage"  
+		productVersion="${product_version}" 
+		productFamily="${org_name}" 
+		productName="${product_name}"
+		cookieName="loginpage" 
+		i18nPackageName='xwt' 
+		i18nBundleName='ApplicationProperties'
+		needRememberUsername=false
+		needProblemsLink=false>
+	</div>
+</body>
+</html>

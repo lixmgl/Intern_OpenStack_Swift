@@ -1,0 +1,309 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Backends &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="../index.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Backends</a><ul>
+<li><a class="reference internal" href="#sql">SQL</a><ul>
+<li><a class="reference internal" href="#users"><tt class="docutils literal"><span class="pre">users</span></tt></a></li>
+<li><a class="reference internal" href="#tokens"><tt class="docutils literal"><span class="pre">tokens</span></tt></a></li>
+<li><a class="reference internal" href="#tenants"><tt class="docutils literal"><span class="pre">tenants</span></tt></a></li>
+<li><a class="reference internal" href="#roles"><tt class="docutils literal"><span class="pre">roles</span></tt></a></li>
+<li><a class="reference internal" href="#user-roles"><tt class="docutils literal"><span class="pre">user_roles</span></tt></a></li>
+<li><a class="reference internal" href="#services"><tt class="docutils literal"><span class="pre">services</span></tt></a></li>
+<li><a class="reference internal" href="#credentials"><tt class="docutils literal"><span class="pre">credentials</span></tt></a></li>
+<li><a class="reference internal" href="#endpoints"><tt class="docutils literal"><span class="pre">endpoints</span></tt></a></li>
+<li><a class="reference internal" href="#endpoint-templates"><tt class="docutils literal"><span class="pre">endpoint_templates</span></tt></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/old/backends.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="backends">
+<h1>Backends<a class="headerlink" href="#backends" title="Permalink to this headline">¶</a></h1>
+<p>Keystone supports multiple types of data stores for things like users, tenants, and
+tokens, including SQL, LDAP, and memcache.</p>
+<div class="section" id="sql">
+<h2>SQL<a class="headerlink" href="#sql" title="Permalink to this headline">¶</a></h2>
+<p>In the default backend configuration (SQL-only), Keystone depends on the following database tables.</p>
+<div class="section" id="users">
+<h3><tt class="docutils literal"><span class="pre">users</span></tt><a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">id</span></tt></dt>
+<dd>Auto-incremented primary key.</dd>
+<dt><tt class="docutils literal"><span class="pre">name</span></tt></dt>
+<dd>Unqiue username used for authentication via <tt class="docutils literal"><span class="pre">passwordCredentials</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">password</span></tt></dt>
+<dd><p class="first">Password used for authentication via <tt class="docutils literal"><span class="pre">passwordCredentials</span></tt>.</p>
+<p class="last">Salted and hashed using <tt class="docutils literal"><span class="pre">passlib</span></tt>.</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">email</span></tt></dt>
+<dd>Email address (uniqueness is expected, but not enforced).</dd>
+<dt><tt class="docutils literal"><span class="pre">enabled</span></tt></dt>
+<dd>If false, the user is unable to authenticate and the user&#8217;s tokens will fail validation.</dd>
+<dt><tt class="docutils literal"><span class="pre">tenant_id</span></tt></dt>
+<dd>Default tenant for the user.</dd>
+</dl>
+</div>
+<div class="section" id="tokens">
+<h3><tt class="docutils literal"><span class="pre">tokens</span></tt><a class="headerlink" href="#tokens" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">id</span></tt></dt>
+<dd>The actual token provided after successful authentication (<em>plaintext</em>).</dd>
+<dt><tt class="docutils literal"><span class="pre">user_id</span></tt></dt>
+<dd>References the user who owns the token.</dd>
+<dt><tt class="docutils literal"><span class="pre">tenant_id</span></tt></dt>
+<dd>(<em>optional</em>) References the tenant the token is scoped to.</dd>
+<dt><tt class="docutils literal"><span class="pre">expires</span></tt></dt>
+<dd>Indicates the expiration date of the token, after which the token can no longer be validated successfully.</dd>
+</dl>
+</div>
+<div class="section" id="tenants">
+<h3><tt class="docutils literal"><span class="pre">tenants</span></tt><a class="headerlink" href="#tenants" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">id</span></tt></dt>
+<dd>Auto-incremented primary key.</dd>
+<dt><tt class="docutils literal"><span class="pre">name</span></tt></dt>
+<dd>Unique string identifying the tenant.</dd>
+<dt><tt class="docutils literal"><span class="pre">desc</span></tt></dt>
+<dd>Description of the tenant.</dd>
+<dt><tt class="docutils literal"><span class="pre">enabled</span></tt></dt>
+<dd>If false, users are unable to scope to the tenant.</dd>
+</dl>
+</div>
+<div class="section" id="roles">
+<h3><tt class="docutils literal"><span class="pre">roles</span></tt><a class="headerlink" href="#roles" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">id</span></tt></dt>
+<dd>Auto-incremented primary key.</dd>
+<dt><tt class="docutils literal"><span class="pre">name</span></tt></dt>
+<dd><p class="first">Name of the role.</p>
+<p>If the role is owned by a service, the role name <strong>must</strong> follow the convention:</p>
+<div class="last highlight-python"><pre>serviceName:roleName</pre>
+</div>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">desc</span></tt></dt>
+<dd>Description of the role.</dd>
+<dt><tt class="docutils literal"><span class="pre">service_id</span></tt></dt>
+<dd>(<em>optional</em>) References the service that owns the role.</dd>
+</dl>
+</div>
+<div class="section" id="user-roles">
+<h3><tt class="docutils literal"><span class="pre">user_roles</span></tt><a class="headerlink" href="#user-roles" title="Permalink to this headline">¶</a></h3>
+<p>Maps users to the roles that have been granted to them (<em>optionally</em>, within the scope of a tenant).</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">id</span></tt></dt>
+<dd>Auto-incremented primary key.</dd>
+<dt><tt class="docutils literal"><span class="pre">user_id</span></tt></dt>
+<dd>References the user the role is granted to.</dd>
+<dt><tt class="docutils literal"><span class="pre">role_id</span></tt></dt>
+<dd>References the granted role.</dd>
+<dt><tt class="docutils literal"><span class="pre">tenant_id</span></tt></dt>
+<dd>(<em>optional</em>) References a tenant upon which this grant is applies.</dd>
+</dl>
+</div>
+<div class="section" id="services">
+<h3><tt class="docutils literal"><span class="pre">services</span></tt><a class="headerlink" href="#services" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">id</span></tt></dt>
+<dd>Auto-incremented primary key.</dd>
+<dt><tt class="docutils literal"><span class="pre">name</span></tt></dt>
+<dd>Unique name of the service.</dd>
+<dt><tt class="docutils literal"><span class="pre">type</span></tt></dt>
+<dd><p class="first">Indicates the type of service (e.g. <tt class="docutils literal"><span class="pre">compute</span></tt>, <tt class="docutils literal"><span class="pre">object</span></tt>, <tt class="docutils literal"><span class="pre">identity</span></tt>, etc).</p>
+<p class="last">This can also be extended to support non-core services. Extended services
+follow the naming convention <tt class="docutils literal"><span class="pre">extension:type</span></tt> (e.g. <tt class="docutils literal"><span class="pre">dnsextension:dns</span></tt>).</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">desc</span></tt></dt>
+<dd>Describes the service.</dd>
+<dt><tt class="docutils literal"><span class="pre">owner_id</span></tt></dt>
+<dd>(<em>optional</em>) References the user who owns the service.</dd>
+</dl>
+</div>
+<div class="section" id="credentials">
+<h3><tt class="docutils literal"><span class="pre">credentials</span></tt><a class="headerlink" href="#credentials" title="Permalink to this headline">¶</a></h3>
+<p>Currently only used for Amazon EC2 credential storage, this table is designed to support multiple
+types of credentials in the future.</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">id</span></tt></dt>
+<dd>Auto-incremented primary key.</dd>
+<dt><tt class="docutils literal"><span class="pre">user_id</span></tt></dt>
+<dd>References the user who owns the credential.</dd>
+<dt><tt class="docutils literal"><span class="pre">tenant_id</span></tt></dt>
+<dd>References the tenant upon which the credential is valid.</dd>
+<dt><tt class="docutils literal"><span class="pre">types</span></tt></dt>
+<dd>Indicates the type of credential (e.g. <tt class="docutils literal"><span class="pre">Password</span></tt>, <tt class="docutils literal"><span class="pre">APIKey</span></tt>, <tt class="docutils literal"><span class="pre">EC2</span></tt>).</dd>
+<dt><tt class="docutils literal"><span class="pre">key</span></tt></dt>
+<dd>Amazon EC2 access key.</dd>
+<dt><tt class="docutils literal"><span class="pre">secret</span></tt></dt>
+<dd>Amazon EC2 secret key.</dd>
+</dl>
+</div>
+<div class="section" id="endpoints">
+<h3><tt class="docutils literal"><span class="pre">endpoints</span></tt><a class="headerlink" href="#endpoints" title="Permalink to this headline">¶</a></h3>
+<p>Tenant-specific endpoints map endpoint templates to specific tenants.
+The <tt class="docutils literal"><span class="pre">tenant_id</span></tt> which appears here replaces the
+<tt class="docutils literal"><span class="pre">%tenant_id%</span></tt> template variable in the specified endpoint template.</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">id</span></tt></dt>
+<dd>Auto-incremented primary key.</dd>
+<dt><tt class="docutils literal"><span class="pre">tenant_id</span></tt></dt>
+<dd>References the tenant this endpoint applies to.</dd>
+<dt><tt class="docutils literal"><span class="pre">endpoint_template_id</span></tt></dt>
+<dd>The endpoint template to appear in the user&#8217;s service catalog.</dd>
+</dl>
+</div>
+<div class="section" id="endpoint-templates">
+<h3><tt class="docutils literal"><span class="pre">endpoint_templates</span></tt><a class="headerlink" href="#endpoint-templates" title="Permalink to this headline">¶</a></h3>
+<p>A multi-purpose model for the service catalog which can be:</p>
+<ul class="simple">
+<li>Provided to users of a specific tenants via <tt class="docutils literal"><span class="pre">endpoints</span></tt>, when <tt class="docutils literal"><span class="pre">is_global</span></tt> is false.</li>
+<li>Provided to all users as-is, when <tt class="docutils literal"><span class="pre">is_global</span></tt> is true.</li>
+</ul>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">id</span></tt></dt>
+<dd>Auto-incremented primary key.</dd>
+<dt><tt class="docutils literal"><span class="pre">region</span></tt></dt>
+<dd>Identifies the geographic region the endpoint is physically located within.</dd>
+<dt><tt class="docutils literal"><span class="pre">service_id</span></tt></dt>
+<dd>TODO: References the service which owns the endpoints?</dd>
+<dt><tt class="docutils literal"><span class="pre">public_url</span></tt></dt>
+<dd><p class="first">Appears in the service catalog <a class="footnote-reference" href="#first" id="id1">[1]</a>.</p>
+<p class="last">Represents an endpoint available on the public Internet.</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">admin_url</span></tt></dt>
+<dd><p class="first">Appears in the service catalog <a class="footnote-reference" href="#first" id="id2">[1]</a>.</p>
+<p class="last">Users of this endpoint must have an Admin or ServiceAdmin role.</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">internal_url</span></tt></dt>
+<dd><p class="first">Appears in the service catalog <a class="footnote-reference" href="#first" id="id3">[1]</a>.</p>
+<p class="last">Represents an endpoint on an internal, unmetered network.</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">enabled</span></tt></dt>
+<dd>If false, this endpoint template will not appear in the service catalog.</dd>
+<dt><tt class="docutils literal"><span class="pre">is_global</span></tt></dt>
+<dd>If true, this endpoint can not be mapped to tenant-specific endpoints, and <tt class="docutils literal"><span class="pre">%tenant_id%</span></tt> will not be substituted in endpoint URL&#8217;s. Additionally, this endpoint will appear for all users.</dd>
+<dt><tt class="docutils literal"><span class="pre">version_id</span></tt></dt>
+<dd>Identifies the version of the API contract that endpoint supports.</dd>
+<dt><tt class="docutils literal"><span class="pre">version_list</span></tt></dt>
+<dd>A URL which lists versions supported by the endpoint.</dd>
+<dt><tt class="docutils literal"><span class="pre">version_info</span></tt></dt>
+<dd>A URL which provides detailed version info regarding the service.</dd>
+</dl>
+<table class="docutils footnote" frame="void" id="first" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>, <a class="fn-backref" href="#id3">3</a>)</em> <tt class="docutils literal"><span class="pre">%tenant_id%</span></tt> may be replaced by actual tenant references, depending on the value of <tt class="docutils literal"><span class="pre">is_global</span></tt> and the existence of a corresponding <tt class="docutils literal"><span class="pre">endpoints</span></tt> record.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

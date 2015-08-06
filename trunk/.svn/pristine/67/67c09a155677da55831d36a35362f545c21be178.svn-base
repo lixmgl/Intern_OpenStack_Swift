@@ -1,0 +1,555 @@
+@import url("../fonts/colaborate.css");
+
+/*-------------------------------------------------
+SETUP 
+-------------------------------------------------*/
+* {
+	margin: 0;
+	padding: 0;
+} 
+html, body, #Wrapper {
+	height: 100%;
+}
+body > #Wrapper {
+	height: auto; 
+	min-height: 100%;
+}
+body {
+	background-color: white;
+    font: normal normal normal 13px/18px 'HelveticaNeue', Helvetica, Arial, sans-serif;
+}
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clearfix {
+	display: inline-block;
+}
+a, a:link, a:visited { border: none; color: #06c; outline: none; }
+a:hover { text-decoration: none; }
+
+/*-------------------------------------------------
+FONTS (titles)
+-------------------------------------------------*/
+h1,h2{
+    line-height:normal;
+	font-weight: normal;
+  	font-family: 'Colaborate-ThinRegular', 'HelveticaNeue-UltraLight', Helvetica;
+}
+h1 {
+    color:#444;
+  	font-size: 48px;
+}
+h2 {
+    color: #555;
+  	font-size: 24px;
+}
+
+/*-------------------------------------------------
+PAGE STRUCTURE 
+-------------------------------------------------*/
+
+#Header {
+	float: left;
+ 	width: 100%;
+	height: auto;
+	background: #000 url("../img/background.png") repeat-x scroll 50% 0%;;
+}
+#Title {
+ 	width: 100%;
+	float: left;
+	display: block;
+   	text-align: left;
+	padding-top: 5px;
+	margin: 0 0 30px 0;
+}
+#Main {
+	width: 100%;
+	padding-bottom: 30px;  /* Must be same height as Footer height */
+} 
+#Area { 				   /* Content */
+    float:left;
+	margin: 0 2em 0 2em;
+	padding-bottom: 2em;   /* Space between content and footer */
+}
+#Footer {
+	/* Sticky footer hack from www.cssstickyfooter.com */
+	position: relative;  
+	margin-top: -30px;     /* Negative value of Footer height */
+	height: 30px;		 
+	clear:both;
+
+	margin-left: 2em;
+	margin-right: 2em;
+	text-align: center;
+	color: #999;
+	font-size: 11px;
+} 
+
+/*-------------------------------------------------
+PAGE ELEMENTS 
+-------------------------------------------------*/
+
+#Logo {
+	display: inline-block;
+} 
+#Header #Logo a {
+	float: left;
+	height: 40px;
+	width: 150px;
+	margin-top: 25px;
+	margin-left: 25px;
+	background: url("../img/logo.png") no-repeat;
+}
+#Header #Logout a {
+	float: right;
+	height:18px;
+	width: 16px;
+	top: 10px; right:15px;
+	position: relative;
+    background: transparent url("../img/logout.png") left top;
+}
+#Header #Logout a:hover {
+    background: transparent url("../img/logout.png") 0 -18px;
+}
+#Title h1 {
+	display: block;
+    margin: 30px 24px 0 24px;
+    padding-bottom: 5px;
+    border-bottom: 4px solid #eee;
+    position: relative;
+}
+#Title .title-link {
+    float: none!important; 
+    color:inherit!important;
+    font: inherit!important; 
+}
+#Title h1 a { /* Action link */
+	float: right;
+	color: #c00;
+	font-size: 18px;
+	line-height:48px; /* same as h1 */
+    text-shadow: none;
+    font-weight: normal;
+}
+#Title img.help {
+	float: right;
+	border: 0;
+}
+#Area p {
+	padding-bottom: 5px;
+}
+#Area td {
+	vertical-align: top;
+}
+#Area .main-content {
+	width: 90%;
+	min-width: 500px; 
+}
+#Footer p {
+    padding:inherit!important;
+    margin: inherit!important;
+    color: inherit!important;
+	font-size: inherit!important;
+}
+#Footer a {
+	color: #777;
+}
+#Footer a:hover {
+	text-decoration: none;
+}
+
+/*-------------------------------------------------
+NAVIGATION
+-------------------------------------------------*/
+
+#Nav  {
+    float: right;
+    margin-right: 9em;
+    font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	font-family: Verdana;
+}
+#Nav li {
+    z-index: 1;
+	float: left;
+	position: relative;
+	list-style: none;
+}
+#Nav a {
+	color: #eee;
+	float: left;
+	height: 30px;
+	cursor: pointer;
+    margin-right: 3px;
+    padding: 0 0 1px 9px;
+    background: #000 url("../img/tabs.png") no-repeat left top;
+	line-height: 13px;
+	text-decoration: none;
+}
+#Nav a span {
+    float: left;
+    display: block;
+    padding: 8px 17px 4px 10px;
+    background: #000 url("../img/tabs.png") no-repeat right top;
+}
+#Nav li:hover > a {
+    color: #333;
+    background: #000 url("../img/tabs.png") no-repeat 0 -100px;
+}
+#Nav li:hover a > span {
+    color: #333;
+    background: #000 url("../img/tabs.png") no-repeat 100% -100px;
+}
+#Nav #current > a {
+    color: #000;
+    background: #000 url("../img/tabs.png") no-repeat 0 -200px;
+}
+#Nav #current a span {
+    color: #000;
+    background: #000 url("../img/tabs.png") no-repeat 100% -200px;
+}
+/* Sub levels link hover */
+#Nav ul li:hover a, #Nav li:hover li a {
+	background: none;
+	border: none;
+	color: #111;
+
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+}
+#Nav ul a:hover {
+	color: #fff !important;
+	background: #4672f3 !important; /* for non-css3 browsers */
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#688bf5', endColorstr='#2457e8'); 
+	background: -webkit-gradient(linear, left top, left bottom, from(#688bf5), to(#2457e8)) !important; 
+	background: -moz-linear-gradient(top,  #688bf5,  #2457e8) !important; 
+
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+
+	text-shadow: 0 1px 1px rgba(0,0,0, .1);
+}
+/* Dropdown, based on http://www.webdesignerwall.com/tutorials/css3-dropdown-menu/ */
+#Nav li:hover > ul {
+    z-index: -1;
+	display: block;
+}
+/* Level 2 list */
+#Nav ul {
+	display: none;
+	position: relative;
+    
+	margin: 0;
+	padding: 0;
+	width: 140px;
+	position: absolute !important;
+	top: 31px;
+	left: -1px;
+	background: #fff;
+	border: solid 1px #b4b4b4;
+    border-top: none;
+   
+	-webkit-border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomleft: 10px;
+
+	-webkit-border-bottom-right-radius: 10px;
+	-moz-border-radius-bottomright: 10px;
+
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0, .3);
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0, .3);
+	box-shadow: 0 1px 3px rgba(0,0,0, .3);
+}
+#Nav ul li {
+	float: none;
+	margin: 0;
+	padding: 0;
+}
+#Nav ul a {
+ 	margin: 0;
+	padding: 5px 10px;
+ 	height: auto;
+    display:block;
+	float: none;
+	text-shadow: 0 1px 0 #fff;
+}
+/* Level 3+ list */
+#Nav ul ul {
+	left: 139px;
+	top: 0px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+/* Rounded corners of last link */
+#Nav ul li:last-child > a {
+	-webkit-border-bottom-left-radius: 9px;
+	-moz-border-radius-bottomleft: 9px;
+
+	-webkit-border-bottom-right-radius: 9px;
+	-moz-border-radius-bottomright: 9px;
+}
+/* Rounded corners of first link in level 3+ lists */
+#Nav ul ul li:first-child > a {
+	-webkit-border-top-left-radius: 9px;
+	-moz-border-radius-topleft: 9px;
+
+	-webkit-border-top-right-radius: 9px;
+	-moz-border-radius-topright: 9px;
+}
+/* In-page sub menu */
+.sub-menu {
+	padding-left: 15px;
+    text-align: left;
+}
+.sub-menu a, .sub-menu a:link, .sub-menu a:visited {
+    color: #06f;
+    text-decoration: underline;
+}
+.sub-menu a:hover {
+    color: #000;
+    text-decoration: none;
+}
+.sub-menu  a.current {
+    color: #000;
+    text-decoration: none;
+}
+
+/*-------------------------------------------------
+LAYOUT
+-------------------------------------------------*/
+
+.dropcap {
+    color:#333;
+    display:block;
+    float:left;
+    font-size:40px;
+    line-height:40px;
+    margin:0 8px 0 0;
+}
+/* Piped menu type */
+ul.piped {
+	float: left;
+	display: inline;
+	margin-bottom: 0;
+	list-style: none outside;
+}
+.piped li {
+	float: left;
+	padding: 0 8px;
+	border-left: 1px solid #ccc;
+}
+.piped .first {
+	border: none;
+}
+.toleft {	
+    float: left;	
+    text-align: left;	
+}
+.toright {	
+    float: right;
+}
+.roundedbox {
+    padding: 15px 10px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border: 1px solid #ccc;
+}
+.crud {
+    width:560px;
+    min-width:55%;
+}
+.story {
+	min-width: 35%; 
+	color: #777; 
+	text-align: justify; 
+	padding: 0px 10px 10px 40px; 
+}
+.story h2 {
+    font-size:28px;
+	margin: 0px 0px 8px 0px;
+}
+.story h3 {
+	font-size: 13px;
+	font-weight: bold;
+	padding: 5px 0;
+}
+
+/*-------------------------------------------------
+DRILLDOWN MENU
+-------------------------------------------------*/
+
+.drilldown * {
+	outline: none;
+}
+.drilldown {
+	display: block;
+	max-width: 170px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	padding: 5px 10px 20px 10px;
+	margin-left:15px;
+	border: 1px solid #ccc;
+}
+.drilldown button, .drilldown em {
+	width: 140px;
+	margin-left: 2px;
+    font-style: normal;
+    display: block;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.drilldown input.search-field {
+	width: 122px;
+	margin-left:2px;
+}
+.drilldown label {
+	line-height: 1.8em;
+	font-weight: bold;
+	padding-left: 2px;
+	color:#333;
+}
+.drilldown em { /* Pull Button Menu Text sligtly up */
+	margin-top: -2px;
+}
+.drilldown .menudivision {
+    border-top:1px solid #ccc;
+    margin-top: 10px;
+    padding-top: 5px;
+}
+.drilldown .menuitem {
+    padding-top: 10px;
+}
+.drilldown .reset {
+	clear: both;
+    display: block;
+	text-align: right;
+	font-size: 11px;
+}
+
+/*-------------------------------------------------
+COLORS
+-------------------------------------------------*/
+
+.dark-grey-text {
+	color: #333;
+}
+.light-grey-text {
+	color :#777;
+}
+.red-text {
+  	color:#c00;
+}
+.blue-gradient {
+    background: #e5f5ff;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f9ff', endColorstr='#ffffff'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#f1f9ff), to(#fff)); /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #f1f9ff,  #fff); /* for firefox 3.6+ */
+}
+.grey-gradient {
+    background: #f1f1f1;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9f9f9', endColorstr='#ffffff'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#fff)); /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #f9f9f9,  #fff); /* for firefox 3.6+ */
+}
+
+/*-------------------------------------------------
+FORMS
+-------------------------------------------------*/
+
+input.field, .search-field {
+    outline: none;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	resize:none;
+	padding:3px 2px;
+	border-top:1px solid #8e8e8e;
+	border-left:1px solid #8e8e8e;
+	border-bottom:1px solid #e1e1e1;
+	border-right:1px solid #e1e1e1;
+}	
+.Buttons {
+    width: 100%;
+    margin: 10px 0 35px 0;
+    padding-top: 15px;
+    border-top: 1px solid #777;
+	font-size: 13px;
+}
+.Buttons input[value]  {
+	margin-top: -2px;
+}
+.inset-box {
+    width: 100%;
+    border: 1px inset #ccc; 
+}
+.search-field {
+    outline: none;
+    padding-left:10px;
+    padding-right:10px;
+    margin-bottom:5px;
+	border: 1px solid #aaa;
+	-moz-border-radius:9px!important;
+	-webkit-border-radius:9px!important;
+}
+.search-field:focus {
+	background-color: rgb(254,254,238);;
+}
+
+
+/*-------------------------------------------------
+TEXT
+-------------------------------------------------*/
+
+.help-dialog {
+	color: #333;
+	font-size: 13px;
+    text-align: left;
+}
+.help-dialog p, #help p {
+	padding-bottom: 8px;
+}
+.help-dialog ul {
+	display: block;
+	list-style-type: disc;
+	margin: 1em 2em 1em 2em;
+}
+.help-dialog li {
+	padding-bottom: 5px;
+}
+.help-dialog table {
+	border: 1px solid #ccc; 
+	border-collapse: collapse;
+}
+.help-dialog th, .help-dialog td {
+	padding: 1em;
+}
+/* Error message */
+.error-text {
+	color:#df0000;
+	font-size: 16px;
+}
+/* Error page */
+.error-page {
+	padding-top: 2em;
+}
+.error-page .text {
+    float:left;
+    margin-bottom:40px;
+}
+.error-page h1 {
+    font-size:32px;
+	font-weight: normal;
+    font-family: 'HelveticaNeue', Helvetica, Arial, sans-serif;
+}
+.error-page h3 {
+	color: #555;
+	font-size: 18px;
+	font-weight: normal;
+	margin: 20px 0px 0px 0px;
+}

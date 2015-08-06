@@ -1,0 +1,1 @@
+link ../../../../../../share/pyshared/keystone/contrib/admin_crud/__init__.py

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+	
+    <link href="../../css/main.css" media="screen" rel="Stylesheet">
+    
+    <script src="../../build/yuiloader/yuiloader-min.js"></script>
+    <script src="../../js/mmonit.js"></script>
+	
+    <title>M/Monit Admin | Users</title>
+
+    <style media="screen">
+        .yui-skin-sam .yui-dt tbody td.up {
+            background:transparent url('../../img/remove.png') no-repeat center;
+        }
+        .yui-skin-sam .yui-dt tbody td.hover {
+            background:transparent url('../../img/remove_hover.png') no-repeat center;
+        }
+    </style>
+
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="../../status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="../../status/">Overview</a></li>
+                            <li><a href="../../status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="../../reports/"><span>Reports</span></a>
+                        <ul>
+                            <li><a href="../../reports/">Overview</a></li>
+                            <li><a href="../../reports/events/">Events</a></li>
+                        </ul>
+                    </li>
+                    <li id="current">
+                        <a href="../../admin/"><span>Admin</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+        
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../../admin/">Overview</a></li>
+                    <li><a href="../../admin/hosts/">Hosts</a></li>
+                    <li><a href="../../admin/groups/">Groups</a></li>
+                    <li><a href="../../admin/users/" class="current">Users</a></li>
+                    <li><a href="../../admin/rules/">Alerts</a></li>
+                </ul>
+            </div>
+            <h1>
+                Users
+                <a href="create">Add new user</a>
+            </h1>
+        </div> <!-- Title -->
+        
+        <div id="Main" class="clearfix">
+            
+            <div id="Area">
+                
+                <div id="userTable"></div>
+                
+            </div>
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+    <script>
+    var loader = new YAHOO.util.YUILoader();
+    loader.loadOptional = true;
+    loader.base = '../../build/';
+    loader.require('element', 'connection','json','datatable');
+    loader.insert({
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+
+                    var myIMFormatter = function(elCell, oRecord, oColumn, oData) {
+                        YAHOO.util.Dom.addClass(elCell, "IM");
+                        var imtype = oRecord.getData("imtype");
+                        elCell.innerHTML = imtype + (imtype ? ": " : "") + oRecord.getData("imname");
+                    };
+                    var myDeleteFormatter = function(elCell, oRecord, oColumn, oData) {
+                        YAHOO.util.Dom.addClass(elCell, "delete");
+                        if (oData)
+                            YAHOO.util.Dom.replaceClass(elCell.parentNode, "down", "up");
+                        else
+                            YAHOO.util.Dom.replaceClass(elCell.parentNode, "up", "down");
+                    };
+                    var myColumnDefs = [
+                        {key:"uname",  label:"User name", sortable:true},
+                        {key:"name",   label:"Name",      sortable:true},
+                        {key:"email",  label:"Email",     sortable:true},
+                        {key:"phone",  label:"Phone",     sortable:true},
+                        {key:"mobile", label:"Mobile",    sortable:true},
+                        {key:"im",     label:"IM",        sortable:true,  formatter:myIMFormatter},
+                        {key:"delete", label:"",          sortable:false, formatter:myDeleteFormatter, width:15}
+                    ];
+                    var myDataSource = new YAHOO.util.XHRDataSource("../../json/admin/users/list");
+                        myDataSource.connMethodPost = true;
+                        myDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                        myDataSource.responseSchema = {
+                            resultsList: "records",
+                            fields: ["uname","name","email","phone","mobile","imname","imtype"],
+                            metaFields: {totalRecords: 'totalRecords'}
+                        };
+                    var myConfigs = {
+                        selectionMode:"single",
+                        sortedBy : {key: "uname", dir: YAHOO.widget.DataTable.CLASS_ASC},
+                        paginator : new YAHOO.widget.Paginator({
+                            alwaysVisible: false,
+                            rowsPerPage    : 10,
+                            rowsPerPageOptions : [10, 20, 50, 100, 200],
+                            template       : "{PageLinks} {RowsPerPageDropdown}"
+                        })
+                    };
+                    var myDataTable = new YAHOO.widget.DataTable("userTable", myColumnDefs, myDataSource, myConfigs);
+                    myDataTable.subscribe("rowMouseoverEvent", function(e) {
+                        var row = myDataTable.getRecord(e.target);
+                        if (row) {
+                                var uname = row.getData("uname");
+                                myDataTable.highlightRow(row);
+                                var column = myDataTable.getColumn("delete");
+                                myDataTable.updateCell(row, column, uname);
+                        }
+                    });
+                    myDataTable.subscribe("rowMouseoutEvent", function(e) {
+                        var row = myDataTable.getRecord(e.target);
+                        if (row) {
+                                myDataTable.unhighlightRow(row);
+                                var column = myDataTable.getColumn("delete");
+                                myDataTable.updateCell(row, column);
+                        }
+                    });
+                    myDataTable.subscribe("rowClickEvent", function(e) {
+                        window.location = MMONIT.location('edit?uname=' + myDataTable.getRecord(e.target).getData("uname"));
+                    });      
+                    myDataTable.subscribe("cellClickEvent", function(e) {
+                        if (myDataTable.getColumn(e.target).key == "delete") {
+                            if (window.confirm("Are you sure you want to delete " + myDataTable.getRecord(e.target).getData("uname") + "? There is no undo.")) {
+                                var myPostData = "uname=" + myDataTable.getRecord(e.target).getData("uname") + "&Delete=1";
+                                var myCallback = {
+                                    success: function(o) {
+                                        myDataTable.deleteRow(myDataTable.getRecord(e.target).getId());
+                                    },
+                                    failure: function(o) {
+                                        alert(o.responseText);
+                                    },
+                                    timeout: 5000
+                                };
+                                YAHOO.util.Connect.asyncRequest('POST', '.', myCallback, myPostData);
+                            }
+                            return false;
+                        }
+                    });
+                    myDataTable.subscribe("cellMouseoverEvent", function(e, t) {
+                        var column = myDataTable.getColumn(e.target);
+                        if (column && column.key == "delete") {
+                            YAHOO.util.Dom.replaceClass(e.target, "up", "hover");
+                        }
+                    });   
+                    myDataTable.subscribe("cellMouseoutEvent", function(e, t) {
+                        var column = myDataTable.getColumn(e.target);
+                        if (column && column.key == "delete") {
+                            YAHOO.util.Dom.replaceClass(e.target, "hover", "up");
+                        }
+                    });   
+                
+            });
+        }
+    });
+    </script>
+</body>
+</html>

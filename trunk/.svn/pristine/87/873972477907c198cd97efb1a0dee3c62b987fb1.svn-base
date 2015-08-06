@@ -1,0 +1,35 @@
+common Package
+==============
+
+:mod:`cfg` Module
+-----------------
+
+.. automodule:: keystone.openstack.common.cfg
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`importutils` Module
+-------------------------
+
+.. automodule:: keystone.openstack.common.importutils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`iniparser` Module
+-----------------------
+
+.. automodule:: keystone.openstack.common.iniparser
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`setup` Module
+-------------------
+
+.. automodule:: keystone.openstack.common.setup
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

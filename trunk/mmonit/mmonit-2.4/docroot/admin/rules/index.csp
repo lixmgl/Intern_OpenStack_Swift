@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <link href="../../css/main.css" media="screen" rel="Stylesheet">
+
+    <script src="../../build/yuiloader/yuiloader-min.js"></script>
+    <script src="../../js/mmonit.js"></script>
+    
+    <title>M/Monit Admin | Rules</title>
+
+    <style media="screen">
+        .yui-skin-sam .yui-dt tbody td.up {
+            background:url('../../img/remove.png') no-repeat center;
+        }
+        .yui-skin-sam .yui-dt tbody td.hover {
+            background:url('../../img/remove_hover.png') no-repeat center;
+        }
+        #Area p {
+            padding-bottom:10px;
+        }
+    </style>
+
+</head>
+
+<body class="yui-skin-sam">
+    
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="../../status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="../../status/">Overview</a></li>
+                            <li><a href="../../status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="../../reports/"><span>Reports</span></a>
+                        <ul>
+                            <li><a href="../../reports/">Overview</a></li>
+                            <li><a href="../../reports/events/">Events</a></li>
+                        </ul>
+                    </li>
+                    <li id="current">
+                        <a href="../../admin/"><span>Admin</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+        
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../../admin/">Overview</a></li>
+                    <li><a href="../../admin/hosts/">Hosts</a></li>
+                    <li><a href="../../admin/groups/">Groups</a></li>
+                    <li><a href="../../admin/users/">Users</a></li>
+                    <li><a href="../../admin/rules/" class="current">Alerts</a></li>
+                </ul>
+            </div>
+            <h1>
+                Alert Rules
+                <a href="create">Add new rule</a>
+            </h1>
+        </div> <!-- Title -->
+        
+        <div id="Main" class="clearfix">
+            
+            <div id="Area">
+                
+                <p>
+                    Setup alert rules for event notification. Only active rules are evaluated
+                </p>
+                <div id="rulesTable"></div>
+                
+            </div>
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+    
+
+    <script>
+    var loader = new YAHOO.util.YUILoader();
+    loader.loadOptional = true;
+    loader.base = '../../build/';
+    loader.require('element', 'connection','json','datatable');
+    loader.insert({
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+
+                var myCheckboxFormatter = function(el, oRecord, oColumn, oData) {
+                    var isChecked = parseInt(oData, 10) ? " checked" : "";
+                    el.innerHTML = "<input type=\"checkbox\"" + isChecked + " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\">";
+                };
+                var myDeleteFormatter = function(elCell, oRecord, oColumn, oData) {
+                    YAHOO.util.Dom.addClass(elCell, "delete");
+                    if (oData)
+                        YAHOO.util.Dom.replaceClass(elCell.parentNode, "down", "up");
+                    else
+                        YAHOO.util.Dom.replaceClass(elCell.parentNode, "up", "down");
+                };
+                var myColumnDefs = [
+                    {key:"active",      label:"Active",      sortable:true,  formatter:myCheckboxFormatter},
+                    {key:"description", label:"Description", sortable:true},
+                    {key:"delete",      label:"",            sortable:false, formatter:myDeleteFormatter, width:15}
+                ];
+                var myDataSource = new YAHOO.util.XHRDataSource("../../json/admin/rules/list");
+                    myDataSource.connMethodPost = true;
+                    myDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                    myDataSource.responseSchema = {
+                        resultsList: "records",
+                        fields: ["id", "active","description"],
+                        metaFields : { 
+                            totalRecords : 'totalRecords'
+                        }
+                    };
+                var myConfigs = {
+                    selectionMode : "single",
+                    sortedBy      : {key: "active", dir: YAHOO.widget.DataTable.CLASS_DESC}
+                };
+                var myDataTable = new YAHOO.widget.DataTable("rulesTable", myColumnDefs, myDataSource, myConfigs);
+                myDataTable.subscribe("rowMouseoverEvent", function(e) {
+                    var row = myDataTable.getRecord(e.target);
+                    if (row) {
+                        var id = row.getData("id");
+                        myDataTable.highlightRow(row);
+                        var column = myDataTable.getColumn("delete");
+                        myDataTable.updateCell(row, column, id);
+                    }
+                });
+                myDataTable.subscribe("rowMouseoutEvent", function(e) {
+                    var row = myDataTable.getRecord(e.target);
+                    if (row) {
+                        myDataTable.unhighlightRow(row);
+                        var column = myDataTable.getColumn("delete");
+                        myDataTable.updateCell(row, column);
+                    }
+                });
+                myDataTable.subscribe("checkboxClickEvent", function(e){
+                    var elCheckbox = e.target;
+                    var oRecord = myDataTable.getRecord(elCheckbox);
+                    var myPostData = "id=" + oRecord.getData("id") + "&active=" + (elCheckbox.checked ? "1" : "0");
+                    var myCallback = {
+                        success: function(o) { oRecord.setData("active", elCheckbox.checked); },
+                        failure: function(o) { elCheckbox.checked = elCheckbox.checked ? false : true; }
+                    };
+                    YAHOO.util.Connect.asyncRequest('POST', './update-active', myCallback, myPostData);
+                });
+                myDataTable.subscribe("cellClickEvent", function(e){
+                    var el = e.target;
+                    if (el.cellIndex == 1) {
+                        var oRecord = myDataTable.getRecord(el);
+                        window.location = MMONIT.location('edit?id=' + oRecord.getData("id"));
+                    } else if (myDataTable.getColumn(el).key == "delete") {
+                        if (window.confirm("Are you sure you want to delete " + myDataTable.getRecord(el).getData("description") + "? There is no undo.")) {
+                            var myPostData = "id=" + myDataTable.getRecord(el).getData("id") + "&Delete=1";
+                            var myCallback = {
+                                success: function(o) {
+                                    myDataTable.deleteRow(myDataTable.getRecord(el).getId());
+                                },
+                                failure: function(o) {
+                                    alert(o.responseText);
+                                },
+                                timeout: 5000
+                            };
+                            YAHOO.util.Connect.asyncRequest('POST', '.', myCallback, myPostData);
+                        }
+                        return false;
+                    }
+                });
+                myDataTable.subscribe("cellMouseoverEvent", function(e, t) {
+                    var column = myDataTable.getColumn(e.target);
+                    if (column && column.key == "delete") {
+                        YAHOO.util.Dom.replaceClass(e.target, "up", "hover");
+                    }
+                });   
+                myDataTable.subscribe("cellMouseoutEvent", function(e, t) {
+                    var column = myDataTable.getColumn(e.target);
+                    if (column && column.key == "delete") {
+                        YAHOO.util.Dom.replaceClass(e.target, "hover", "up");
+                    }
+                });   
+
+            });
+        }
+    });
+    </script>
+
+</body>
+
+</html>

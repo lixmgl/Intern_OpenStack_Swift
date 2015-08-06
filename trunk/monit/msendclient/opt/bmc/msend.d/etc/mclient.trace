@@ -1,0 +1,11 @@
+#
+# BMC Impact Manager 8.5
+# Generic CLI trace configuration
+# Format : see mcell.trace
+#
+
+#ALL	ALL	no
+#ALL	FATAL	stderr
+#ALL	ERROR	stderr
+#ALL	WARNING	stderr
+#ALL	INFORM	stderr

@@ -1,0 +1,1 @@
+link ../../../../../../share/pyshared/keystone/contrib/ec2/__init__.py

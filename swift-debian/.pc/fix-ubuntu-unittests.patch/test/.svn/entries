@@ -1,0 +1,34 @@
+10
+
+dir
+272
+svn://engsvnserv4.corp.webex.com/openstack/trunk/swift-debian/.pc/fix-ubuntu-unittests.patch/test
+svn://engsvnserv4.corp.webex.com/openstack
+
+
+
+2012-05-02T14:09:50.585624Z
+100
+autumnw
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+4a083582-653f-4f4c-8dd4-6b54de6a16f1
+
+probe
+dir
+
+unit
+dir
+

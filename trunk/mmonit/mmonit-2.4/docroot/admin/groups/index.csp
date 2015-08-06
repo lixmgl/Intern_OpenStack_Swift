@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <link href="../../css/form.css" media="screen" rel="stylesheet">
+    <link href="../../css/main.css" media="screen" rel="stylesheet">
+ 
+    <script src="../../js/mmonit.js"></script>
+    <script src="../../build/yuiloader/yuiloader-min.js"></script>
+    
+    <style media="screen">
+        .group_controls {
+            visibility:hidden; display:inline; float:right; cursor:pointer;
+        }
+        .group:hover .group_controls { visibility:visible; }
+    </style>
+
+    <title>M/Monit Admin | Host Groups</title>
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="../../status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="../../status/">Overview</a></li>
+                            <li><a href="../../status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="../../reports/"><span>Reports</span></a>
+                        <ul>
+                            <li><a href="../../reports/">Overview</a></li>
+                            <li><a href="../../reports/events/">Events</a></li>
+                        </ul>
+                    </li>
+                    <li id="current">
+                        <a href="../../admin/"><span>Admin</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+        
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../../admin/">Overview</a></li>
+                    <li><a href="../../admin/hosts/">Hosts</a></li>
+                    <li><a href="../../admin/groups/" class="current">Groups</a></li>
+                    <li><a href="../../admin/users/">Users</a></li>
+                    <li><a href="../../admin/rules/">Alerts</a></li>
+                </ul>
+            </div>
+            <h1>
+                Host Groups
+                <a id="createLink" href="#">Add new group</a>
+            </h1>
+        </div> <!-- Title -->
+        
+        <div id="Main" class="clearfix">
+            
+            <div id="Area">
+                
+                <?cs set:row = 0 ?>
+                <table style="width:640px; border: 1px solid #ccc; border-collapse: collapse;" border="1">
+                    <?cs each:group = HostGroup ?>
+                    <tr>
+                        <td <?cs if:row % 2 ?>bgcolor="#edf5ff"<?cs /if ?> class="group">
+                            <form name="G<?cs var:row ?>" method="post"> 
+                                <div class="group_controls">
+                                    <img src="../../img/delete.png" onclick='deleteGroup(<?cs var:row ?>);' title="Delete Group" alt="delete">
+                                    <img src="../../img/info.png" style="padding-left:5px;" title="Edit Group" onclick="updateGroup(<?cs var:row ?>);" alt="edit">
+                                    <img src="../../img/exp.png" style="padding-left:5px;" title="Expand Group" onclick="MMONIT.layer.toggle('l<?cs var:row ?>');" alt="Expand">
+                                </div>
+                                <input type="hidden" name="id" value="<?cs var:group.id ?>">
+                                <input type="hidden" name="groupname" value="<?cs var:group.name ?>">
+                                <input type="hidden" name="description" value="<?cs var:group.description ?>">
+                                <div style="margin:5px;cursor:pointer;" onclick="MMONIT.layer.toggle('l<?cs var:row ?>');"><?cs var:group.name ?></div>
+                                <table id="l<?cs var:row ?>" style="display: none; padding:5px;">
+                                    <tr>
+                                        <td colspan="3" style="color: #999; ">
+                                            <?cs var:group.description ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 70%">Hosts in group:</td>
+                                        <td></td>
+                                        <td style="font-size: 70%">Hosts:</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <select name="inlist" size="12" multiple style="width:284px;"></select>
+                                        </td>
+                                        <td nowrap style="vertical-align:middle">
+                                            <img style="cursor:pointer;" src="../../img/arrow_l.png" onClick="changeGroup(<?cs var:row ?>, true);" title="Add Hosts to Group" alt="add"> 
+                                            <img style="cursor:pointer;" src="../../img/arrow_r.png" onClick="changeGroup(<?cs var:row ?>, false);" title="Remove Hosts from Group" alt="remove">
+                                        </td>
+                                        <td>
+                                            <select name="outlist" size="12" multiple style="width:284px;"></select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </td>
+                    </tr>
+                    <?cs set:row = row + 1 ?>
+                    <?cs /each ?>
+                </table>
+                
+                <?cs if row == 0 ?>
+                <p>
+                        <span class="dropcap">A</span> Host Group is a collection of Hosts that can logically be grouped
+                        together, for instance, by functionality or by organizational or geographical location. In the Status
+                        and Events page, Host Group can be selected in the drill-down menu to view data for a set of Hosts
+                        and in the Rules page you can create alert rules that applies to a Host Group.
+                </p>
+                <?cs /if ?>
+                
+            </div>
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+
+    <!--  Dialogs -->
+    
+    <div id="CreateDialog" style="display: none; font-size: 90%;">
+        <div class="hd">Create new host group</div>
+        <div class="bd">
+            <form name="create" method="POST" action="create">
+                <label for="groupname">Group Name: <span style="color:#f00;">*</span></label>
+                <input name="groupname" id="groupname" class="text" type="text" maxlength="255" style="width: 98%"/>
+                <label for="description">Description:</label>
+                <textarea name="description" rows="4" style="width: 98%" class="textarea medium"></textarea>
+                <div style="clear: left; display: block; color:#f00; font-size: 90%; font-weight: bold;" id="createErrorMessage"></div>
+            </form>
+        </div>
+    </div>
+    <div id="UpdateDialog" style="display: none; font-size: 90%;">
+        <div class="hd">Update host group</div>
+        <div class="bd">
+            <form name="update" method="POST" action="update">
+                <input type="hidden" name="id">
+                <label for="groupname">Group Name: <span style="color:#f00;">*</span></label>
+                <input name="groupname" id="groupname" class="text" type="text" maxlength="255" style="width: 98%"/>
+                <label for="description">Description:</label>
+                <textarea name="description" rows="4" style="width: 98%" class="textarea medium"></textarea>
+                <div style="clear: left; display: block; color:#f00; font-size: 90%; font-weight: bold;" id="updateErrorMessage"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    var UpdateDialog;
+    var loader = new YAHOO.util.YUILoader();
+    loader.loadOptional = true;
+    loader.base = '../../build/';
+    loader.require('dom','element','connection','container','button','json','datatable', 'event');
+    loader.insert({
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+                
+                // Handle submit for both update and create Dialogs
+                var handleSubmit = function() {
+                    this.submit();
+                };
+                
+                // Handle cancel for both update and create Dialogs
+                var handleCancel = function() {
+                    var f = this.form;
+                    for (var i = 0; i < f.elements.length; i++) {
+                        f.elements[i].value = '';
+                    }
+                    this.cancel();
+                };
+                
+                // Handle validate of data for both update and create Dialogs
+                var handleValidate = function() {
+                    var groupname = this.getData().groupname.trim();
+                    var description = this.getData().description.trim();
+                    if ((groupname == "") || (description.length > 4096)) {
+                        MMONIT.effects.shake(this.id, 10, 6, 0.04);
+                        return false;
+                    } 
+                    return true;
+                };
+                
+                /* Setup dialog for creating a new group */
+                (function() {
+                    MMONIT.layer.show('CreateDialog');
+                    var CreateDialog = new YAHOO.widget.Dialog("CreateDialog", {
+                        width               : "30em",
+                        fixedcenter         : true,
+                        visible             : false,
+                        constraintoviewport : true,
+                        modal               : true,
+                        buttons             : 
+                        [ 
+                        { text:"Create", handler:handleSubmit, isDefault:true },
+                        { text:"Cancel", handler:handleCancel } 
+                        ],
+                        underlay            : "none"
+                    });
+                    CreateDialog.validate = handleValidate;
+                    CreateDialog.callback.success = function(o) {
+                        window.location = '';
+                    };
+                    CreateDialog.callback.failure = function(o) {
+                        CreateDialog.show();
+                        document.getElementById("createErrorMessage").innerHTML = o.responseText;
+                    };
+                    CreateDialog.render();
+                    // Listner which show The CreateDialog
+                    var createLink = MMONIT.dom.get("createLink");
+                    YAHOO.util.Event.addListener(createLink, "click", function(e) {
+                        CreateDialog.show();
+                    });
+                })();
+                
+                /* Setup dialog for update a group. I.e. changing its name and description */
+                (function() {
+                    MMONIT.layer.show('UpdateDialog');
+                    // NOTE UpdateDialog is global for access by page event handlers
+                    UpdateDialog = new YAHOO.widget.Dialog("UpdateDialog", {
+                        width               : "30em",
+                        fixedcenter         : true,
+                        visible             : false,
+                        constraintoviewport : true,
+                        modal               : true,
+                        buttons             : 
+                        [ 
+                        { text:"Update", handler:handleSubmit, isDefault:true },
+                        { text:"Cancel", handler:handleCancel } 
+                        ],
+                        underlay            : "none"
+                    });
+                    UpdateDialog.validate = handleValidate;
+                    UpdateDialog.callback.success = function(o) {
+                        window.location = '';
+                    };
+                    UpdateDialog.callback.failure = function(o) {
+                        UpdateDialog.show();
+                        document.getElementById("updateErrorMessage").innerHTML = o.responseText;
+                    };
+                    UpdateDialog.render();
+                })();
+
+                <?cs if:row > 0 ?>
+                    /* Setup and populate host group lists using JSON data */
+                     var myDataSource = new YAHOO.util.XHRDataSource("../../json/admin/groups/list");
+                     myDataSource.connMethodPost = true;
+                     myDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                     myDataSource.responseSchema = {
+                         resultsList: "records",
+                         fields: [{key:"hosts"}, {key:"groups"}]
+                     };
+                     var oCallback = {
+                         success: function(oRequest, oResponse, oPayload) {
+                             var g, i, j, k, l;
+                             var hosts = oResponse.results[0].hosts;
+                             var groups = oResponse.results[0].groups;
+                             for (i = 0; (g = document.forms["G"+i]); i++) {
+                                 var members = groups[g.id.value] ? groups[g.id.value] : [];
+                                 for (j = 0, k = 0, l = 0; j < hosts.length; j++) {
+                                     if (members.contains(hosts[j].id)) {
+                                         g.inlist.options[k++] = new Option(hosts[j].name, hosts[j].id);
+                                     } else {
+                                         g.outlist.options[l++] = new Option(hosts[j].name, hosts[j].id);
+                                     }
+                                 }
+                             }
+                         },
+                         failure: function(oRequest,oResponse,oPayload) {
+                             alert("JSON error: " + oResponse.statusText);
+                         }
+                     }
+                     myDataSource.sendRequest('', oCallback);
+                <?cs /if ?>
+            });
+        }
+    });
+        
+    // --------------------------------------------------------------- Page functions
+        
+    /* Update name and description of host group given by id */
+    function updateGroup(id) {
+        var f = document.forms["G"+id];
+        var df = UpdateDialog.form;
+        df.id.value = f.id.value;
+        df.groupname.value = f.groupname.value;
+        df.description.value = f.description.value;
+        UpdateDialog.show();
+    }
+    /* Delete host group with id */
+    function deleteGroup(id) {
+        var f = document.forms["G"+id];
+        if (window.confirm("Are you sure you want to delete the group "+f.groupname.value +"? There is no undo.")) {
+            var d = document.createElement('input'); 
+                d.setAttribute('type', 'hidden');
+                d.setAttribute('name', 'Delete'); 
+                d.setAttribute('value', f.id.value);
+                f.appendChild(d);
+                f.submit();
+        }
+    }
+    /* Add or remove hosts from group with id. If doAdd is true we add, 
+     otherwise we delete hosts from group */ 
+    function changeGroup(id, doAdd) {
+        var f = document.forms["G"+id];
+        var oFrom = doAdd ? f.outlist : f.inlist;
+        var oTo = doAdd ? f.inlist : f.outlist;
+        var oCallback = {
+          success: function(o) { MMONIT.list.move(oFrom, oTo); },
+          failure: function(o) { alert("Error: HTTP status ["+o.status+"] " + o.statusText); }
+        }
+        if (MMONIT.list.hasSelected(oFrom) > 0) { 
+            YAHOO.util.Connect.setForm(f);
+            YAHOO.util.Connect.asyncRequest('POST', './change', oCallback);
+        }
+    }
+    </script>
+</body>
+</html>

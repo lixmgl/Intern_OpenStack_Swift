@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd test/functional
+nosetests --exe --with-xunit --xunit-file=../../../functest1.xml $@
+cd -
+
+cd test/functionalnosetests
+nosetests --exe --with-xunit --xunit-file=../../../functest2.xml  $@
+cd -

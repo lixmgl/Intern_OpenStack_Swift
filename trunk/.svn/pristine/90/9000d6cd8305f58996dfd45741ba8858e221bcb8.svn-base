@@ -1,0 +1,15 @@
+Package: python-keystoneclient
+Version: 4.0.0
+Architecture: all
+Maintainer: PKG OpenStack <openstack-devel@lists.alioth.debian.org>
+Installed-Size: 171
+Depends: python2.7, python (>= 2.7.1-0ubuntu2), python (<< 2.8), python-httplib2, python-prettytable, python-pkg-resources
+Section: python
+Priority: extra
+Homepage: https://github.com/openstack/python-keystoneclient
+Description: client library for the OpenStack Keystone API
+ This is a client for the OpenStack Keystone API. There's a Python API
+ (the ``keystoneclient`` module), and a command-line script (``keystone``).
+ .
+ Installing this package gets you a shell command, that you can use to
+ interact with Keystone's API.

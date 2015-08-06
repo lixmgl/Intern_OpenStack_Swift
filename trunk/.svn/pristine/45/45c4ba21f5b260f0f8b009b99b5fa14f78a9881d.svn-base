@@ -1,0 +1,213 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing Keystone &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="next" title="Configuring Keystone" href="configuration.html" />
+    <link rel="prev" title="Setting up a Keystone development environment" href="setup.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuring Keystone"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="setup.html" title="Setting up a Keystone development environment"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Installing Keystone</a><ul>
+<li><a class="reference internal" href="#installing-from-source">Installing from Source</a></li>
+<li><a class="reference internal" href="#installing-from-packages-ubuntu">Installing from packages: Ubuntu</a></li>
+<li><a class="reference internal" href="#installing-from-packages-fedora">Installing from packages: Fedora</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="setup.html"
+                                  title="previous chapter">Setting up a Keystone development environment</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="configuration.html"
+                                  title="next chapter">Configuring Keystone</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/installing.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installing-keystone">
+<h1>Installing Keystone<a class="headerlink" href="#installing-keystone" title="Permalink to this headline">¶</a></h1>
+<p>This document describes how to install Keystone in order to use it. If you are
+intending to develop on or with Keystone, please read <a class="reference internal" href="developing.html"><em>Developing with Keystone</em></a> and
+<a class="reference internal" href="setup.html"><em>Setting up a Keystone development environment</em></a></p>
+<div class="section" id="installing-from-source">
+<h2>Installing from Source<a class="headerlink" href="#installing-from-source" title="Permalink to this headline">¶</a></h2>
+<p>The source install instructions specifically avoid using platform specific
+packages, instead using the source for the code and the Python Package Index
+(<a class="reference external" href="http://pypi.python.org/pypi">PyPi</a>).</p>
+<p>Its expected that your system already has <a class="reference external" href="http://www.python.org">python</a>, <a class="reference external" href="http://www.pip-installer.org/en/latest/installing.html">pip</a>, and <a class="reference external" href="http://git-scm.com/">git</a> available.</p>
+<p>Clone the keystone repository:</p>
+<div class="highlight-python"><pre>git clone http://github.com/openstack/keystone.git
+cd keystone</pre>
+</div>
+<p>Install the dependencies to run keystone:</p>
+<div class="highlight-python"><pre>sudo pip install -r tools/pip-requires</pre>
+</div>
+<p>And at this point, you should have all the pieces you need to run keystone
+installed on your system. The following commands should be available on the
+commandline path:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">keystone</span></tt> the keystone client, used to configure keystone</li>
+<li><tt class="docutils literal"><span class="pre">keystone-manage</span></tt> used to bootstrap keystone data</li>
+<li><tt class="docutils literal"><span class="pre">keystone-all</span></tt> used to run the keystone services</li>
+</ul>
+<p>You will find sample configuration files in <tt class="docutils literal"><span class="pre">etc/</span></tt></p>
+<ul class="simple">
+<li>keystone.conf</li>
+<li>logging.conf</li>
+<li>policy.json</li>
+<li>default_catalog.templates</li>
+</ul>
+<p>From here, refer to <a class="reference internal" href="configuration.html"><em>Configuring Keystone</em></a> to choose which backend drivers to
+enable and use. Once configured, you should be able to run keystone by issueing
+the command:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">keystone</span><span class="o">-</span><span class="nb">all</span>
+</pre></div>
+</div>
+<p>which (by default) will show logging on the console from which it was started.
+Once started, you can initialize data in keystone for use with the rest of
+openstack, as described in <a class="reference internal" href="configuringservices.html"><em>Configuring Services to work with Keystone</em></a>.</p>
+<p>An excellent reference implementation of setting up keystone is <a class="reference external" href="http://devstack.org/">DEVSTACK</a>,
+most commonly used for development and testing setup of not only Keystone,
+but all of the core OpenStack projects.</p>
+<p>The script with the latest examples of intializing data in Keystone is a
+bash script called <a class="reference external" href="https://github.com/openstack-dev/devstack/blob/master/files/keystone_data.sh">keystone_data.sh</a></p>
+</div>
+<div class="section" id="installing-from-packages-ubuntu">
+<h2>Installing from packages: Ubuntu<a class="headerlink" href="#installing-from-packages-ubuntu" title="Permalink to this headline">¶</a></h2>
+<p>Ubuntu is providing packages for Keystone for Precise. To install keystone
+on Ubuntu:</p>
+<div class="highlight-python"><pre>sudo apt-get install keystone</pre>
+</div>
+<p>In using Ubuntu&#8217;s packages, the packages will set up a user account for
+the Keystone service (<cite>keystone</cite>), and place default configurations in
+<tt class="docutils literal"><span class="pre">/etc/keystone</span></tt>. The debian installer will also ask you about configuration
+options for setting up and running Keystone. As of this writing, the defaults
+for Keystone backends are all SQL based, stored locally in a sqlite.</p>
+<p>Once installed, you still need to initialize data in Keystone, which you can
+find described in <a class="reference internal" href="configuringservices.html"><em>Configuring Services to work with Keystone</em></a>.</p>
+</div>
+<div class="section" id="installing-from-packages-fedora">
+<h2>Installing from packages: Fedora<a class="headerlink" href="#installing-from-packages-fedora" title="Permalink to this headline">¶</a></h2>
+<p>Installing Keystone with Fedora 17 is documented at
+<a class="reference external" href="http://fedoraproject.org/wiki/Getting_started_with_OpenStack_on_Fedora_17">http://fedoraproject.org/wiki/Getting_started_with_OpenStack_on_Fedora_17</a>.</p>
+<p>To install the packages:</p>
+<div class="highlight-python"><pre>sudo yum install --enablerepo=updates-testing openstack-keystone</pre>
+</div>
+<p>Once installed, you can configure keystone based on the instructions at:</p>
+<p><a class="reference external" href="http://fedoraproject.org/wiki/Getting_started_with_OpenStack_on_Fedora_17#Configuring_Keystone_for_authentication">http://fedoraproject.org/wiki/Getting_started_with_OpenStack_on_Fedora_17#Configuring_Keystone_for_authentication</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuring Keystone"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="setup.html" title="Setting up a Keystone development environment"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

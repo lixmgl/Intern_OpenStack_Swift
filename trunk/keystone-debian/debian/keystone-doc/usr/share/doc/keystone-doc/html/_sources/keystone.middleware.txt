@@ -1,0 +1,59 @@
+middleware Package
+==================
+
+:mod:`middleware` Package
+-------------------------
+
+.. automodule:: keystone.middleware
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`auth_token` Module
+------------------------
+
+.. automodule:: keystone.middleware.auth_token
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`cisco_token` Module
+-------------------------
+
+.. automodule:: keystone.middleware.cisco_token
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`core` Module
+------------------
+
+.. automodule:: keystone.middleware.core
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`ec2_token` Module
+-----------------------
+
+.. automodule:: keystone.middleware.ec2_token
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`s3_token` Module
+----------------------
+
+.. automodule:: keystone.middleware.s3_token
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`swift_auth` Module
+------------------------
+
+.. automodule:: keystone.middleware.swift_auth
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

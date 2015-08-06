@@ -1,0 +1,18 @@
+#!/bin/bash
+
+PYTHONPATH=/opt/graphite/lib/python2.7/site-packages:$PYTHONPATH 
+PATH=/opt/graphite/bin:$PATH
+
+chown -R root:root /opt/graphite
+cp /opt/graphite/bin/graphite_rc /etc/init.d/graphite
+
+cp /opt/graphite/conf/carbon.conf.example /opt/graphite/conf/carbon.conf
+cp /opt/graphite/conf/storage-schemas.conf.example /opt/graphite/conf/storage-schemas.conf
+cp /opt/graphite/conf/graphite.wsgi.example /opt/graphite/conf/graphite.wsgi
+cp /opt/graphite/examples/example-graphite-vhost.conf /etc/apache2/sites-available/graphite
+cp /opt/graphite/webapp/graphite/local_settings.py.example /opt/graphite/webapp/graphite/local_settings.py
+cd /opt/graphite/webapp/graphite
+
+chown -R www-data:www-data /opt/graphite/storage
+
+#python manage.py syncdb

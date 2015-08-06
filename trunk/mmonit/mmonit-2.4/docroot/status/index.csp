@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    
+    <link href="../css/main.css" media="screen" rel="Stylesheet">
+    
+    <script src="../build/yuiloader/yuiloader-min.js"></script>
+    <script src="../js/mmonit.js"></script>
+ 
+    <title>M/Monit Status</title>
+    
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li  id="current">
+                        <a href="../status/"><span>Status</span></a>
+                    </li>
+                    <li>
+                        <a href="../reports/"><span>Reports</span></a>
+                        <ul>
+                            <li><a href="../reports/">Overview</a></li>
+                                    <li><a href="../reports/events/">Events</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="../admin/"><span>Admin</span></a>
+                        <ul>
+                            <li><a href="../admin/">Overview</a></li>
+                            <li><a href="../admin/hosts/">Hosts</a></li>
+                            <li><a href="../admin/groups/">Groups</a></li>
+                            <li><a href="../admin/users/">Users</a></li>
+                            <li><a href="../admin/rules/">Alerts</a></li>
+        				</ul>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+        
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../status/" class="current">Overview</a></li>
+                    <li><a href="../status/topography">Topography</a></li>
+                </ul>
+            </div>
+            <h1>Status</h1>
+        </div> <!-- Title -->
+
+        <div id="Main" class="clearfix">
+
+            <table id="Area" border="0">
+                <tr>
+                    <td class="main-content">
+                        
+                        <?cs if:Status_Filter_error ?>
+                        <p class="error-text">
+                            <?cs var:Status_Filter_error ?>
+                        </p>
+                        <?cs /if ?>
+
+                        <div id="statusTable"></div>
+
+                    </td>
+                    <td>
+                        <div class="drilldown">
+
+                            <div class="reset">
+                                <a href="../status/?Reset=1">Reset</a>
+                            </div>
+
+                            <div class="menuitem"></div>
+
+                            <input class="search-field" type="text" id="Status_Host" value="<?cs var:Status_Host ?>" maxlength="255">
+
+                            <div class="menuitem"></div>
+
+                            <form id="formHostGroup" name="formHostGroup" action="../status/" method="GET" style="margin:0; padding:0;">
+                                <label>Host Group</label>
+                                <div id="HostGroupContainer"></div>
+                                <input type="hidden" id="Status_HostGroup" name="Status_HostGroup" value="<?cs var:Status_HostGroup ?>">
+                            </form>
+
+                            <div class="menuitem"></div>
+
+                            <form id="formHostStatus" name="formHostStatus" action="../status/" method="GET" style="margin:0; padding:0;">
+                                <label>Host Status</label>
+                                <div id="HostStatusContainer"></div>
+                                <input type="hidden" id="Status_HostStatus" name="Status_HostStatus" value="<?cs var:Status_HostStatus ?>">
+                            </form>
+
+                            <div class="menuitem"></div>
+
+                            <form id="formHostPlatform" name="formHostPlatform" action="../status/" method="GET" style="margin:0; padding:0;">
+                                <label>Operating System</label>
+                                <div id="HostPlatformContainer"></div>
+                                <input type="hidden" id="Status_HostPlatform" name="Status_HostPlatform" value="<?cs var:Status_HostPlatform ?>">
+                            </form>
+
+                            <div class="menuitem"></div>
+
+                            <form id="formHostMachine" name="formHostMachine" action="../status/" method="GET" style="margin:0; padding:0;">
+                                <label>Machine</label>
+                                <div id="HostMachineContainer"></div>
+                                <input type="hidden" id="Status_HostMachine" name="Status_HostMachine" value="<?cs var:Status_HostMachine ?>">
+                            </form>
+
+                            <div class="menuitem"></div>
+
+                            <form id="formLedType" name="formLedType" action="../status/" method="GET" style="margin:0; padding:0;">
+                                <label>Led</label>
+                                <div id="LedTypeContainer"></div>
+                                <input type="hidden" id="Status_LedType" name="Status_LedType" value="<?cs var:Status_LedType ?>">
+                            </form>
+
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+    
+    <script>
+    var loader = new YAHOO.util.YUILoader();
+    loader.loadOptional = true;
+    loader.base = '../build/';
+    loader.require('datasource','container','element','connection','json','datatable','button', 'dom', 'event');
+    loader.insert({
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+
+                var myEventsFormatter = function(elCell, oRecord, oColumn, oData) {
+                    YAHOO.util.Dom.addClass(elCell, "Events");
+                    if (parseInt(oRecord.getData("events"), 10) > 0)
+                        elCell.innerHTML = '<a href="../reports/events/?Events_Host=' + oRecord.getData("host") + '&Events_ServiceNameId=">' + oRecord.getData("events") + '</a>';
+                    else
+                        elCell.innerHTML = oRecord.getData("events");
+                };
+                var myCpuFormatter = function(elCell, oRecord, oColumn, oData) {
+                    YAHOO.util.Dom.addClass(elCell, "%Cpu");
+                    cpu = oRecord.getData("cpu");
+                    elCell.innerHTML = cpu > 0 ? cpu : 0;
+                };
+                var myLedFormatter = function(elCell, oRecord, oColumn, oData) {
+                    YAHOO.util.Dom.addClass(elCell, "Led");
+                    elCell.innerHTML = '<img src="../img/led' + oRecord.getData("led") + '.png" alt="led">';
+                };
+                var myColumnDefs = [
+                    {key:"led",    label:"&nbsp;&nbsp;*", sortable:true,  formatter:myLedFormatter},
+                    {key:"host",   label:"Host",          sortable:true,  minWidth:200},
+                    {key:"cpu",    label:"%Cpu",          sortable:true,  formatter:myCpuFormatter},
+                    {key:"mem",    label:"%Mem",          sortable:true},
+                    {key:"status", label:"Status",        sortable:true},
+                    {key:"events", label:"Events",        sortable:true,  formatter:myEventsFormatter}
+                ];
+                var myDataSource = new YAHOO.util.XHRDataSource("../json/status/list");
+                myDataSource.connMethodPost = true;
+                myDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                myDataSource.responseSchema = {
+                    resultsList : "records",
+                    fields      : [
+                        {key:"id",     parser: "string"}, 
+                        {key:"led",    parser: "number"}, 
+                        {key:"host",   parser: "string"}, 
+                        {key:"cpu",    parser: "number"}, 
+                        {key:"mem",    parser: "number"}, 
+                        {key:"status", parser: "string"},
+                        {key:"events", parser: "number"}
+                    ],
+                    metaFields:"totalRecords"
+                };
+                <?cs if:!Status_Sort ?><?cs set:Status_Sort = 'host' ?><?cs /if ?>
+                <?cs if:!Status_Rows ?><?cs set:Status_Rows = 15 ?><?cs /if ?>
+                <?cs if:!Status_Dir ?><?cs set:Status_Dir = 'yui-dt-asc' ?><?cs /if ?>
+                var myConfigs = {
+                    selectionMode:"single",
+                    sortedBy : {key: "<?cs var:Status_Sort ?>", dir:'<?cs var:Status_Dir ?>'},
+                    paginator : new YAHOO.widget.Paginator({
+                        alwaysVisible         : false,
+                        rowsPerPage           : <?cs var:Status_Rows ?>,
+                        rowsPerPageOptions    : [15, 50, 100, 500],
+                        template              : "{PageLinks} {RowsPerPageDropdown}"
+                    })
+                };
+                var myDataTable = new YAHOO.widget.DataTable('statusTable', myColumnDefs, myDataSource, myConfigs);
+                myDataTable.subscribe("rowMouseoverEvent", myDataTable.onEventHighlightRow);
+                myDataTable.subscribe("rowMouseoutEvent", myDataTable.onEventUnhighlightRow);
+                myDataTable.subscribe("rowClickEvent", function(e) {
+                    window.location = MMONIT.location('detail?id=' + myDataTable.getRecord(e.target).getData("id"));
+                }); 
+                <?cs if:(#Request.Param.refresh > 1) ?>
+                myDataTable.getDataSource().setInterval(<?cs var:Request.Param.refresh ?>, "" , {
+                    success  : myDataTable.onDataReturnReplaceRows,
+                    scope    : myDataTable,
+                    argument : myDataTable.getState()
+                });
+                <?cs /if ?>
+                var mySort = function(col, dir) {
+                    if (dir == YAHOO.widget.DataTable.CLASS_ASC) {
+                        return function(a,b) {return (a[col] < b[col]) ? -1 : (a[col] > b[col]) ? 1 : 0; };
+                    } else {
+                        return function(a,b) {return (a[col] > b[col]) ? -1 : (a[col] < b[col]) ? 1 : 0; }
+                    }
+                };
+                /* Persistent client-side table sort and persistent storage of sort column and
+                 sort dir between table reload */
+                 myDataTable.doBeforeLoadData = function(sRequest, oResponse, oPayload) {
+                     if (oResponse.error)
+                        myDataTable.showTableMessage("Load error: " + oResponse.statusText);
+                     var state = myDataTable.getState();
+                     if (state) {
+                         myConfigs.sortedBy.key = state.sortedBy.key;
+                         myConfigs.sortedBy.dir = state.sortedBy.dir;
+                         oPayload.pagination.rowsPerPage = state.pagination.rowsPerPage;
+                         oPayload.pagination.recordOffset = state.pagination.recordOffset;
+                         oPayload.pagination.totalRecords = oResponse.results.length;
+                     }
+                     // "Notify" that DataTable search should re-run as the table was updated 
+                     MMONIT.datatable.search.shouldApplyClientSearch = true;
+                     oResponse.results.sort(mySort(myConfigs.sortedBy.key, myConfigs.sortedBy.dir));
+                     return true;
+                 };
+                // Store myDataTable.state and Host search field persistent if changed
+                YAHOO.util.Event.on(window, "beforeunload", function(e) { 
+                    var q = [];
+                    var state = myDataTable.getState();
+                    var searchField = MMONIT.dom.get('Status_Host');
+                    if (state.pagination.rowsPerPage != <?cs var:Status_Rows ?>) {
+                        q[q.length] = 'Status_Rows=' + myConfigs.paginator.getRowsPerPage();
+                    }
+                    if (state.sortedBy && (state.sortedBy.key != '<?cs var:Status_Sort ?>')) {
+                        q[q.length] = 'Status_Sort=' + state.sortedBy.key;
+                    }
+                    if (state.sortedBy && (state.sortedBy.dir != '<?cs var:Status_Dir ?>')) {
+                        q[q.length] = 'Status_Dir=' + state.sortedBy.dir;
+                    }
+                    if (searchField.value == 'Find host..') {
+                        searchField.value = '';
+                    }
+                    if (searchField.value != '<?cs var:Status_Host ?>') {
+                        q[q.length] = 'Status_Host=' + searchField.value.trim();
+                    }
+                    if (q.length) {
+                        // Synchronous "ajax" is required - at page unload asynchronous wont work
+                        MMONIT.sjax.post('update/table-state', q.join("&"));
+                    }
+                }); 
+                
+
+                //
+                // Drill-down Menu
+                //
+
+                // Setup a Host search field on the DataTable
+                MMONIT.datatable.search.client(myDataTable, 'host', 'Status_Host', 'Find host..');
+
+                /// Host Group
+                function onHostGroupClick(p_sType, p_aArgs, p_oItem) {
+                    var txt = document.getElementById("Status_HostGroup");
+                    txt.value = p_oItem.value;
+                    document.formHostGroup.submit();
+                }
+                var HostGroupMenu = [
+                <?cs set:init = 1 ?>
+                <?cs each:list = ListHostGroup ?>
+                <?cs if:init == 0 ?>,<?cs /if ?><?cs set:init = 0 ?>{ text: "<?cs var:list.name ?>", value: "<?cs var:list.value ?>", onclick: {fn: onHostGroupClick}}
+                <?cs /each ?>
+                ];
+                var HostGroupButton = new YAHOO.widget.Button({
+                    type         : "menu",
+                    label        : "<em><?cs each:list = ListHostGroup ?><?cs if:list.value == Status_HostGroup ?><?cs var:list.name ?><?cs /if ?><?cs /each ?></em>",
+                    menu         : HostGroupMenu,
+                    container    : "HostGroupContainer",
+                    lazyloadmenu : true
+                });
+                HostGroupButton.getMenu().cfg.setProperty("scrollincrement", 5);
+
+                /// Host Status
+                function onHostStatusClick(p_sType, p_aArgs, p_oItem) {
+                    var txt = document.getElementById("Status_HostStatus");
+                    txt.value = p_oItem.value;
+                    document.formHostStatus.submit();
+                }
+                var HostStatusMenu = [
+                <?cs set:init = 1 ?>
+                <?cs each:list = ListHostStatus ?>
+                <?cs if:init == 0 ?>,<?cs /if ?><?cs set:init = 0 ?>{ text: "<?cs var:list.name ?>", value: "<?cs var:list.value ?>", onclick: {fn: onHostStatusClick}}
+                <?cs /each ?>
+                ];
+                var HostStatusButton = new YAHOO.widget.Button({
+                    type         : "menu",
+                    label        : "<em><?cs each:list = ListHostStatus ?><?cs if:list.value == Status_HostStatus ?><?cs var:list.name ?><?cs /if ?><?cs /each ?></em>",
+                    menu         : HostStatusMenu,
+                    container    : "HostStatusContainer",
+                    lazyloadmenu : true
+                });
+                HostStatusButton.getMenu().cfg.setProperty("scrollincrement", 5);
+
+                /// Host Platform
+                function onHostPlatformClick(p_sType, p_aArgs, p_oItem) {
+                    var txt = document.getElementById("Status_HostPlatform");
+                    txt.value = p_oItem.value;
+                    document.formHostPlatform.submit();
+                }
+                var HostPlatformMenu = [
+                <?cs set:init = 1 ?>
+                <?cs each:list = ListHostPlatform ?>
+                <?cs if:init == 0 ?>,<?cs /if ?><?cs set:init = 0 ?>{ text: "<?cs var:list.name ?>", value: "<?cs var:list.value ?>", onclick: {fn: onHostPlatformClick}}
+                <?cs /each ?>
+                ];
+                var HostPlatformButton = new YAHOO.widget.Button({
+                    type         : "menu",
+                    label        : "<em><?cs each:list = ListHostPlatform ?><?cs if:list.value == Status_HostPlatform ?><?cs var:list.name ?><?cs /if ?><?cs /each ?></em>",
+                    menu         : HostPlatformMenu,
+                    container    : "HostPlatformContainer",
+                    lazyloadmenu : true
+                });
+                HostPlatformButton.getMenu().cfg.setProperty("scrollincrement", 5);
+
+                /// Host Machine
+                function onHostMachineClick(p_sType, p_aArgs, p_oItem) {
+                    var txt = document.getElementById("Status_HostMachine");
+                    txt.value = p_oItem.value;
+                    document.formHostMachine.submit();
+                }
+                var HostMachineMenu = [
+                <?cs set:init = 1 ?>
+                <?cs each:list = ListHostMachine ?>
+                <?cs if:init == 0 ?>,<?cs /if ?><?cs set:init = 0 ?>{ text: "<?cs var:list.name ?>", value: "<?cs var:list.value ?>", onclick: {fn: onHostMachineClick}}
+                <?cs /each ?>
+                ];
+                var HostMachineButton = new YAHOO.widget.Button({
+                    type         : "menu",
+                    label        : "<em><?cs each:list = ListHostMachine ?><?cs if:list.value == Status_HostMachine ?><?cs var:list.name ?><?cs /if ?><?cs /each ?></em>",
+                    menu         : HostMachineMenu,
+                    container    : "HostMachineContainer",
+                    lazyloadmenu : true
+                });
+                HostMachineButton.getMenu().cfg.setProperty("scrollincrement", 5);
+
+                /// Led Type
+                function onLedTypeClick(p_sType, p_aArgs, p_oItem) {
+                    var txt = document.getElementById("Status_LedType");
+                    txt.value = p_oItem.value;
+                    document.formLedType.submit();
+                }
+                var LedTypeMenu = [
+                    {text: "ALL", value: "",  onclick: {fn: onLedTypeClick}},
+                    {text: "<img src='../img/led0.png' style='color:#fff; border:none;' alt='led'>", value: "0", onclick: {fn: onLedTypeClick}},
+                    {text: "<img src='../img/led1.png' style='color:#fff; border:none;' alt='led'>", value: "1", onclick: {fn: onLedTypeClick}},
+                    {text: "<img src='../img/led2.png' style='color:#fff; border:none;' alt='led'>", value: "2", onclick: {fn: onLedTypeClick}},
+                    {text: "<img src='../img/led3.png' style='color:#fff; border:none;' alt='led'>", value: "3", onclick: {fn: onLedTypeClick}}
+                ];
+                var LedTypeButton = new YAHOO.widget.Button({
+                    type         : "menu",
+                    label        : "<em><?cs if:(!?Status_LedType) ?>ALL<?cs else ?><img src='../img/led<?cs var:Status_LedType ?>.png' alt='led'><?cs /if ?></em>",
+                    menu         : LedTypeMenu,
+                    container    : "LedTypeContainer",
+                    lazyloadmenu : true
+                });
+                LedTypeButton.getMenu().cfg.setProperty("scrollincrement", 5);
+
+            });
+        }
+    });
+    </script>
+</body>
+</html>

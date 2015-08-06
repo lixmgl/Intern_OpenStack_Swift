@@ -1,0 +1,8 @@
+Package: cisco-collectd
+Version: 5.1.0 
+Section: base
+Priority: optional
+Architecture: amd64
+Depends: libltdl7 
+Maintainer: Chad Malfait cmalfait@cisco.com
+Description: cisco-collectd is a small daemon which collects system information periodically and provides mechanisms to store and monitor the values in a variety of ways. 

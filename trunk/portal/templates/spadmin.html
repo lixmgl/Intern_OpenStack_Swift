@@ -1,0 +1,193 @@
+$def with (modules)
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- *******************************************************************   
+ *        Copyright (c) 2009-2012 Cisco Systems, Inc.   
+ *        All rights reserved.   
+ ******************************************************************** -->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=8">
+	
+	<title>Service Provider Console</title>
+	
+	<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-base.css">
+	<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-xwt.css">	
+	<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-explorer.css">
+	<link rel="stylesheet" type="text/css" href="static/css/icons.css">
+	
+	<style type="text/css">
+		@import "../dojo/dijit/themes/futurama/futurama.css";
+	</style>
+	<script type="text/javascript">
+		djConfig = {
+			isDebug: false,
+			debugAtAllCosts: false,
+			parseOnLoad: true,
+			baseUrl: "../dojo/",
+			modulePaths: {
+				'xwt': '../xwt'
+			}
+		};
+    </script>
+	<script type="text/javascript" src="../dojo/dojo.js"></script>
+	<style type="text/css">
+		.leftcontent
+		{
+			float:left;
+			width: 250px;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 20px;
+			
+			-moz-box-shadow: 0 0 3px 3px #aaa;
+			-webkit-box-shadow: 0 0 3px 3px #aaa;
+			box-shadow: 0 0 3px 3px #aaa;
+			
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			-khtml-border-radius: 5px;
+			border-radius: 5px;
+		}
+		
+		.mainContent {
+			float:right;
+			background-color: #ffffff;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 20px;
+			width: 900px;
+			height: 700px;
+			padding-bottom: 10px;
+			
+			-moz-box-shadow: 0 0 3px 3px #aaa;
+			-webkit-box-shadow: 0 0 3px 3px #aaa;
+			box-shadow: 0 0 3px 3px #aaa;
+			
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			-khtml-border-radius: 5px;
+			border-radius: 5px;
+		}
+	</style>
+	
+	<script type="text/javascript">
+	    dojo.require("dojo.parser");
+	    
+	    dojo.require("xwt.widget.navigation.UIshellV15");
+	    dojo.require("xwt.widget.uishell.Header17")
+	    dojo.require("xwt.widget.Background");
+		dojo.require("xwt.widget.layout._BasePanel");
+		dojo.require("xwt.widget.layout.TitlePane");
+		dojo.require("xwt.widget.layout.Popover");
+		dojo.require("xwt.widget.layout.Dialog");
+		dojo.require("xwt.widget.form.IconButton");
+		dojo.require("xwt.widget.form.TextButton");
+		dojo.require("xwt.widget.form.TextIconButton");
+		dojo.require("xwt.widget.form.DropDown");
+		dojo.require("xwt.widget.table.Table");
+		dojo.require("xwt.widget.table.Toolbar");
+		dojo.require("dijit.form.Button");
+		dojo.require("dijit.form.TextBox");
+		dojo.require("dijit.form.NumberTextBox");
+		dojo.require("dijit.layout.BorderContainer");
+		dojo.require("dijit.layout.ContentPane");
+		
+	    dojo.require("xwt.widget._ConfigureTheme");
+		
+		var headerItems= {
+			items: 
+			[ 
+			    {	
+					id: "logininfo",
+					actionId:'logininfoAction',
+					label:'Login Information',
+					type:'hover',
+					url:'/portal/auth/logininfo'
+				},{
+					actionId:'logout',
+					href:'/portal/auth/logout',
+					label:'Log Out',
+					target:'_top'
+				}	
+			]
+		};
+	</script>
+	
+	<script type="text/javascript">
+		function myInit() {
+			$for module in modules:
+				var ${module.get('name')} = dojo.byId("${module.get('name')}")
+				$if loop.first:
+					${module.get('name')}.style.display="block"
+				$else:
+					${module.get('name')}.style.display="none"
+				
+			$for module in modules:
+				var ${module.get('name')}Icon = new xwt.widget.form.IconButton({
+					id: "${module.get('name')}IconID",
+					label: "${module.get('label')}",
+					showLabel: true,
+					iconClass: "${module.get('icon')}",
+					iconClassHover: "${module.get('icon')}Hover",
+					iconClassPressed: "${module.get('icon')}Pressed",
+					iconClassDisabled: "${module.get('icon')}Disabled"
+				});
+				${module.get('name')}Icon.placeAt(dojo.byId("${module.get('name')}Button"));
+				$if loop.first:
+					${module.get('name')}Icon.startup();
+				
+				dojo.connect(dijit.byId("${module.get('name')}IconID"), "onClick", function(){
+					${module.get('name')}.style.display="block"
+					$for xmodule in modules:
+						if (${xmodule.get('name')} != ${module.get('name')}) {
+							${xmodule.get('name')}.style.display="none"
+						}
+				});
+		};
+		
+		dojo.addOnLoad(myInit);
+	</script>
+</head>
+<body class="reboot2">
+	<div dojoType="xwt.widget.Background" id="application-bg"></div>
+	<div dojoType="xwt.widget.uishell.Header17" 
+		applicationTitle='Cloud Services' 
+		applicationSubtitle='Cloud Management Platform' 
+		headerItems="headerItems"
+		i18nPackageName='xwt'
+		i18nBundleName = 'ApplicationProperties' 
+		requireSearch=false>
+	</div>
+	<br>
+	<br>
+	<table class="Table" align="center" cellpadding="20" cellspacing="20" style="width:95%">
+		<tr>
+			<td align="left" valign="top">
+				<div dojoType="xwt.widget.layout.TitlePane" class="leftcontent" title="Service Provider Actions" jsId="pane1" needTitleBar="true">
+					<table align="left">
+						$for module in modules:
+	       					<tr>
+	       						<td>
+	       							<div id="${module.get('name')}Button"/>   
+								</td>       			
+	       					</tr>
+	       					
+       				</table>
+				</div>
+			</td>
+			<td align="center" valign="top">
+				<div class="mainContent">
+					$for module in modules:
+						<div dojoType="xwt.widget.layout.TitlePane" id="${module.get('name')}" jsId="${module.get('name')}" title="${module.get('label')}" style="width:890px">
+							<iframe id="${module.get('name')}Iframe" src="${module.get('url')}" frameborder="no" scrolling="yes" style="border-width:0px; width:880px; height:640px"></iframe>
+						</div>
+						
+				</div>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

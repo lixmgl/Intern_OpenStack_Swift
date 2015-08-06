@@ -1,0 +1,5 @@
+c969a44f2b2be4ab9a2026ba88a46102  usr/bin/keystone-all
+d5ed43646a2d8303b12ce9942dd8cf95  usr/bin/keystone-manage
+13602cac17d08a606b5362308ee01d11  usr/share/doc/keystone/changelog.gz
+8576fafbffac52a39a8cf299a71fbf03  usr/share/doc/keystone/copyright
+b6d3111a0c8cbe705b4c7dc832b366b0  usr/share/man/man1/keystone.1.gz

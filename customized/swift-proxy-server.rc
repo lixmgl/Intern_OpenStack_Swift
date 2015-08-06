@@ -1,0 +1,30 @@
+check process swift-proxy with pidfile /var/run/swift/proxy-server.pid
+       start program = "/etc/init.d/swift-proxy start" with timeout 90 seconds
+       stop program  = "/etc/init.d/swift-proxy stop"
+       if failed port 8081 then restart
+       if 3 restarts within 3 cycles then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'Proxy server is down' 'swift-proxy'"
+       group swift-proxy-service
+
+check process apache2 with pidfile /var/run/apache2.pid
+       start program = "/etc/init.d/apache2 start" with timeout 60 seconds
+       stop program  = "/etc/init.d/apache2 stop"
+       if failed port 8080 with timeout 15 seconds then restart
+       if 3 restarts within 3 cycles then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'apache server is down' 'swift-proxy'"
+       group swift-proxy-service
+       
+## Monitor the changing of cofniguration files and auto-reload to applications 
+check file swift-proxy.conf with path /etc/swift/proxy-server.conf
+       if changed timestamp
+          then exec "/usr/bin/msend.sh INFO pncell_BMBTPRO 'proxy-server.conf was changed' 'swift-proxy'"
+          
+check file apache2.conf with path /etc/apache2/sites-available/default-ssl
+       if changed timestamp 
+          then exec "/usr/bin/msend.sh INFO pncell_BMBTPRO 'apache configuration file was changed' 'swift-proxy'"
+          
+## Check system volume
+check filesystem os-sda1 with path /dev/sda1
+       if failed permission 0660 then unmonitor
+       if failed uid root then unmonitor
+       if failed gid disk then unmonitor
+       if space usage > 90 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'System disk usage is greater than 90 percent' 'swift-proxy'"
+       if inode usage > 90 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'System disk node usage is greater than 90 percent' 'swift-proxy'"

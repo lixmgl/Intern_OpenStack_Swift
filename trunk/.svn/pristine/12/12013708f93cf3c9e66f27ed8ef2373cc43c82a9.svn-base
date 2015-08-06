@@ -1,0 +1,104 @@
+$def with (memory_xml, cpu_xml)
+
+<html>
+<head>
+	<title>Dashboard</title>
+	<link rel='Stylesheet' href='/static/css/dashboard.css'>
+	<link rel='Stylesheet' href='/static/css/graph_grid.css'>
+	<script language='JavaScript' src='/static/charts/Code/FusionCharts/FusionCharts.js'>
+		/**
+		* openNewWindow method open a new JavaScript pop-up window.
+		* It also adds the year to the end of URL
+		*/	
+		function openNewWindow(theURL,winName,features) {
+		window.open(theURL);
+		}
+
+</script>
+</head>
+
+<body class='server'>
+
+<br>
+<table width='98%' bgcolor='white' class='tableWithBorder' align='center'>
+<tr>
+<td>
+<div id='mid-section'>
+	<div id='mid-col-1' align='left'>
+		<div id='chartdiv1' align='left'>
+	        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://down.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="325" height="250" id="chartdiv1" >
+			<param name="movie" value="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" />
+			<param name="FlashVars" value="&dataXML=$memory_xml" />
+			<param name="quality" value="high" />
+			<embed src="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" flashVars="&dataXML=$memory_xml" quality="high" width="325" height="250" name="chart3" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+	        </object>
+		</div>
+		<div id='chartdiv2' align='left'>
+	        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://down.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="325" height="250" id="chartdiv2" >
+			<param name="movie" value="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" />
+			<param name="FlashVars" value="&dataXML=$memory_xml" />
+			<param name="quality" value="high" />
+			<embed src="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" flashVars="&dataXML=$memory_xml" quality="high" width="325" height="250" name="chart3" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+	        </object>
+		</div>
+		<div id='chartdiv3' align='left'>
+	        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://down.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="325" height="250" id="chartdiv3" >
+			<param name="movie" value="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" />
+			<param name="FlashVars" value="&dataXML=$cpu_xml" />
+			<param name="quality" value="high" />
+			<embed src="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" flashVars="&dataXML=$cpu_xml" quality="high" width="325" height="250" name="chart3" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+	        </object>
+		</div>
+        </div>
+
+
+	<div id='mid-col-2' align='center'>
+		<div id='chartdiv4' align='center'>
+	        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://down.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="550" height="375" id="chartdiv4" >
+			<param name="movie" value="/static/charts/Charts/FCF_Line.swf?chartWidth=550&chartHeight=375" />
+			<param name="FlashVars" value="&dataXML=$cpu_xml" />
+			<param name="quality" value="high" />
+			<embed src="/static/charts/Charts/FCF_Line.swf?chartWidth=550&chartHeight=375" flashVars="&dataXML=$cpu_xml" quality="high" width="550" height="375" name="chart4" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+	        </object>
+		</div>
+		<div id='chartdiv5' align='center'>
+	        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://down.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="550" height="375" id="chartdiv5" >
+			<param name="movie" value="/static/charts/Charts/FCF_Line.swf?chartWidth=550&chartHeight=375" />
+			<param name="FlashVars" value="&dataXML=$memory_xml" />
+			<param name="quality" value="high" />
+			<embed src="/static/charts/Charts/FCF_Line.swf?chartWidth=550&chartHeight=375" flashVars="&dataXML=$memory_xml" quality="high" width="550" height="375" name="chart5" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+	        </object>
+		</div>
+	</div>
+
+	<div id='mid-col-3' align='right'>
+		<div id='chartdiv6' align='right'>
+	        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://down.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="325" height="250" id="chartdiv6" >
+			<param name="movie" value="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" />
+			<param name="FlashVars" value="&dataXML=$memory_xml" />
+			<param name="quality" value="high" />
+			<embed src="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" flashVars="&dataXML=$memory_xml" quality="high" width="325" height="250" name="chart6" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+	        </object>
+		</div>
+  		<div id='chartdiv7' align='right'>
+	        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://down.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="325" height="250" id="chartdiv7" >
+			<param name="movie" value="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" />
+			<param name="FlashVars" value="&dataXML=$cpu_xml" />
+			<param name="quality" value="high" />
+			<embed src="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" flashVars="&dataXML=$cpu_xml" quality="high" width="325" height="250" name="chart6" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+		</div>
+  		<div id='chartdiv8' align='right'>
+	        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://down.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="325" height="250" id="chartdiv8" >
+			<param name="movie" value="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" />
+			<param name="FlashVars" value="&dataXML=$cpu_xml" />
+			<param name="quality" value="high" />
+			<embed src="/static/charts/Charts/FCF_Line.swf?chartWidth=325&chartHeight=250" flashVars="&dataXML=$cpu_xml" quality="high" width="325" height="250" name="chart6" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+		</div>
+		<br>
+	</div>
+</div>
+</td>
+</tr>
+</table>
+</body>
+</html>

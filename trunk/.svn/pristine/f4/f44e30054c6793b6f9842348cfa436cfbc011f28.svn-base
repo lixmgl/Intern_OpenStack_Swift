@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Keystone Architecture &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="next" title="Middleware Architecture" href="middlewarearchitecture.html" />
+    <link rel="prev" title="Developing with Keystone" href="developing.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="middlewarearchitecture.html" title="Middleware Architecture"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="developing.html" title="Developing with Keystone"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Keystone Architecture</a><ul>
+<li><a class="reference internal" href="#the-services">The Services</a><ul>
+<li><a class="reference internal" href="#identity">Identity</a></li>
+<li><a class="reference internal" href="#token">Token</a></li>
+<li><a class="reference internal" href="#catalog">Catalog</a></li>
+<li><a class="reference internal" href="#policy">Policy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#application-construction">Application Construction</a></li>
+<li><a class="reference internal" href="#service-backends">Service Backends</a><ul>
+<li><a class="reference internal" href="#kvs-backend">KVS Backend</a></li>
+<li><a class="reference internal" href="#sql-backend">SQL Backend</a></li>
+<li><a class="reference internal" href="#pam-backend">PAM Backend</a></li>
+<li><a class="reference internal" href="#templated-backend">Templated Backend</a></li>
+<li><a class="reference internal" href="#ldap-backend">LDAP Backend</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data-model">Data Model</a></li>
+<li><a class="reference internal" href="#approach-to-crud">Approach to CRUD</a></li>
+<li><a class="reference internal" href="#approach-to-authorization-policy">Approach to Authorization (Policy)</a><ul>
+<li><a class="reference internal" href="#rules">Rules</a></li>
+<li><a class="reference internal" href="#capability-rbac">Capability RBAC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="developing.html"
+                                  title="previous chapter">Developing with Keystone</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="middlewarearchitecture.html"
+                                  title="next chapter">Middleware Architecture</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/architecture.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="keystone-architecture">
+<h1>Keystone Architecture<a class="headerlink" href="#keystone-architecture" title="Permalink to this headline">¶</a></h1>
+<p>Much of the design is precipitated from the expectation that the auth backends
+for most deployments will actually be shims in front of existing user systems.</p>
+<div class="section" id="the-services">
+<h2>The Services<a class="headerlink" href="#the-services" title="Permalink to this headline">¶</a></h2>
+<p>Keystone is organized as a group of internal services exposed on one or many
+endpoints. Many of these services are used in a combined fashion by the
+frontend, for example an authenticate call will validate user/tenant
+credentials with the Identity service and, upon success, create and return a
+token with the Token service.</p>
+<div class="section" id="identity">
+<h3>Identity<a class="headerlink" href="#identity" title="Permalink to this headline">¶</a></h3>
+<p>The Identity service provides auth credential validation and data about Users,
+Tenants and Roles, as well as any associated metadata.</p>
+<p>In the basic case all this data is managed by the service, allowing the service
+to manage all the CRUD associated with the data.</p>
+<p>In other cases, this data is pulled, by varying degrees, from an authoritative
+backend service. An example of this would be when backending on LDAP. See
+<cite>LDAP Backend</cite> below for more details.</p>
+</div>
+<div class="section" id="token">
+<h3>Token<a class="headerlink" href="#token" title="Permalink to this headline">¶</a></h3>
+<p>The Token service validates and manages Tokens used for authenticating requests
+once a user/tenant&#8217;s credentials have already been verified.</p>
+</div>
+<div class="section" id="catalog">
+<h3>Catalog<a class="headerlink" href="#catalog" title="Permalink to this headline">¶</a></h3>
+<p>The Catalog service provides an endpoint registry used for endpoint discovery.</p>
+</div>
+<div class="section" id="policy">
+<h3>Policy<a class="headerlink" href="#policy" title="Permalink to this headline">¶</a></h3>
+<p>The Policy service provides a rule-based authorization engine and the
+associated rule management interface.</p>
+</div>
+</div>
+<div class="section" id="application-construction">
+<h2>Application Construction<a class="headerlink" href="#application-construction" title="Permalink to this headline">¶</a></h2>
+<p>Keystone is an HTTP front-end to several services. Like other OpenStack
+applications, this is done using python WSGI interfaces and applications are
+configured together using <a class="reference external" href="http://pythonpaste.org/">Paste</a>. The application&#8217;s HTTP endpoints are made up
+of pipelines of WSGI middleware, such as:</p>
+<div class="highlight-python"><pre>[pipeline:public_api]
+pipeline = token_auth admin_token_auth json_body debug ec2_extension public_service</pre>
+</div>
+<p>These in turn use a subclass of <a class="reference internal" href="keystone.common.html#keystone.common.wsgi.ComposingRouter" title="keystone.common.wsgi.ComposingRouter"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.common.wsgi.ComposingRouter</span></tt></a> to
+link URLs to Controllers (a subclass of
+<a class="reference internal" href="keystone.common.html#keystone.common.wsgi.Application" title="keystone.common.wsgi.Application"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.common.wsgi.Application</span></tt></a>). Within each Controller, one or more
+Managers are loaded (for example, see <a class="reference internal" href="keystone.catalog.html#keystone.catalog.core.Manager" title="keystone.catalog.core.Manager"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.catalog.core.Manager</span></tt></a>),
+which are thin wrapper classes which load the appropriate service driver based
+on the keystone configuration.</p>
+<ul class="simple">
+<li>Identity</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="keystone.identity.html#keystone.identity.core.TenantController" title="keystone.identity.core.TenantController"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.identity.core.TenantController</span></tt></a></li>
+<li><a class="reference internal" href="keystone.identity.html#keystone.identity.core.UserController" title="keystone.identity.core.UserController"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.identity.core.UserController</span></tt></a></li>
+<li><a class="reference internal" href="keystone.identity.html#keystone.identity.core.RoleController" title="keystone.identity.core.RoleController"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.identity.core.RoleController</span></tt></a></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>Catalog</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="keystone.catalog.html#keystone.catalog.core.ServiceController" title="keystone.catalog.core.ServiceController"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.catalog.core.ServiceController</span></tt></a></li>
+<li><a class="reference internal" href="keystone.html#keystone.service.VersionController" title="keystone.service.VersionController"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.service.VersionController</span></tt></a></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>Token</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="keystone.html#keystone.service.TokenController" title="keystone.service.TokenController"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.service.TokenController</span></tt></a></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>Misc</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="keystone.html#keystone.service.ExtensionsController" title="keystone.service.ExtensionsController"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.service.ExtensionsController</span></tt></a></li>
+</ul>
+</div></blockquote>
+<p>At this time, the policy service and associated manager is not exposed as a URL
+frontend, and has no associated Controller class.</p>
+</div>
+<div class="section" id="service-backends">
+<h2>Service Backends<a class="headerlink" href="#service-backends" title="Permalink to this headline">¶</a></h2>
+<p>Each of the services can configured to use a backend to allow Keystone to fit a
+variety of environments and needs. The backend for each service is defined in
+the keystone.conf file with the key <tt class="docutils literal"><span class="pre">driver</span></tt> under a group associated with
+each service.</p>
+<p>A general class under each backend named <tt class="docutils literal"><span class="pre">Driver</span></tt> exists to provide an
+abstract base class for any implementations, identifying the expected service
+implementations. The drivers for the services are:</p>
+<ul class="simple">
+<li><a class="reference internal" href="keystone.identity.html#keystone.identity.core.Driver" title="keystone.identity.core.Driver"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.identity.core.Driver</span></tt></a></li>
+<li><a class="reference internal" href="keystone.token.html#keystone.token.core.Driver" title="keystone.token.core.Driver"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.token.core.Driver</span></tt></a></li>
+</ul>
+<p>If you implement a backend driver for one of the keystone services, you&#8217;re
+expected to subclass from these classes. The default response for the defined
+apis in these Drivers is to raise a <a class="reference internal" href="keystone.html#keystone.service.TokenController" title="keystone.service.TokenController"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.service.TokenController</span></tt></a>.</p>
+<div class="section" id="kvs-backend">
+<h3>KVS Backend<a class="headerlink" href="#kvs-backend" title="Permalink to this headline">¶</a></h3>
+<p>A simple backend interface meant to be further backended on anything that can
+support primary key lookups, the most trivial implementation being an in-memory
+dict.</p>
+<p>Supports all features of the general data model.</p>
+</div>
+<div class="section" id="sql-backend">
+<h3>SQL Backend<a class="headerlink" href="#sql-backend" title="Permalink to this headline">¶</a></h3>
+<p>A SQL based backend using SQLAlchemy to store data persistently. The
+keystone-manage command introspects the backends to identify SQL based backends
+when running &#8220;db_sync&#8221; to establish or upgrade schema. If the backend driver
+has a method db_sync(), it will be invoked to sync and/or migrate schema.</p>
+</div>
+<div class="section" id="pam-backend">
+<h3>PAM Backend<a class="headerlink" href="#pam-backend" title="Permalink to this headline">¶</a></h3>
+<p>Extra simple backend that uses the current system&#8217;s PAM service to authenticate,
+providing a one-to-one relationship between Users and Tenants with the <cite>root</cite>
+User also having the &#8216;admin&#8217; role.</p>
+</div>
+<div class="section" id="templated-backend">
+<h3>Templated Backend<a class="headerlink" href="#templated-backend" title="Permalink to this headline">¶</a></h3>
+<p>Largely designed for a common use case around service catalogs in the Keystone
+project, a Catalog backend that simply expands pre-configured templates to
+provide catalog data.</p>
+<p>Example paste.deploy config (uses $ instead of % to avoid ConfigParser&#8217;s
+interpolation):</p>
+<div class="highlight-python"><pre>[DEFAULT]
+catalog.RegionOne.identity.publicURL = http://localhost:$(public_port)s/v2.0
+catalog.RegionOne.identity.adminURL = http://localhost:$(public_port)s/v2.0
+catalog.RegionOne.identity.internalURL = http://localhost:$(public_port)s/v2.0
+catalog.RegionOne.identity.name = 'Identity Service'</pre>
+</div>
+</div>
+<div class="section" id="ldap-backend">
+<h3>LDAP Backend<a class="headerlink" href="#ldap-backend" title="Permalink to this headline">¶</a></h3>
+<p>The LDAP backend stored Users and Tenents in separate Subtrees.  Roles are recorded
+as entries under the Tenants.</p>
+</div>
+</div>
+<div class="section" id="data-model">
+<h2>Data Model<a class="headerlink" href="#data-model" title="Permalink to this headline">¶</a></h2>
+<p>Keystone was designed from the ground up to be amenable to multiple styles of
+backends and as such many of the methods and data types will happily accept
+more data than they know what to do with and pass them on to a backend.</p>
+<p>There are a few main data types:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>User</strong>: has account credentials, is associated with one or more tenants</li>
+<li><strong>Tenant</strong>: unit of ownership in openstack, contains one or more users</li>
+<li><strong>Role</strong>: a first-class piece of metadata associated with many user-tenant pairs.</li>
+<li><strong>Token</strong>: identifying credential associated with a user or user and tenant</li>
+<li><strong>Extras</strong>: bucket of key-value metadata associated with a user-tenant pair.</li>
+<li><strong>Rule</strong>: describes a set of requirements for performing an action.</li>
+</ul>
+</div></blockquote>
+<p>While the general data model allows a many-to-many relationship between Users
+and Tenants and a many-to-one relationship between Extras and User-Tenant pairs,
+the actual backend implementations take varying levels of advantage of that
+functionality.</p>
+</div>
+<div class="section" id="approach-to-crud">
+<h2>Approach to CRUD<a class="headerlink" href="#approach-to-crud" title="Permalink to this headline">¶</a></h2>
+<p>While it is expected that any &#8220;real&#8221; deployment at a large company will manage
+their users, tenants and other metadata in their existing user systems, a
+variety of CRUD operations are provided for the sake of development and testing.</p>
+<p>CRUD is treated as an extension or additional feature to the core feature set
+in that it is not required that a backend support it. It is expected that
+backends for services that don&#8217;t support the CRUD operations will raise a
+<a class="reference internal" href="keystone.html#keystone.exception.NotImplemented" title="keystone.exception.NotImplemented"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.exception.NotImplemented</span></tt></a>.</p>
+</div>
+<div class="section" id="approach-to-authorization-policy">
+<h2>Approach to Authorization (Policy)<a class="headerlink" href="#approach-to-authorization-policy" title="Permalink to this headline">¶</a></h2>
+<p>Various components in the system require that different actions are allowed
+based on whether the user is authorized to perform that action.</p>
+<p>For the purposes of Keystone there are only a couple levels of authorization
+being checked for:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Require that the performing user is considered an admin.</li>
+<li>Require that the performing user matches the user being referenced.</li>
+</ul>
+</div></blockquote>
+<p>Other systems wishing to use the policy engine will require additional styles
+of checks and will possibly write completely custom backends. Backends included
+in Keystone are:</p>
+<div class="section" id="rules">
+<h3>Rules<a class="headerlink" href="#rules" title="Permalink to this headline">¶</a></h3>
+<p>Given a list of matches to check for, simply verify that the credentials
+contain the matches. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">credentials</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;user_id&#39;</span><span class="p">:</span> <span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;is_admin&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;roles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;nova:netadmin&#39;</span><span class="p">]}</span>
+
+<span class="c"># An admin only call:</span>
+<span class="n">policy_api</span><span class="o">.</span><span class="n">enforce</span><span class="p">((</span><span class="s">&#39;is_admin:1&#39;</span><span class="p">,),</span> <span class="n">credentials</span><span class="p">)</span>
+
+<span class="c"># An admin or owner call:</span>
+<span class="n">policy_api</span><span class="o">.</span><span class="n">enforce</span><span class="p">((</span><span class="s">&#39;is_admin:1&#39;</span><span class="p">,</span> <span class="s">&#39;user_id:foo&#39;</span><span class="p">),</span> <span class="n">credentials</span><span class="p">)</span>
+
+<span class="c"># A netadmin call:</span>
+<span class="n">policy_api</span><span class="o">.</span><span class="n">enforce</span><span class="p">((</span><span class="s">&#39;roles:nova:netadmin&#39;</span><span class="p">,),</span> <span class="n">credentials</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Credentials are generally built from the user metadata in the &#8216;extras&#8217; part
+of the Identity API. So, adding a &#8216;role&#8217; to the user just means adding the role
+to the user metadata.</p>
+</div>
+<div class="section" id="capability-rbac">
+<h3>Capability RBAC<a class="headerlink" href="#capability-rbac" title="Permalink to this headline">¶</a></h3>
+<p>(Not yet implemented.)</p>
+<p>Another approach to authorization can be action-based, with a mapping of roles
+to which capabilities are allowed for that role. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">credentials</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;user_id&#39;</span><span class="p">:</span> <span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;is_admin&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;roles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;nova:netadmin&#39;</span><span class="p">]}</span>
+
+<span class="c"># add a policy</span>
+<span class="n">policy_api</span><span class="o">.</span><span class="n">add_policy</span><span class="p">(</span><span class="s">&#39;action:nova:add_network&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;roles:nova:netadmin&#39;</span><span class="p">,))</span>
+
+<span class="n">policy_api</span><span class="o">.</span><span class="n">enforce</span><span class="p">((</span><span class="s">&#39;action:nova:add_network&#39;</span><span class="p">,),</span> <span class="n">credentials</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the backend this would look up the policy for &#8216;action:nova:add_network&#8217; and
+then do what is effectively a &#8216;Simple Match&#8217; style match against the creds.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="middlewarearchitecture.html" title="Middleware Architecture"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="developing.html" title="Developing with Keystone"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

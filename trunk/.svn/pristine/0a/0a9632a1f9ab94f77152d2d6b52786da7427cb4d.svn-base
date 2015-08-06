@@ -1,0 +1,8 @@
+Package: cisco-mmonit
+Version: 2.4 
+Section: base
+Priority: optional
+Architecture: amd64
+Depends: python
+Maintainer: Chad Malfait cmalfait@cisco.com
+Description: cisco-mmonit

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <link href="css/main.css" media="screen" rel="Stylesheet">
+
+    <script src="js/mmonit.js"></script>
+    <script src="build/yuiloader/yuiloader-min.js"></script>
+
+    <style>
+    #status, #events
+    {
+        width: 400px;
+        height: 300px;
+    }
+    h2
+    {
+        margin-bottom: 0.4em;
+    }
+    </style>
+
+    <title>
+        M/Monit Dashboard
+    </title>
+
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="."></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li id="current">
+                            <a href="index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="status/">Overview</a></li>
+                            <li><a href="status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="reports/"><span>Reports</span></a>
+                        <ul>
+                            <li><a href="reports/">Overview</a></li>
+                            <li><a href="reports/events/">Events</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="admin/"><span>Admin</span></a>
+                        <ul>
+                            <li><a href="admin/">Overview</a></li>
+                            <li><a href="admin/hosts/">Hosts</a></li>
+                            <li><a href="admin/groups/">Groups</a></li>
+                            <li><a href="admin/users/">Users</a></li>
+                            <li><a href="admin/rules/">Alerts</a></li>
+        				</ul>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+        
+        <div id="Title">
+            <h1>Latest status</h1>
+        </div> <!-- Title -->
+        
+        <div id="Main" class="clearfix">
+            
+            <table id="Area" border="0">
+                <tr>
+                    <td>
+                        <h2>Hosts Status</h2>
+                        <div id="status">
+                            The Charts Control requires Flash Player 9.0.45 or higher. You can get the latest version
+                            at the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.
+                        </div>
+                    </td>
+                    <td style="padding-left:40px">
+                        <h2>Events in last 24-hours</h2>
+                        <div id="events"></div>
+                    </td>
+                </tr>
+            </table>
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+    <script>
+        var loader = new YAHOO.util.YUILoader();
+        loader.loadOptional = true;
+        loader.base = 'build/';
+        loader.require('yahoo-dom-event','json','element','datasource','charts','connection');
+        loader.insert({
+            onSuccess: function() {
+                YAHOO.util.Event.onDOMReady(function() {
+
+                    YAHOO.widget.Chart.SWFURL = "build/charts/assets/charts.swf";
+
+
+                    //
+                    // STATUS CHART
+                    //
+
+                    var statusData = new YAHOO.util.XHRDataSource("json/dashboard/status");
+                    statusData.connMethodPost = true;
+                    statusData.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                    statusData.responseSchema = {
+                        resultsList: "records",
+                        fields: [
+                        {key: "name",  parser: "string"},
+                        {key: "value", parser: "number"}
+                        ]
+                    };
+                    
+                    var myStatusChart = new YAHOO.widget.PieChart( "status", statusData,
+                    {
+                        dataField      : "value",
+                        categoryField  : "name",
+                        polling        : <?cs var:Request.Param.refresh ?>,
+                        //                                darkred,  red,      orange,   green,    darkgrey, grey
+                        series         : [{style:{colors:[0xaa0000, 0xdd0000, 0xff9900, 0x00aa00, 0xaaaaaa, 0xdddddd]}}]
+                    });
+                    
+                    myStatusChart.subscribe("itemClickEvent", function(e) {
+                        window.location = 'status/';
+                    });
+
+
+                    //
+                    // EVENTS CHART
+                    //
+
+                    function parseNumber(oData) {
+                        var number = oData * 1;
+                        /* If an event is 0 we use a negative value as a hack to make the plotted point
+                        below the visible Y-axis as we don't want to show a dotted green line of 0 events */
+                        return YAHOO.lang.isNumber(number) ? (number == 0) ? -1 : number : null;
+                    }
+                    var eventDataSource = new YAHOO.util.XHRDataSource("json/dashboard/events");
+                    eventDataSource.connMethodPost = true;
+                    eventDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                    eventDataSource.responseSchema = {
+                        resultsList: "records",
+                        fields: [
+                        {key: "time",      parser: "date"},
+                        {key: "succeeded", parser: parseNumber},
+                        {key: "failed",    parser: parseNumber},
+                        {key: "changed",   parser: parseNumber},
+                        {key: "match",     parser: parseNumber},
+                        {key: "instance",  parser: parseNumber},
+                        {key: "action",    parser: parseNumber}
+                        ]
+                    };
+
+                    var seriesDef = [
+                    { displayName: "Changed events",        yField: "changed",   style:{color:0xff9900} },
+                    { displayName: "Failed events",         yField: "failed",    style:{color:0xdd0000} },
+                    { displayName: "Succeeded events",      yField: "succeeded", style:{color:0x00dd00} }
+                    ];
+
+                    var xAxis = new YAHOO.widget.TimeAxis();
+                    xAxis.majorTimeUnit = "hours";
+                    xAxis.majorUnit = 4;
+                    xAxis.labelFunction = function (date) {
+                        var h = date.getHours();
+                        var m = date.getMinutes();
+                        return (h > 9 ? h : "0"+h) + ":" + (m > 9 ? m : "0"+m);
+                    };
+                    var yAxis = new YAHOO.widget.NumericAxis();
+                    yAxis.minimum = 0;
+
+                    var myEventsChart = new YAHOO.widget.LineChart( "events", eventDataSource,
+                    {
+                        xField          : "time",
+                        xAxis           : xAxis,
+                        yAxis           : yAxis,
+                        polling         : <?cs var:Request.Param.refresh ?>,
+                        series          : seriesDef,
+                        dataTipFunction : function (item, index, series) {
+                            var count = item[series.yField] < 0 ? 0 : item[series.yField];
+                            return series.displayName + " at " + item.time.toTimeString() + ": " + count;
+                        }
+                    });
+
+                    myEventsChart.subscribe("itemClickEvent", function(e) {
+                        window.location = 'reports/events/';
+                    });
+
+
+                    //
+                    // CHARTS SIZE
+                    //
+                    
+                    (function(){
+                        this.setSize = function() {
+                            var h = YAHOO.util.Dom.getViewportHeight()/2;
+                            var w = YAHOO.util.Dom.getViewportWidth()/2;
+                            YAHOO.util.Dom.setStyle('status', 'width', (w - w/4)+"px");
+                            YAHOO.util.Dom.setStyle('status', 'height', h+"px");
+                            YAHOO.util.Dom.setStyle('events', 'width', (w + w/20)+"px");
+                            YAHOO.util.Dom.setStyle('events', 'height', h+"px");
+                        };
+                        YAHOO.util.Event.addListener(window, "resize", this.setSize);
+                        this.setSize();
+                    })();
+
+
+                });
+            }
+        });
+        
+    </script>
+</body>
+
+</html>

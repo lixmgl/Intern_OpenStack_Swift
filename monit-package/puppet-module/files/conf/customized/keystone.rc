@@ -1,0 +1,6 @@
+check process keystone-all matching "keystone-all"
+	start program  = "/etc/init.d/keystone.rc start" with timeout 90 seconds
+	stop program = "/etc/init.d/keystone.rc stop"
+	if failed port 5000 then restart
+	if failed port 35357 then restart
+	if 5 restarts within 5 cycles then timeout

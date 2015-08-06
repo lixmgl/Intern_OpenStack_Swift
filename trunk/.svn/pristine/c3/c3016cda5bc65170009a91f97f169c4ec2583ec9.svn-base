@@ -1,0 +1,5 @@
+#!/bin/bash
+
+mkdir /opt/mmonit/logs
+chown -R root:root /opt/mmonit
+cp /opt/mmonit/bin/mmonit_rc /etc/init.d/mmonit

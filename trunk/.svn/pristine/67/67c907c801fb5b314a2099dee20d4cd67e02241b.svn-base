@@ -1,0 +1,162 @@
+ 
+                       M/Monit version 2.x
+ 
+ Introduction
+ ------------
+ 
+ M/Monit is a system for automatic management and monitoring of
+ Information Technology Systems. M/Monit can monitor and manage
+ distributed computer systems, conduct automatic maintenance and
+ repair and execute meaningful causal actions in error situations.
+ 
+ M/Monit expand upon Monit's capabilities to provide monitoring
+ and management of all Monit enabled hosts from one easy to use
+ web-interface.
+ 
+ 
+ System requirements
+ -------------------
+ 
+ * M/Monit requires Monit as an agent. A Monit agent send status
+   periodically and events immediately to M/Monit which collects
+   the information in its database. The Monit agent software must
+   be version 5.2 or later and installed on all hosts M/Monit
+   should monitor. Download Monit from http://mmonit.com/monit/
+ 
+ * Supported Platforms
+ 
+   See: http://mmonit.com/wiki/MMonit/SupportedPlatforms
+ 
+ * Memory and Disk space
+  
+   A minimum of 8 megabytes RAM are required and around 20 MB of
+   free disk space. You may need more RAM depending on how many
+   processor threads the M/Monit server is started with and the
+   number of Sessions that are used.
+ 
+ * Accurate time keeping
+  
+   M/Monit use the time of day for reporting and monitoring and
+   it is recommended to investigate if your system clock has the
+   correct time and maybe set some time synchronization facility
+   on your system.
+ 
+ * Random Device
+  
+   A random device is needed for creating universal unique and
+   cryptographically strong HTTP (and SSL) Session identifiers
+   and the Server will complain and exit if it cannot find
+   /dev/random or /dev/urandom on the system.
+ 
+ * M/Monit depends only on the C-libraries installed on all POSIX
+   systems.
+ 
+ 
+ Installation
+ ------------
+ 
+ M/Monit comes pre-configured and should run right out of the
+ box. Simply unpack the M/Monit tar file into a location so that
+ the distribution resides in its own directory.
+ 
+ M/Monit utilize Monit as an agent and Monit should be installed
+ on all hosts you want M/Monit to manage and monitor.
+
+
+ Quick start
+ -----------
+
+ 1) Start M/Monit: <mmonit-home>/bin/mmonit
+    Point your browser to http://localhost:8080/ and login as
+    user admin with password swordfish. Make sure that javascript
+    is turned on and that your browser accept cookies.
+
+ 2) Setup Monit to post events and automatically register itself with
+    M/Monit: Put the following into your Monit control file,
+    .monitrc:
+
+     set eventqueue basedir /var/monit slots 1000
+     # Specify the URL for posting events to M/Monit. The auth. part of
+     # the URL, that is, monit:monit, specify a username and password
+     # registered in M/Monit. If you change the password for the monit
+     # user in M/Monit it must be changed here as well.
+     set mmonit http://monit:monit@<M/Monit-host>:8080/collector
+     set httpd port 2812 and use address <monit-host>
+         allow localhost
+         allow <M/Monit-host>
+         allow username:password
+
+    where <M/Monit-host> and <monit-host> is the host name or
+    IP-address of the host running respectively M/Monit and
+    Monit. For extra security you can also configure Monit and
+    M/Monit to use SSL. See the M/Monit manual at
+    http://mmonit.com/documentation/ for more information.
+ 
+ 
+ Documentation
+ -------------
+ 
+ The M/Monit manual can be downloaded from 
+ http://mmonit.com/documentation/
+ 
+ 
+ Change log
+ ----------
+ 
+ See http://mmonit.com/wiki/MMonit/Releases
+  
+ 
+ Database note
+ -------------
+ 
+ The Database Connection Pool library (libzdb) used by M/Monit is
+ built with support for the following database systems: SQLite
+ version 3.x, MySQL version 5.x and PostgreSQL version 7.4 - 8.x.
+
+ If you want to use M/Monit with another database than SQLite see
+ this wiki article http://mmonit.com/wiki/MMonit/Setup
+ 
+
+ Contact information
+ -------------------
+ 
+ The M/Monit software is a product of Tildeslash Ltd. a Company
+ registered in Norway and in United Kingdom.
+ 
+ For further information about this Software, please see contact
+ information at.
+ 
+   http://mmonit.com/contact/
+   
+ 
+ Acknowledgments
+ ---------------
+ 
+ This product includes software developed by the OpenSSL Project for 
+ use in the OpenSSL Toolkit (http://www.openssl.org/)
+ 
+ This product includes and use libevent developed by Niels Provos et.
+ al. (http://www.monkey.org/~provos/libevent/)
+ 
+ This product use parts of the CII software library developed by
+ David R. Hanson. (http://www.cs.princeton.edu/software/cii/)
+ 
+ This product includes Clearsilver, developed by Brandon Long.
+ (http://www.clearsilver.net/)
+ 
+ This product includes SQLite, developed by D. Richard Hipp et. al.
+ (http://www.sqlite.org/)
+ 
+ This product includes The Yahoo! User Interface Library (YUI), 
+ developed by Yahoo! Inc. (http://developer.yahoo.com/yui/)
+
+ This product includes Judy Array, developed by Doug Baskins et. al. 
+ (http://judy.sourceforge.net/)
+
+ This product includes libzdb, a Database Library developed by
+ Tildeslash Ltd. (http://www.tildeslash.com/libzdb/)
+
+ This product includes the Zild App Server created by Tildeslash
+ Ltd. The design and architecture of Zild was inspired by the
+ Tomcat Servlet Container by the Apache Software Foundation
+ (http://www.apache.org/)

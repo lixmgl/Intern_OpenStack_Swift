@@ -1,0 +1,88 @@
+check process glance-registry matching "glance-registry"
+       start program = "/bin/sh -c '/etc/init.d/glance-registry start'" with timeout 90 seconds
+       stop program  = "/bin/sh -c '/etc/init.d/glance-registry stop'"
+       if failed port 9191 then restart
+       if 3 restarts within 3 cycles then timeout
+       
+check process glance-api matching "glance-api"
+       start program = "/etc/init.d/glance-api start" with timeout 90 seconds
+       stop program  = "/etc/init.d/glance-api stop"
+       if failed port 9292 then restart
+       if 3 restarts within 3 cycles then timeout
+       
+check process nova-api matching "nova-api"
+       start program = "/etc/init.d/nova-api start" with timeout 90 seconds
+       stop program  = "/etc/init.d/nova-api stop"
+       if failed port 8773 then restart
+       if failed port 8775 then restart
+       if failed port 8776 then restart
+       if 5 restarts within 5 cycles then timeout
+       
+#check process nova-api-os-volume matching "/root/monit-5.3.2/script/program_status-nova-api-os-volume"
+#       start program = "/etc/init.d/nova-api-os-volume start" with timeout 90 seconds
+#       stop program  = "/etc/init.d/nova-api-os-volume stop"
+#       if status != 0 then restart
+#       if failed port 8773 then restart
+#       if failed port 8775 then restart
+#       if failed port 8776 then restart
+#       if 3 restarts within 3 cycles then timeout
+       
+#check process nova-api-ec2 matching "nova-api-ec2"
+#       start program = "/etc/init.d/nova-api-ec2 start" with timeout 90 seconds
+#       stop program  = "/etc/init.d/nova-api-ec2 stop"
+#       #if status != 0 then restart
+#       if 3 restarts within 3 cycles then timeout
+       
+check process nova-vncproxy matching "nova-xvpvncproxy"
+       start program = "/etc/init.d/nova-vncproxy start" with timeout 90 seconds
+       stop program  = "/etc/init.d/nova-vncproxy stop"
+       if failed port 6081 then restart
+       if 3 restarts within 3 cycles then timeout
+
+#check process nova-api-metadata matching "nova-api-metadata"
+#       start program = "/etc/init.d/nova-api-metadata start" with timeout 90 seconds
+#       stop program  = "/etc/init.d/nova-api-metadata stop"
+#       if 3 restarts within 3 cycles then timeout       
+
+ check process nova-api-os-compute matching "nova-api-os-compute"
+       start program = "/etc/init.d/nova-api-os-compute start" with timeout 90 seconds
+       stop program  = "/etc/init.d/nova-api-os-compute stop"
+       if failed port 8774 then restart
+       if 3 restarts within 3 cycles then timeout
+       
+#check process nova-console matching "nova-console"
+#       start program = "/etc/init.d/nova-console start" with timeout 90 seconds
+#       stop program  = "/etc/init.d/nova-console stop"
+#       if 3 restarts within 3 cycles then timeout
+       
+#check process nova-consoleauth matching "nova-consoleauth"
+#       start program = "/etc/init.d/nova-consoleauth start" with timeout 90 seconds
+#       stop program  = "/etc/init.d/nova-consoleauth stop"
+#       if 3 restarts within 3 cycles then timeout
+       
+check process nova-objectstore matching "nova-objectstore"
+       start program = "/etc/init.d/nova-objectstore start" with timeout 90 seconds
+       stop program  = "/etc/init.d/nova-objectstore stop"
+       if failed host 10.100.18.141 port 3333 then restart
+       if 3 restarts within 3 cycles then timeout    
+     
+check process memcached with pidfile "/var/run/memcached.pid"
+       start program = "/etc/init.d/memcached start" with timeout 90 seconds
+       stop program  = "/etc/init.d/memcached stop"
+       if failed port 11211 then restart
+       if 3 restarts within 3 cycles then timeout 
+
+## Check system volume
+check filesystem os-sda1 with path /dev/sda1
+       if failed permission 0660 then unmonitor
+       if failed uid root then unmonitor
+       if failed gid disk then unmonitor
+       if space usage > 90 % then alert
+       if inode usage > 90 % then alert
+       alert autumn@cisco.com
+       
+## Check the changing of configuration file and restart/reload the processes
+check file nova.conf path /etc/nova/nova.conf
+     if changed timestamp then alert
+     alert autumn@cisco.com
+

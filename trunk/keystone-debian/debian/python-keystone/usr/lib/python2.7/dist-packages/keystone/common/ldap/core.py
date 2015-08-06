@@ -1,0 +1,1 @@
+link ../../../../../../share/pyshared/keystone/common/ldap/core.py

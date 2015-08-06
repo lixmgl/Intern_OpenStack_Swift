@@ -1,0 +1,4 @@
+#!/bin/bash
+
+chown -R root:root /opt/collectd
+cp /opt/collectd/bin/collectd_rc /etc/init.d/collectd

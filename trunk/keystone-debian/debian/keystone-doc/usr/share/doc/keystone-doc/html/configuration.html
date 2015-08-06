@@ -1,0 +1,868 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configuring Keystone &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="next" title="keystone-manage" href="man/keystone-manage.html" />
+    <link rel="prev" title="Installing Keystone" href="installing.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="man/keystone-manage.html" title="keystone-manage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installing.html" title="Installing Keystone"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Configuring Keystone</a><ul>
+<li><a class="reference internal" href="#starting-and-stopping-keystone">Starting and Stopping Keystone</a></li>
+<li><a class="reference internal" href="#configuration-files">Configuration Files</a><ul>
+<li><a class="reference internal" href="#service-catalog">Service Catalog</a><ul>
+<li><a class="reference internal" href="#sql-based-service-catalog-sql-catalog">SQL-based Service Catalog (<tt class="docutils literal"><span class="pre">sql.Catalog</span></tt>)</a></li>
+<li><a class="reference internal" href="#file-based-service-catalog-templated-templatedcatalog">File-based Service Catalog (<tt class="docutils literal"><span class="pre">templated.TemplatedCatalog</span></tt>)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logging">Logging</a></li>
+<li><a class="reference internal" href="#ssl">SSL</a><ul>
+<li><a class="reference internal" href="#types-of-certificates">Types of certificates</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sample-configuration-files">Sample Configuration Files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#preparing-your-essex-deployment">Preparing your Essex deployment</a><ul>
+<li><a class="reference internal" href="#step-1-configure-keystone-conf">Step 1: Configure keystone.conf</a></li>
+<li><a class="reference internal" href="#step-2-sync-your-new-empty-database">Step 2: Sync your new, empty database</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migrating-from-legacy-versions-of-keystone">Migrating from legacy versions of Keystone</a><ul>
+<li><a class="reference internal" href="#step-1-ensure-your-essex-deployment-can-access-your-legacy-database">Step 1: Ensure your Essex deployment can access your legacy database</a></li>
+<li><a class="reference internal" href="#step-2-import-your-legacy-data">Step 2: Import your legacy data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migrating-your-service-catalog-from-legacy-versions-of-keystone">Migrating your Service Catalog from legacy versions of Keystone</a></li>
+<li><a class="reference internal" href="#migrating-from-nova-auth">Migrating from Nova Auth</a><ul>
+<li><a class="reference internal" href="#step-1-export-your-data-from-nova">Step 1: Export your data from Nova</a></li>
+<li><a class="reference internal" href="#step-2-import-your-data-to-keystone">Step 2: Import your data to Keystone</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#initializing-keystone">Initializing Keystone</a></li>
+<li><a class="reference internal" href="#adding-users-tenants-and-roles-with-python-keystoneclient">Adding Users, Tenants, and Roles with python-keystoneclient</a><ul>
+<li><a class="reference internal" href="#authenticating-with-a-token">Authenticating with a Token</a></li>
+<li><a class="reference internal" href="#authenticating-with-a-password">Authenticating with a Password</a></li>
+<li><a class="reference internal" href="#example-usage">Example usage</a></li>
+<li><a class="reference internal" href="#tenants">Tenants</a><ul>
+<li><a class="reference internal" href="#tenant-create"><tt class="docutils literal"><span class="pre">tenant-create</span></tt></a></li>
+<li><a class="reference internal" href="#tenant-delete"><tt class="docutils literal"><span class="pre">tenant-delete</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#users">Users</a><ul>
+<li><a class="reference internal" href="#user-create"><tt class="docutils literal"><span class="pre">user-create</span></tt></a></li>
+<li><a class="reference internal" href="#user-delete"><tt class="docutils literal"><span class="pre">user-delete</span></tt></a></li>
+<li><a class="reference internal" href="#user-list"><tt class="docutils literal"><span class="pre">user-list</span></tt></a></li>
+<li><a class="reference internal" href="#user-update"><tt class="docutils literal"><span class="pre">user-update</span></tt></a></li>
+<li><a class="reference internal" href="#user-password-update"><tt class="docutils literal"><span class="pre">user-password-update</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#roles">Roles</a><ul>
+<li><a class="reference internal" href="#role-create"><tt class="docutils literal"><span class="pre">role-create</span></tt></a></li>
+<li><a class="reference internal" href="#role-delete"><tt class="docutils literal"><span class="pre">role-delete</span></tt></a></li>
+<li><a class="reference internal" href="#role-list"><tt class="docutils literal"><span class="pre">role-list</span></tt></a></li>
+<li><a class="reference internal" href="#role-get"><tt class="docutils literal"><span class="pre">role-get</span></tt></a></li>
+<li><a class="reference internal" href="#user-role-add"><tt class="docutils literal"><span class="pre">user-role-add</span></tt></a></li>
+<li><a class="reference internal" href="#user-role-remove"><tt class="docutils literal"><span class="pre">user-role-remove</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#services">Services</a><ul>
+<li><a class="reference internal" href="#service-create"><tt class="docutils literal"><span class="pre">service-create</span></tt></a></li>
+<li><a class="reference internal" href="#service-list"><tt class="docutils literal"><span class="pre">service-list</span></tt></a></li>
+<li><a class="reference internal" href="#service-get"><tt class="docutils literal"><span class="pre">service-get</span></tt></a></li>
+<li><a class="reference internal" href="#service-delete"><tt class="docutils literal"><span class="pre">service-delete</span></tt></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuring-the-ldap-identity-provider">Configuring the LDAP Identity Provider</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="installing.html"
+                                  title="previous chapter">Installing Keystone</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="man/keystone-manage.html"
+                                  title="next chapter">keystone-manage</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/configuration.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="configuring-keystone">
+<h1>Configuring Keystone<a class="headerlink" href="#configuring-keystone" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="man/keystone-manage.html">keystone-manage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/keystone-all.html">keystone</a></li>
+</ul>
+</div>
+<p>Once Keystone is installed, it is configured via a primary configuration file
+(<tt class="docutils literal"><span class="pre">etc/keystone.conf</span></tt>), possibly a separate logging configuration file, and
+initializing data into keystone using the command line client.</p>
+<div class="section" id="starting-and-stopping-keystone">
+<h2>Starting and Stopping Keystone<a class="headerlink" href="#starting-and-stopping-keystone" title="Permalink to this headline">¶</a></h2>
+<p>Start Keystone services using the command:</p>
+<div class="highlight-python"><pre>$ keystone-all</pre>
+</div>
+<p>Invoking this command starts up two <tt class="docutils literal"><span class="pre">wsgi.Server</span></tt> instances, <tt class="docutils literal"><span class="pre">admin</span></tt> (the
+administration API) and <tt class="docutils literal"><span class="pre">main</span></tt> (the primary/public API interface). Both
+services are configured by <tt class="docutils literal"><span class="pre">keystone.conf</span></tt> as run in a single process.</p>
+<p>Stop the process using <tt class="docutils literal"><span class="pre">Control-C</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you have not already configured Keystone, it may not start as expected.</p>
+</div>
+</div>
+<div class="section" id="configuration-files">
+<h2>Configuration Files<a class="headerlink" href="#configuration-files" title="Permalink to this headline">¶</a></h2>
+<p>The keystone configuration file is an <tt class="docutils literal"><span class="pre">ini</span></tt> file based on <a class="reference external" href="http://pythonpaste.org/">Paste</a>, a
+common system used to configure python WSGI based applications. In addition to
+the paste configuration entries, general and driver-specific configuration
+values are organized into the following sections:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">[DEFAULT]</span></tt> - general configuration</li>
+<li><tt class="docutils literal"><span class="pre">[sql]</span></tt> - optional storage backend configuration</li>
+<li><tt class="docutils literal"><span class="pre">[ec2]</span></tt> - Amazon EC2 authentication driver configuration</li>
+<li><tt class="docutils literal"><span class="pre">[s3]</span></tt> - Amazon S3 authentication driver configuration.</li>
+<li><tt class="docutils literal"><span class="pre">[identity]</span></tt> - identity system driver configuration</li>
+<li><tt class="docutils literal"><span class="pre">[catalog]</span></tt> - service catalog driver configuration</li>
+<li><tt class="docutils literal"><span class="pre">[token]</span></tt> - token driver configuration</li>
+<li><tt class="docutils literal"><span class="pre">[policy]</span></tt> - policy system driver configuration for RBAC</li>
+<li><tt class="docutils literal"><span class="pre">[ssl]</span></tt> - SSL configuration</li>
+</ul>
+<p>The Keystone configuration file is expected to be named <tt class="docutils literal"><span class="pre">keystone.conf</span></tt>.
+When starting keystone, you can specify a different configuration file to
+use with <tt class="docutils literal"><span class="pre">--config-file</span></tt>. If you do <strong>not</strong> specify a configuration file,
+keystone will look in the following directories for a configuration file, in
+order:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">~/.keystone/</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">~/</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">/etc/keystone/</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">/etc/</span></tt></li>
+</ul>
+<div class="section" id="service-catalog">
+<h3>Service Catalog<a class="headerlink" href="#service-catalog" title="Permalink to this headline">¶</a></h3>
+<p>Keystone provides two configuration options for your service catalog.</p>
+<div class="section" id="sql-based-service-catalog-sql-catalog">
+<h4>SQL-based Service Catalog (<tt class="docutils literal"><span class="pre">sql.Catalog</span></tt>)<a class="headerlink" href="#sql-based-service-catalog-sql-catalog" title="Permalink to this headline">¶</a></h4>
+<p>A dynamic database-backed driver fully supporting persistent configuration via
+keystoneclient administration commands (e.g. <tt class="docutils literal"><span class="pre">keystone</span> <span class="pre">endpoint-create</span></tt>).</p>
+<p><tt class="docutils literal"><span class="pre">keystone.conf</span></tt> example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">catalog</span><span class="p">]</span>
+<span class="n">driver</span> <span class="o">=</span> <span class="n">keystone</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">Catalog</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A <cite>template_file</cite> does not need to be defined for the sql.Catalog driver.</p>
+</div>
+<p>To build your service catalog using this driver, see the built-in help:</p>
+<div class="highlight-python"><pre>$ keystone
+$ keystone help service-create
+$ keystone help endpoint-create</pre>
+</div>
+<p>You can also refer to <a class="reference external" href="https://github.com/openstack/keystone/blob/master/tools/sample_data.sh">an example in Keystone (tools/sample_data.sh)</a>.</p>
+</div>
+<div class="section" id="file-based-service-catalog-templated-templatedcatalog">
+<h4>File-based Service Catalog (<tt class="docutils literal"><span class="pre">templated.TemplatedCatalog</span></tt>)<a class="headerlink" href="#file-based-service-catalog-templated-templatedcatalog" title="Permalink to this headline">¶</a></h4>
+<p>The templated catalog is an in-memory backend initialized from a read-only
+<tt class="docutils literal"><span class="pre">template_file</span></tt>. Choose this option only if you know that your
+service catalog will not change very much over time.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Attempting to manage your service catalog using keystoneclient commands
+(e.g. <tt class="docutils literal"><span class="pre">keystone</span> <span class="pre">endpoint-create</span></tt>) against this driver will result in
+<tt class="docutils literal"><span class="pre">HTTP</span> <span class="pre">501</span> <span class="pre">Not</span> <span class="pre">Implemented</span></tt> errors. This is the expected behavior. If you
+want to use these commands, you must instead use the SQL-based Service
+Catalog driver.</p>
+</div>
+<p><tt class="docutils literal"><span class="pre">keystone.conf</span></tt> example:</p>
+<div class="highlight-python"><pre>[catalog]
+driver = keystone.catalog.backends.templated.TemplatedCatalog
+template_file = /opt/stack/keystone/etc/default_catalog.templates</pre>
+</div>
+<p>The value of <tt class="docutils literal"><span class="pre">template_file</span></tt> is expected to be an absolute path to your
+service catalog configuration. An example <tt class="docutils literal"><span class="pre">template_file</span></tt> is included in
+Keystone, however you should create your own to reflect your deployment.
+If you are migrating from a legacy deployment, a tool is available to help with
+this task (see <a class="reference internal" href="#migrating-your-service-catalog-from-legacy-versions-of-keystone">Migrating your Service Catalog from legacy versions of
+Keystone</a>).</p>
+<p>Another such example is <a class="reference external" href="https://github.com/openstack-dev/devstack/blob/master/files/default_catalog.templates">available in devstack
+(files/default_catalog.templates)</a>.</p>
+</div>
+</div>
+<div class="section" id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
+<p>Logging is configured externally to the rest of Keystone. Configure the path
+to your logging configuration file using the <tt class="docutils literal"><span class="pre">[DEFAULT]</span> <span class="pre">log_config</span></tt> option of
+<tt class="docutils literal"><span class="pre">keystone.conf</span></tt>. If you wish to route all your logging through syslog, set
+the <tt class="docutils literal"><span class="pre">[DEFAULT]</span> <span class="pre">use_syslog</span></tt> option.</p>
+<p>A sample <tt class="docutils literal"><span class="pre">log_config</span></tt> file is included with the project at
+<tt class="docutils literal"><span class="pre">etc/logging.conf.sample</span></tt>. Like other OpenStack projects, Keystone uses the
+<cite>python logging module</cite>, which includes extensive configuration options for
+choosing the output levels and formats.</p>
+</div>
+<div class="section" id="ssl">
+<h3>SSL<a class="headerlink" href="#ssl" title="Permalink to this headline">¶</a></h3>
+<p>Keystone may be configured to support 2-way SSL out-of-the-box.  The x509
+certificates used by Keystone must be obtained externally and configured for use
+with Keystone as described in this section.  However, a set of sample certficates
+is provided in the examples/ssl directory with the Keystone distribution for testing.
+Here is the description of each of them and their purpose:</p>
+<div class="section" id="types-of-certificates">
+<h4>Types of certificates<a class="headerlink" href="#types-of-certificates" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt>ca.pem</dt>
+<dd>Certificate Authority chain to validate against.</dd>
+<dt>keystone.pem</dt>
+<dd>Public certificate for Keystone server.</dd>
+<dt>middleware.pem</dt>
+<dd>Public and private certificate for Keystone middleware/client.</dd>
+<dt>cakey.pem</dt>
+<dd>Private key for the CA.</dd>
+<dt>keystonekey.pem</dt>
+<dd>Private key for the Keystone server.</dd>
+</dl>
+<p>Note that you may choose whatever names you want for these certificates, or combine
+the public/private keys in the same file if you wish.  These certificates are just
+provided as an example.</p>
+</div>
+<div class="section" id="configuration">
+<h4>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h4>
+<p>To enable SSL with client authentication, modify the etc/keystone.conf file accordingly
+under the [ssl] section.  SSL configuration example using the included sample
+certificates:</p>
+<div class="highlight-python"><pre>[ssl]
+enable = True
+certfile = &lt;path to keystone.pem&gt;
+keyfile = &lt;path to keystonekey.pem&gt;
+ca_certs = &lt;path to ca.pem&gt;
+cert_required = True</pre>
+</div>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">enable</span></tt>:  True enables SSL.  Defaults to False.</li>
+<li><tt class="docutils literal"><span class="pre">certfile</span></tt>:  Path to Keystone public certificate file.</li>
+<li><tt class="docutils literal"><span class="pre">keyfile</span></tt>:  Path to Keystone private certificate file.  If the private key is included in the certfile, the keyfile maybe omitted.</li>
+<li><tt class="docutils literal"><span class="pre">ca_certs</span></tt>:  Path to CA trust chain.</li>
+<li><tt class="docutils literal"><span class="pre">cert_required</span></tt>:  Requires client certificate.  Defaults to False.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="sample-configuration-files">
+<h3>Sample Configuration Files<a class="headerlink" href="#sample-configuration-files" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="docutils literal"><span class="pre">etc/</span></tt> folder distributed with Keystone contains example configuration
+files for each Server application.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">etc/keystone.conf</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">etc/logging.conf.sample</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">etc/default_catalog.templates</span></tt></li>
+</ul>
+</div>
+</div>
+<div class="section" id="preparing-your-essex-deployment">
+<span id="prepare-your-essex-deployment"></span><h2>Preparing your Essex deployment<a class="headerlink" href="#preparing-your-essex-deployment" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="step-1-configure-keystone-conf">
+<h3>Step 1: Configure keystone.conf<a class="headerlink" href="#step-1-configure-keystone-conf" title="Permalink to this headline">¶</a></h3>
+<p>Ensure that your <tt class="docutils literal"><span class="pre">keystone.conf</span></tt> is configured to use a SQL driver:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">identity</span><span class="p">]</span>
+<span class="n">driver</span> <span class="o">=</span> <span class="n">keystone</span><span class="o">.</span><span class="n">identity</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">Identity</span>
+</pre></div>
+</div>
+<p>You may also want to configure your <tt class="docutils literal"><span class="pre">[sql]</span></tt> settings to better reflect your
+environment:</p>
+<div class="highlight-python"><pre>[sql]
+connection = sqlite:///keystone.db
+idle_timeout = 200</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is important that the database that you specify be different from the
+one containing your existing install.</p>
+</div>
+</div>
+<div class="section" id="step-2-sync-your-new-empty-database">
+<h3>Step 2: Sync your new, empty database<a class="headerlink" href="#step-2-sync-your-new-empty-database" title="Permalink to this headline">¶</a></h3>
+<p>You should now be ready to initialize your new database without error, using:</p>
+<div class="highlight-python"><pre>$ keystone-manage db_sync</pre>
+</div>
+<p>To test this, you should now be able to start <tt class="docutils literal"><span class="pre">keystone-all</span></tt> and use the
+Keystone Client to list your tenants (which should successfully return an
+empty list from your new database):</p>
+<div class="highlight-python"><pre>$ keystone --token ADMIN --endpoint http://127.0.0.1:35357/v2.0/ tenant-list
++----+------+---------+
+| id | name | enabled |
++----+------+---------+
++----+------+---------+</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We&#8217;re providing the default SERVICE_TOKEN and SERVICE_ENDPOINT values from
+<tt class="docutils literal"><span class="pre">keystone.conf</span></tt> to connect to the Keystone service. If you changed those
+values, or deployed Keystone to a different endpoint, you will need to
+change the provided command accordingly.</p>
+</div>
+</div>
+</div>
+<div class="section" id="migrating-from-legacy-versions-of-keystone">
+<h2>Migrating from legacy versions of Keystone<a class="headerlink" href="#migrating-from-legacy-versions-of-keystone" title="Permalink to this headline">¶</a></h2>
+<p>Migration support is provided for the following legacy Keystone versions:</p>
+<ul class="simple">
+<li>diablo-5</li>
+<li>stable/diablo</li>
+<li>essex-2</li>
+<li>essex-3</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Before you can import your legacy data, you must first
+<a class="reference internal" href="#prepare-your-essex-deployment">prepare your Essex deployment</a>.</p>
+</div>
+<div class="section" id="step-1-ensure-your-essex-deployment-can-access-your-legacy-database">
+<h3>Step 1: Ensure your Essex deployment can access your legacy database<a class="headerlink" href="#step-1-ensure-your-essex-deployment-can-access-your-legacy-database" title="Permalink to this headline">¶</a></h3>
+<p>Your legacy <tt class="docutils literal"><span class="pre">keystone.conf</span></tt> contains a SQL configuration section called
+<tt class="docutils literal"><span class="pre">[keystone.backends.sqlalchemy]</span></tt> connection string which, by default,
+looks like:</p>
+<div class="highlight-python"><pre>sql_connection = sqlite:///keystone.db</pre>
+</div>
+<p>This connection string needs to be accessible from your Essex deployment (e.g.
+you may need to copy your SQLite <tt class="docutils literal"><span class="pre">*.db</span></tt> file to a new server, adjust the
+relative path as appropriate, or open a firewall for MySQL, etc).</p>
+</div>
+<div class="section" id="step-2-import-your-legacy-data">
+<h3>Step 2: Import your legacy data<a class="headerlink" href="#step-2-import-your-legacy-data" title="Permalink to this headline">¶</a></h3>
+<p>Use the following command to import your old data using the value of
+<tt class="docutils literal"><span class="pre">sql_connection</span></tt> from step 3:</p>
+<div class="highlight-python"><pre>$ keystone-manage import_legacy &lt;sql_connection&gt;</pre>
+</div>
+<p>You should now be able to run the same command you used to test your new
+database above, but now you&#8217;ll see your legacy Keystone data in Essex:</p>
+<div class="highlight-python"><pre>$ keystone --token ADMIN --endpoint http://127.0.0.1:35357/v2.0/ tenant-list
++----------------------------------+----------------+---------+
+|                id                |      name      | enabled |
++----------------------------------+----------------+---------+
+| 12edde26a6224199a66ece67b762a065 | project-y      | True    |
+| 593715ed4359404999915ea7005a7da1 | ANOTHER:TENANT | True    |
+| be57fed798b049bc9637d2be30bfa857 | coffee-tea     | True    |
+| e3c382f4757a4385b502056431763cca | customer-x     | True    |
++----------------------------------+----------------+---------+</pre>
+</div>
+</div>
+</div>
+<div class="section" id="migrating-your-service-catalog-from-legacy-versions-of-keystone">
+<h2>Migrating your Service Catalog from legacy versions of Keystone<a class="headerlink" href="#migrating-your-service-catalog-from-legacy-versions-of-keystone" title="Permalink to this headline">¶</a></h2>
+<p>While legacy Keystone deployments stored the service catalog in the database,
+the service catalog in Essex is stored in a flat <tt class="docutils literal"><span class="pre">template_file</span></tt>. An example
+service catalog template file may be found in
+<tt class="docutils literal"><span class="pre">etc/default_catalog.templates</span></tt>. You can change the path to your service
+catalog template in <tt class="docutils literal"><span class="pre">keystone.conf</span></tt> by changing the value of
+<tt class="docutils literal"><span class="pre">[catalog]</span> <span class="pre">template_file</span></tt>.</p>
+<p>Import your legacy catalog and redirect the output to your <tt class="docutils literal"><span class="pre">template_file</span></tt>:</p>
+<div class="highlight-python"><pre>$ keystone-manage export_legacy_catalog &lt;sql_connection&gt; &gt; &lt;template_file&gt;</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">After executing this command, you will need to restart the Keystone
+service to see your changes.</p>
+</div>
+</div>
+<div class="section" id="migrating-from-nova-auth">
+<h2>Migrating from Nova Auth<a class="headerlink" href="#migrating-from-nova-auth" title="Permalink to this headline">¶</a></h2>
+<p>Migration of users, projects (aka tenants), roles and EC2 credentials
+is supported for the Essex release of Nova. To migrate your auth
+data from Nova, use the following steps:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Before you can migrate from nova auth, you must first
+<a class="reference internal" href="#prepare-your-essex-deployment">prepare your Essex deployment</a>.</p>
+</div>
+<div class="section" id="step-1-export-your-data-from-nova">
+<h3>Step 1: Export your data from Nova<a class="headerlink" href="#step-1-export-your-data-from-nova" title="Permalink to this headline">¶</a></h3>
+<p>Use the following command to export your data from Nova to a <tt class="docutils literal"><span class="pre">dump_file</span></tt>:</p>
+<div class="highlight-python"><pre>$ nova-manage export auth &gt; /path/to/dump</pre>
+</div>
+<p>It is important to redirect the output to a file so it can be imported in the
+next step.</p>
+</div>
+<div class="section" id="step-2-import-your-data-to-keystone">
+<h3>Step 2: Import your data to Keystone<a class="headerlink" href="#step-2-import-your-data-to-keystone" title="Permalink to this headline">¶</a></h3>
+<p>Import your Nova auth data from a <tt class="docutils literal"><span class="pre">dump_file</span></tt> created with <tt class="docutils literal"><span class="pre">nova-manage</span></tt>:</p>
+<div class="highlight-python"><pre>$ keystone-manage import_nova_auth &lt;dump_file&gt;</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Users are added to Keystone with the user ID from Nova as the user name.
+Nova&#8217;s projects are imported with the project ID as the tenant name. The
+password used to authenticate a user in Keystone will be the API key
+(also EC2 access key) used in Nova. Users also lose any administrative
+privileges they had in Nova. The necessary admin role must be explicitly
+re-assigned to each user.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Users in Nova&#8217;s auth system have a single set of EC2 credentials that
+works with all projects (tenants) that user can access. In Keystone, these
+credentials are scoped to a single user/tenant pair. In order to use the
+same secret keys from Nova, you must prefix each corresponding access key
+with the ID of the project used in Nova. For example, if you had access
+to the &#8216;Beta&#8217; project in your Nova installation with the access/secret
+keys &#8216;ACCESS&#8217;/&#8217;SECRET&#8217;, you should use &#8216;Beta:ACCESS&#8217;/&#8217;SECRET&#8217; in Keystone.
+These credentials are active once your migration is complete.</p>
+</div>
+</div>
+</div>
+<div class="section" id="initializing-keystone">
+<h2>Initializing Keystone<a class="headerlink" href="#initializing-keystone" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">keystone-manage</span></tt> is designed to execute commands that cannot be administered
+through the normal REST API. At the moment, the following calls are supported:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">db_sync</span></tt>: Sync the database schema.</li>
+<li><tt class="docutils literal"><span class="pre">import_legacy</span></tt>: Import data from a legacy (pre-Essex) database.</li>
+<li><tt class="docutils literal"><span class="pre">export_legacy_catalog</span></tt>: Export service catalog from a legacy (pre-Essex) database.</li>
+<li><tt class="docutils literal"><span class="pre">import_nova_auth</span></tt>: Load auth data from a dump created with <tt class="docutils literal"><span class="pre">nova-manage</span></tt>.</li>
+</ul>
+<p>Invoking <tt class="docutils literal"><span class="pre">keystone-manage</span></tt> by itself will give you additional usage
+information.</p>
+</div>
+<div class="section" id="adding-users-tenants-and-roles-with-python-keystoneclient">
+<h2>Adding Users, Tenants, and Roles with python-keystoneclient<a class="headerlink" href="#adding-users-tenants-and-roles-with-python-keystoneclient" title="Permalink to this headline">¶</a></h2>
+<p>User, tenants, and roles must be administered using admin credentials.
+There are two ways to configure <tt class="docutils literal"><span class="pre">python-keystoneclient</span></tt> to use admin
+credentials, using the either an existing token or password credentials.</p>
+<div class="section" id="authenticating-with-a-token">
+<h3>Authenticating with a Token<a class="headerlink" href="#authenticating-with-a-token" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If your Keystone deployment is brand new, you will need to use this
+authentication method, along with your <tt class="docutils literal"><span class="pre">[DEFAULT]</span> <span class="pre">admin_token</span></tt>.</p>
+</div>
+<p>To use Keystone with a token, set the following flags:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">--endpoint</span> <span class="pre">SERVICE_ENDPOINT</span></tt>: allows you to specify the Keystone endpoint
+to communicate with. The default endpoint is <tt class="docutils literal"><span class="pre">http://localhost:35357/v2.0</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">--token</span> <span class="pre">SERVICE_TOKEN</span></tt>: your service token</li>
+</ul>
+<p>To administer a Keystone endpoint, your token should be either belong to a user
+with the <tt class="docutils literal"><span class="pre">admin</span></tt> role, or, if you haven&#8217;t created one yet, should be equal to
+the value defined by <tt class="docutils literal"><span class="pre">[DEFAULT]</span> <span class="pre">admin_token</span></tt> in your <tt class="docutils literal"><span class="pre">keystone.conf</span></tt>.</p>
+<p>You can also set these variables in your environment so that they do not need
+to be passed as arguments each time:</p>
+<div class="highlight-python"><pre>$ export SERVICE_ENDPOINT=http://localhost:35357/v2.0
+$ export SERVICE_TOKEN=ADMIN</pre>
+</div>
+</div>
+<div class="section" id="authenticating-with-a-password">
+<h3>Authenticating with a Password<a class="headerlink" href="#authenticating-with-a-password" title="Permalink to this headline">¶</a></h3>
+<p>To administer a Keystone endpoint, the following user referenced below should
+be granted the <tt class="docutils literal"><span class="pre">admin</span></tt> role.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">--os_username</span> <span class="pre">OS_USERNAME</span></tt>: Name of your user</li>
+<li><tt class="docutils literal"><span class="pre">--os_password</span> <span class="pre">OS_PASSWORD</span></tt>: Password for your user</li>
+<li><tt class="docutils literal"><span class="pre">--os_tenant_name</span> <span class="pre">OS_TENANT_NAME</span></tt>: Name of your tenant</li>
+<li><tt class="docutils literal"><span class="pre">--os_auth_url</span> <span class="pre">OS_AUTH_URL</span></tt>: URL of your Keystone auth server, e.g.
+<tt class="docutils literal"><span class="pre">http://localhost:35357/v2.0</span></tt></li>
+</ul>
+<p>You can also set these variables in your environment so that they do not need
+to be passed as arguments each time:</p>
+<div class="highlight-python"><pre>$ export OS_USERNAME=my_username
+$ export OS_PASSWORD=my_password
+$ export OS_TENANT_NAME=my_tenant</pre>
+</div>
+</div>
+<div class="section" id="example-usage">
+<h3>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">keystone</span></tt> is set up to expect commands in the general form of
+<tt class="docutils literal"><span class="pre">keystone</span></tt> <tt class="docutils literal"><span class="pre">command</span></tt> <tt class="docutils literal"><span class="pre">argument</span></tt>, followed by flag-like keyword arguments to
+provide additional (often optional) information. For example, the command
+<tt class="docutils literal"><span class="pre">user-list</span></tt> and <tt class="docutils literal"><span class="pre">tenant-create</span></tt> can be invoked as follows:</p>
+<div class="highlight-python"><pre># Using token auth env variables
+export SERVICE_ENDPOINT=http://127.0.0.1:35357/v2.0/
+export SERVICE_TOKEN=secrete_token
+keystone user-list
+keystone tenant-create --name=demo
+
+# Using token auth flags
+keystone --token=secrete --endpoint=http://127.0.0.1:35357/v2.0/ user-list
+keystone --token=secrete --endpoint=http://127.0.0.1:35357/v2.0/ tenant-create --name=demo
+
+# Using user + password + tenant_name env variables
+export OS_USERNAME=admin
+export OS_PASSWORD=secrete
+export OS_TENANT_NAME=admin
+keystone user-list
+keystone tenant-create --name=demo
+
+# Using user + password + tenant_name flags
+keystone --os_username=admin --os_password=secrete --os_tenant_name=admin user-list
+keystone --os_username=admin --os_password=secrete --os_tenant_name=admin tenant-create --name=demo</pre>
+</div>
+</div>
+<div class="section" id="tenants">
+<h3>Tenants<a class="headerlink" href="#tenants" title="Permalink to this headline">¶</a></h3>
+<p>Tenants are the high level grouping within Keystone that represent groups of
+users. A tenant is the grouping that owns virtual machines within Nova, or
+containers within Swift. A tenant can have zero or more users, Users can
+be associated with more than one tenant, and each tenant - user pairing can
+have a role associated with it.</p>
+<div class="section" id="tenant-create">
+<h4><tt class="docutils literal"><span class="pre">tenant-create</span></tt><a class="headerlink" href="#tenant-create" title="Permalink to this headline">¶</a></h4>
+<p>keyword arguments</p>
+<ul class="simple">
+<li>name</li>
+<li>description (optional, defaults to None)</li>
+<li>enabled (optional, defaults to True)</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone tenant-create --name=demo</pre>
+</div>
+<p>creates a tenant named &#8220;demo&#8221;.</p>
+</div>
+<div class="section" id="tenant-delete">
+<h4><tt class="docutils literal"><span class="pre">tenant-delete</span></tt><a class="headerlink" href="#tenant-delete" title="Permalink to this headline">¶</a></h4>
+<p>arguments</p>
+<ul class="simple">
+<li>tenant_id</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone tenant-delete f2b7b39c860840dfa47d9ee4adffa0b3</pre>
+</div>
+</div>
+</div>
+<div class="section" id="users">
+<h3>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="user-create">
+<h4><tt class="docutils literal"><span class="pre">user-create</span></tt><a class="headerlink" href="#user-create" title="Permalink to this headline">¶</a></h4>
+<p>keyword arguments</p>
+<ul class="simple">
+<li>name</li>
+<li>pass</li>
+<li>email</li>
+<li>tenant_id (optional, defaults to None)</li>
+<li>enabled (optional, defaults to True)</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone user-create
+--name=admin \
+--pass=secrete \
+--tenant_id=2395953419144b67955ac4bab96b8fd2 \
+--email=admin@example.com</pre>
+</div>
+</div>
+<div class="section" id="user-delete">
+<h4><tt class="docutils literal"><span class="pre">user-delete</span></tt><a class="headerlink" href="#user-delete" title="Permalink to this headline">¶</a></h4>
+<p>keyword arguments</p>
+<ul class="simple">
+<li>user_id</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone user-delete f2b7b39c860840dfa47d9ee4adffa0b3</pre>
+</div>
+</div>
+<div class="section" id="user-list">
+<h4><tt class="docutils literal"><span class="pre">user-list</span></tt><a class="headerlink" href="#user-list" title="Permalink to this headline">¶</a></h4>
+<p>list users in the system, optionally by a specific tenant (identified by tenant_id)</p>
+<p>arguments</p>
+<ul class="simple">
+<li>tenant_id (optional, defaults to None)</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone user-list</pre>
+</div>
+</div>
+<div class="section" id="user-update">
+<h4><tt class="docutils literal"><span class="pre">user-update</span></tt><a class="headerlink" href="#user-update" title="Permalink to this headline">¶</a></h4>
+<p>arguments</p>
+<ul class="simple">
+<li>user_id</li>
+</ul>
+<p>keyword arguments</p>
+<ul class="simple">
+<li>name     Desired new user name (Optional)</li>
+<li>email    Desired new email address (Optional)</li>
+<li>enabled &lt;true|false&gt;   Enable or disable user (Optional)</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone user-update 03c84b51574841ba9a0d8db7882ac645 --email=newemail@example.com</pre>
+</div>
+</div>
+<div class="section" id="user-password-update">
+<h4><tt class="docutils literal"><span class="pre">user-password-update</span></tt><a class="headerlink" href="#user-password-update" title="Permalink to this headline">¶</a></h4>
+<p>arguments</p>
+<ul class="simple">
+<li>user_id</li>
+<li>password</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone user-password-update --pass foo 03c84b51574841ba9a0d8db7882ac645</pre>
+</div>
+</div>
+</div>
+<div class="section" id="roles">
+<h3>Roles<a class="headerlink" href="#roles" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="role-create">
+<h4><tt class="docutils literal"><span class="pre">role-create</span></tt><a class="headerlink" href="#role-create" title="Permalink to this headline">¶</a></h4>
+<p>arguments</p>
+<ul class="simple">
+<li>name</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone role-create --name=demo</pre>
+</div>
+</div>
+<div class="section" id="role-delete">
+<h4><tt class="docutils literal"><span class="pre">role-delete</span></tt><a class="headerlink" href="#role-delete" title="Permalink to this headline">¶</a></h4>
+<p>arguments</p>
+<ul class="simple">
+<li>role_id</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone role-delete 19d1d3344873464d819c45f521ff9890</pre>
+</div>
+</div>
+<div class="section" id="role-list">
+<h4><tt class="docutils literal"><span class="pre">role-list</span></tt><a class="headerlink" href="#role-list" title="Permalink to this headline">¶</a></h4>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone role-list</pre>
+</div>
+</div>
+<div class="section" id="role-get">
+<h4><tt class="docutils literal"><span class="pre">role-get</span></tt><a class="headerlink" href="#role-get" title="Permalink to this headline">¶</a></h4>
+<p>arguments</p>
+<ul class="simple">
+<li>role_id</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone role-get 19d1d3344873464d819c45f521ff9890</pre>
+</div>
+</div>
+<div class="section" id="user-role-add">
+<h4><tt class="docutils literal"><span class="pre">user-role-add</span></tt><a class="headerlink" href="#user-role-add" title="Permalink to this headline">¶</a></h4>
+<p>keyword arguments</p>
+<ul class="simple">
+<li>user &lt;user-id&gt;</li>
+<li>role &lt;role-id&gt;</li>
+<li>tenant_id &lt;tenant-id&gt;</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone user-role-add  \
+  --user=96a6ebba0d4c441887aceaeced892585  \
+  --role=f8dd5a2e4dc64a41b96add562d9a764e  \
+  --tenant_id=2395953419144b67955ac4bab96b8fd2</pre>
+</div>
+</div>
+<div class="section" id="user-role-remove">
+<h4><tt class="docutils literal"><span class="pre">user-role-remove</span></tt><a class="headerlink" href="#user-role-remove" title="Permalink to this headline">¶</a></h4>
+<p>keyword arguments</p>
+<ul class="simple">
+<li>user &lt;user-id&gt;</li>
+<li>role &lt;role-id&gt;</li>
+<li>tenant_id &lt;tenant-id&gt;</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone user-role-remove  \
+  --user=96a6ebba0d4c441887aceaeced892585  \
+  --role=f8dd5a2e4dc64a41b96add562d9a764e  \
+  --tenant_id=2395953419144b67955ac4bab96b8fd2</pre>
+</div>
+</div>
+</div>
+<div class="section" id="services">
+<h3>Services<a class="headerlink" href="#services" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="service-create">
+<h4><tt class="docutils literal"><span class="pre">service-create</span></tt><a class="headerlink" href="#service-create" title="Permalink to this headline">¶</a></h4>
+<p>keyword arguments</p>
+<ul class="simple">
+<li>name</li>
+<li>type</li>
+<li>description</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone service-create \
+--name=nova \
+--type=compute \
+--description="Nova Compute Service"</pre>
+</div>
+</div>
+<div class="section" id="service-list">
+<h4><tt class="docutils literal"><span class="pre">service-list</span></tt><a class="headerlink" href="#service-list" title="Permalink to this headline">¶</a></h4>
+<p>arguments</p>
+<ul class="simple">
+<li>service_id</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone service-list</pre>
+</div>
+</div>
+<div class="section" id="service-get">
+<h4><tt class="docutils literal"><span class="pre">service-get</span></tt><a class="headerlink" href="#service-get" title="Permalink to this headline">¶</a></h4>
+<p>arguments</p>
+<ul class="simple">
+<li>service_id</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone service-get 08741d8ed88242ca88d1f61484a0fe3b</pre>
+</div>
+</div>
+<div class="section" id="service-delete">
+<h4><tt class="docutils literal"><span class="pre">service-delete</span></tt><a class="headerlink" href="#service-delete" title="Permalink to this headline">¶</a></h4>
+<p>arguments</p>
+<ul class="simple">
+<li>service_id</li>
+</ul>
+<p>example:</p>
+<div class="highlight-python"><pre>$ keystone service-delete 08741d8ed88242ca88d1f61484a0fe3b</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="configuring-the-ldap-identity-provider">
+<h2>Configuring the LDAP Identity Provider<a class="headerlink" href="#configuring-the-ldap-identity-provider" title="Permalink to this headline">¶</a></h2>
+<p>As an alternative to the SQL Databse backing store, Keystone can Use a
+Directory server to provide the Identity service.  An example Schema
+for openstack would look like this:</p>
+<div class="highlight-python"><pre>dn: cn=openstack,cn=org
+dc: openstack
+objectClass: dcObject
+objectClass: organizationalUnit
+ou: openstack
+
+dn: ou=Groups,cn=openstack,cn=org
+objectClass: top
+objectClass: organizationalUnit
+ou: groups
+
+dn: ou=Users,cn=openstack,cn=org
+objectClass: top
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=Roles,cn=openstack,cn=org
+objectClass: top
+objectClass: organizationalUnit
+ou: users</pre>
+</div>
+<p>The corresponding entries in the Keystone configuration file are:</p>
+<div class="highlight-python"><pre>[ldap]
+url = ldap://localhost
+suffix = dc=openstack,dc=org
+user = dc=Manager,dc=openstack,dc=org
+password = badpassword</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="man/keystone-manage.html" title="keystone-manage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installing.html" title="Installing Keystone"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

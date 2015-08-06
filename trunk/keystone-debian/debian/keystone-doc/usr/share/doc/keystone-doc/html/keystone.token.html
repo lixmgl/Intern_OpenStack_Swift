@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>token Package &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="up" title="keystone Package" href="keystone.html" />
+    <link rel="next" title="backends Package" href="keystone.token.backends.html" />
+    <link rel="prev" title="backends Package" href="keystone.policy.backends.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.token.backends.html" title="backends Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keystone.policy.backends.html" title="backends Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" accesskey="U">keystone Package</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">token Package</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">token</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-keystone.token.core"><tt class="docutils literal"><span class="pre">core</span></tt> Module</a></li>
+<li><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="keystone.policy.backends.html"
+                                  title="previous chapter">backends Package</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="keystone.token.backends.html"
+                                  title="next chapter">backends Package</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/keystone.token.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="token-package">
+<h1>token Package<a class="headerlink" href="#token-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">token</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-keystone.token"></span></div>
+<div class="section" id="module-keystone.token.core">
+<span id="core-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">core</span></tt> Module<a class="headerlink" href="#module-keystone.token.core" title="Permalink to this headline">¶</a></h2>
+<p>Main entry point into the Token service.</p>
+<dl class="class">
+<dt id="keystone.token.core.Driver">
+<em class="property">class </em><tt class="descclassname">keystone.token.core.</tt><tt class="descname">Driver</tt><a class="headerlink" href="#keystone.token.core.Driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Interface description for a Token driver.</p>
+<dl class="method">
+<dt id="keystone.token.core.Driver.create_token">
+<tt class="descname">create_token</tt><big>(</big><em>token_id</em>, <em>data</em><big>)</big><a class="headerlink" href="#keystone.token.core.Driver.create_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a token by id and data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>token_id</strong> (<em>string</em>) &#8211; identity of the token</li>
+<li><strong>data</strong> &#8211; dictionary with additional reference information</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><pre>{
+    expires=''
+    id=token_id,
+    user=user_ref,
+    tenant=tenant_ref,
+    metadata=metadata_ref
+}</pre>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">token_ref or None.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.token.core.Driver.delete_token">
+<tt class="descname">delete_token</tt><big>(</big><em>token_id</em><big>)</big><a class="headerlink" href="#keystone.token.core.Driver.delete_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a token by id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>token_id</strong> (<em>string</em>) &#8211; identity of the token</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body">keystone.exception.TokenNotFound</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.token.core.Driver.get_token">
+<tt class="descname">get_token</tt><big>(</big><em>token_id</em><big>)</big><a class="headerlink" href="#keystone.token.core.Driver.get_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a token by id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>token_id</strong> (<em>string</em>) &#8211; identity of the token</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">token_ref</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body">keystone.exception.TokenNotFound</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.token.core.Driver.list_tokens">
+<tt class="descname">list_tokens</tt><big>(</big><em>user_id</em><big>)</big><a class="headerlink" href="#keystone.token.core.Driver.list_tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of current token_id&#8217;s for a user</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user_id</strong> (<em>string</em>) &#8211; identity of the user</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of token_id&#8217;s</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.token.core.Manager">
+<em class="property">class </em><tt class="descclassname">keystone.token.core.</tt><tt class="descname">Manager</tt><a class="headerlink" href="#keystone.token.core.Manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.html#keystone.common.manager.Manager" title="keystone.common.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.manager.Manager</span></tt></a></p>
+<p>Default pivot point for the Token backend.</p>
+<p>See <a class="reference internal" href="keystone.common.html#keystone.common.manager.Manager" title="keystone.common.manager.Manager"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.common.manager.Manager</span></tt></a> for more details on how this
+dynamically calls the backend.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="keystone.token.backends.html">backends Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="keystone.token.backends.html#module-keystone.token.backends.kvs"><tt class="docutils literal"><span class="pre">kvs</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.token.backends.html#module-keystone.token.backends.memcache"><tt class="docutils literal"><span class="pre">memcache</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.token.backends.html#module-keystone.token.backends.sql"><tt class="docutils literal"><span class="pre">sql</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.token.backends.html" title="backends Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keystone.policy.backends.html" title="backends Package"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" >keystone Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

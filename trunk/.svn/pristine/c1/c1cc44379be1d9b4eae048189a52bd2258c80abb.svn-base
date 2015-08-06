@@ -1,0 +1,138 @@
+#Account-server processes
+check process swift-account-server with pidfile /var/run/swift/account-server.pid
+       start program = "/etc/init.d/swift-account start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-account stop"
+       if failed port 6002 then restart
+       if 3 restarts within 3 cycles then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'swift-account-server is down' 'swift-storage-node'"
+       group swift-storage-node-service
+
+check process swift-account-replicator with pidfile /var/run/swift/account-replicator.pid
+       start program = "/etc/init.d/swift-account-replicator start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-account-replicator stop"
+       depends on swift-account-server
+       group swift-storage-node-service
+
+check process swift-account-auditor with pidfile /var/run/swift/account-auditor.pid
+       start program = "/etc/init.d/swift-account-auditor start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-account-auditor stop"
+       depends on swift-account-server
+       group swift-storage-node-service
+       
+check process swift-account-reaper with pidfile /var/run/swift/account-reaper.pid
+       start program = "/etc/init.d/swift-account-reaper start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-account-reaper stop"
+       depends on swift-account-server
+       group swift-storage-node-service
+
+#Container-server processes
+check process swift-container-server with pidfile /var/run/swift/container-server.pid
+       start program = "/etc/init.d/swift-container start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-container stop"
+       if failed port 6001 then restart
+       if 3 restarts within 3 cycles then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'swift-container-server is down' 'swift-storage-node'"
+       group swift-storage-node-service
+
+check process swift-container-replicator with pidfile /var/run/swift/container-replicator.pid
+       start program = "/etc/init.d/swift-container-replicator start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-container-replicator stop"
+       depends on swift-container-server
+       group swift-storage-node-service
+
+check process swift-container-auditor with pidfile /var/run/swift/container-auditor.pid
+       start program = "/etc/init.d/swift-container-auditor start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-container-auditor stop"
+       depends on swift-container-server
+       group swift-storage-node-service
+       
+check process swift-container-updater with pidfile /var/run/swift/container-updater.pid
+       start program = "/etc/init.d/swift-container-updater start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-container-updater stop"
+       depends on swift-container-server
+       group swift-storage-node-service
+       
+#Object-server processes
+check process swift-object-server with pidfile /var/run/swift/object-server.pid
+       start program = "/etc/init.d/swift-object start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-object stop"
+       if failed port 6001 then restart
+       if 3 restarts within 3 cycles then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'swift-object-server is down' 'swift-storage-node'"
+       group swift-storage-node-service
+
+check process swift-object-replicator with pidfile /var/run/swift/object-replicator.pid
+       start program = "/etc/init.d/swift-object-replicator start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-object-replicator stop"
+       depends on swift-object-server
+       group swift-storage-node-service
+
+check process swift-object-auditor with pidfile /var/run/swift/object-auditor.pid
+       start program = "/etc/init.d/swift-object-auditor start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-object-auditor stop"
+       depends on swift-object-server
+       group swift-storage-node-service
+       
+check process swift-object-updater with pidfile /var/run/swift/object-updater.pid
+       start program = "/etc/init.d/swift-object-updater start" with timeout 60 seconds
+       stop program  = "/etc/init.d/swift-object-updater stop"
+       depends on swift-object-server
+       group swift-storage-node-service      
+       
+## Check the hard drives which are used by object store
+check filesystem datafs-sda6 with path /dev/sda6
+       start program  = "/bin/mount /srv/node/sda6"
+       stop program  =  "/bin/umount /srv/node/sda6"
+       if failed permission 0660 then unmonitor
+       if failed uid root then unmonitor
+       if failed gid disk then unmonitor
+       if space usage > 80 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'datafs-sda6 space usage is greater than 80 percent' 'swift-storage-node'"
+       if inode usage > 80 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'datafs-sda6 inode usage is greater than 80 percent' 'swift-storage-node'"
+       
+check filesystem datafs-sda7 with path /dev/sda7
+       start program  = "/bin/mount /srv/node/sda7"
+       stop program  =  "/bin/umount /srv/node/sda7"
+       if failed permission 0660 then unmonitor
+       if failed uid root then unmonitor
+       if failed gid disk then unmonitor
+       if space usage > 80 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'datafs-sda7 space usage is greater than 80 percent' 'swift-storage-node'"
+       if inode usage > 80 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'datafs-sda7 inode usage is greater than 80 percent' 'swift-storage-node'"
+       
+check filesystem datafs-sda8 with path /dev/sda8
+       start program  = "/bin/mount /srv/node/sda8"
+       stop program  =  "/bin/umount /srv/node/sda8"
+       if failed permission 0660 then unmonitor
+       if failed uid root then unmonitor
+       if failed gid disk then unmonitor
+       if space usage > 80 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'datafs-sda8 space usage is greater than 80 percent' 'swift-storage-node'"
+       if inode usage > 80 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'datafs-sda8 inode usage is greater than 80 percent' 'swift-storage-node'"
+       
+check filesystem datafs-sda9 with path /dev/sda9
+       start program  = "/bin/mount /srv/node/sda9"
+       stop program  =  "/bin/umount /srv/node/sda9"
+       if failed permission 0660 then unmonitor
+       if failed uid root then unmonitor
+       if failed gid disk then unmonitor
+       if space usage > 80 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'datafs-sda9 space usage is greater than 80 percent' 'swift-storage-node'"
+       if inode usage > 80 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'datafs-sda9 inode usage is greater than 80 percent' 'swift-storage-node'"
+       
+## Monitor the changing of cofniguration files and auto-reload to applications 
+check file swift-account-server.conf with path /etc/swift/account-server.conf
+       if changed timestamp
+          then exec "/usr/bin/msend.sh INFO pncell_BMBTPRO 'swift-account-server.conf was changed' 'swift-storage-node'"
+
+          
+check file swift-container-server.conf with path /etc/swift/container-server.conf
+       if changed timestamp
+          then alert
+          alert autumn@cisco.com
+ 
+check file swift-object-server.conf with path /etc/swift/container-server.conf
+       if changed timestamp
+          then exec "/usr/bin/msend.sh INFO pncell_BMBTPRO 'swift-object-server.conf was changed' 'swift-storage-node'"
+
+## Check system volume
+check filesystem os-sda1 with path /dev/sda1
+       if failed permission 0660 then unmonitor
+       if failed uid root then unmonitor
+       if failed gid disk then unmonitor
+       if space usage > 90 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'System disk usage is greater than 90 percent' 'swift-storage-node'"
+       if inode usage > 90 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'System disk node usage is greater than 90 percent' 'swift-storage-node'"
+

@@ -1,0 +1,433 @@
+                         CHANGES version 2.4
+
+              This file summarizes changes made since 2.0
+
+Version 2.4
+-----------
+
+NOTE:
+
+* If you are upgrading from M/Monit 2.x please perform the following
+  to upgrade:
+
+     ./upgrade/upgrade-2.1.x-2.4.sh -t [sqlite|mysql|postresql]
+        or
+     ./upgrade/upgrade-2.2.x-2.4.sh -t [sqlite|mysql|postresql]
+        or
+     ./upgrade/upgrade-2.3.x-2.4.sh -t [sqlite|mysql|postresql]
+
+  Please clear your browser's cache before accessing M/Monit
+
+IMPROVEMENTS
+
+* More detailed event error messages for connections. 
+
+* Support new Monit 5.3 features, program execution and
+  every crontab format.
+
+* MySQL client upgraded to 5.1.x (tested with 5.1.x and 5.5.x servers).
+
+BUG FIXES:
+
+* Fix lockup when sqlite is used and multiple hosts have the same monitid.
+
+* Fix buttons click handling for iOS clients (iPhone/iPad).
+
+* Alert mail delivery: If the SMTP server returned error code >= 550,
+  try to deliver the message to the remaining recipients. Originally
+  the SMTP transaction continued in the case of error only if 550 code
+  was returned.
+
+
+
+Version 2.3.4
+-------------
+
+IMPROVEMENTS
+
+* The IP-address of Monit is now automatically set based on the address
+  reported by Monit. M/Monit previously set the address based on the
+  connection made by Monit and updated the IP-address only once when the
+  host is new. If a proxy was setup in front of M/Monit this address
+  would be of the proxy and not of the Monit host. By making Monit
+  report its IP-address, the address should always be correct and
+  current since Monit reports the address at connection time. 
+
+  Because the Monit IP-address now automatically is set by Monit, users
+  can no longer change this address manually. If you need to specify
+  another outbound address for Monit, click the "Firewall/NAT/Proxy?"
+  link in admin/hosts/edit page and specify the address in the "Outbound
+  IP-address for Monit" field.
+
+* Users can now enter a DNS hostname in Monit's outbound IP-address
+  field and the name will be resolved when M/Monit connects to Monit.
+  This is useful and more flexible if the Monit host changes its
+  IP-address (frequently e.g. via DHCP).
+
+BUG FIXES:
+
+* Fixed crash which could happen when processing message from Monit.
+
+
+
+Version 2.3.3
+-------------
+
+IMPROVEMENTS:
+
+* Changed user's default refresh settings for charts and tables from
+  1 minute to 5 seconds so monit status changes and new events reload
+  faster in the GUI.
+
+* Improved SQLite thread-locking strategy
+
+BUG FIXES:
+
+* The descriptive hostname is only updated once for new hosts so it 
+  can be overridden by admin later. In previous versions, M/Monit
+  continued to updated and overwrite the hostname based on the DNS 
+  name of the host.
+
+* If Monit's id file is empty for some reason, M/Monit reported that 
+  Monit is older than the required version, even if the version was OK.
+  The id attribute was moved in Monit 5.2 and if M/Monit did not find 
+  the id element, it assumed that the Monit version was too old. The 
+  error message has been fixed to describe the problem correctly.
+
+* Fixed a problem if two hosts had the same hostname a JSON error 
+  occurred when adding a new alert rule.
+
+
+Version 2.3.2
+-------------
+
+IMPROVEMENTS:
+
+* Security: updated openssl to 1.0.0b. See OpenSSL security advisor;
+  http://www.openssl.org/news/secadv_20101116.txt
+  To prevent further OpenSSL problems in this area we have also 
+  disabled the OpenSSL session cache in M/Monit.
+
+* Updated SQLite to version 3.7.3
+
+BUG FIXES:
+
+* Fixed events link from status detail to the events page. The
+  link had an extra path level which when clicked caused the
+  events detail page not to be properly styled when viewed from
+  the events page. Thanks to Jody Clements for reporting the problem.
+
+
+
+Version 2.3.1
+-------------
+
+IMPROVEMENTS:
+
+* Faster cache load on M/Monit startup.
+
+* Updated to YUI version 2.8.2
+
+BUG FIXES:
+
+* GTalk: M/Monit previously sent jabber messages of type "headline" 
+  which talk.google.com no longer seems to deliver. The message type
+  has therefor been changed to "normal" which work.
+
+
+Version 2.3
+-----------
+
+NOTE:
+
+* M/Monit 2.3 requires Monit 5.2 or later
+
+IMPROVEMENTS:
+
+* New Report pages for hosts and services uptime and downtime.
+  
+* Added execution of user defined programs/scripts as an alert
+  option when receiving events from Monit
+
+* Improved user interface
+
+* Host details: 
+  * New charts: swap memory, CPU and memory
+  * Service data displayed in a new pop-out panel
+  * Sorted port response time chart
+
+* Optional automatic registration of Monit credentials 
+  
+* Internal cache improvements
+
+* TCP/IP and SSL improvements. Should improve communication
+  over low-bandwidth and saturated networks. 
+
+* Reduced memory usage. Not that M/Monit used a lot of memory 
+  before, but now it use even less. 
+
+BUG FIXES:
+
+* Make M/Monit less strict when handling SMTP multi-line responses.
+  Thanks to Barynin Konstantin for letting us know.
+
+* Fix crash during mmonit start on FreeBSD-8.x
+
+* Workaround libpthread bug in OS X which caused one CPU core to max
+  out and M/Monit to become unresponsive if run in background mode. 
+  M/Monit now works fine in daemon mode on OS X.
+  
+* Fixed infrequent connection close. In some situations M/Monit
+  could drop connections in mid-communication if the client was
+  "slow" to respond.
+
+* Fixed login problems for user account during which's create/edit
+  some input data format check failed and the form was re-submitted
+  after correction of the input.
+  
+
+
+Version 2.2.1
+-------------
+
+IMPROVEMENTS:
+
+* Changed name of admin menu item "Rules" to "Alerts" to make it
+  clearer that this page is used for setting up alert rules.
+
+* Accept messages from future Monit versions (no need to upgrade
+  M/Monit when Monit is extended).
+
+BUG FIXES:
+
+* Fix JSON error in rules admin page, when empty hostgroup was
+  defined. Thanks to Balazs Boros for report.
+  
+* Fixed a problem in service cache that could drain the database
+  connection pool.
+
+
+
+Version 2.2
+-----------
+
+IMPROVEMENTS:
+
+* Added support for Monit 5.1 (required to support multiple
+  service groups per service which was added in Monit 5.1).
+
+* Allow non-fully qualified domain name in mail addresses
+
+* Added automatic synchronization of services and service group
+  names with Monit. Services that are no longer configured in any
+  Monit agent configuration file are not displayed in the rules
+  admin drop-down menu. Likewise, if new services are added to a
+  Monit agent it will be displayed and made available when
+  setting up alert rules in M/Monit. The Events page will still
+  display removed services in the drill-down filter if there are
+  events referring to old removed services.
+
+* When specifying a rule, the service menu is context sensitive,
+  that is, the menu list only services that belongs to the
+  selected host. If a host group is selected, only services that
+  are common for all hosts in the group.
+
+* M/Monit database schema version added and checked on startup.
+
+BUG FIXES:
+
+* Fixed alert mail duplication which could occur in some
+  situations. Thanks to George Agnelli for bug report.
+
+* Fixed sporadic long waits when doing an action on a service in
+  the status detailed page. When M/Monit performs a start, stop
+  restart etc on a service it waits up to 30 seconds for a reply
+  from Monit before it times out. In some situations, especially
+  if Monit is running in a virtual machine, Monit could reply
+  before M/Monit started its wait, which would result in M/Monit
+  waiting the full 30 seconds before timeout.
+
+* Fixed a crash that could occur if a host was added to a
+  non-existent host group. Thanks to Jarod Reid for report.
+
+* Fixed initial sorting of host names in the host admin table.
+
+* If several sessions were open for the same user and password
+  changed, the new password was not applied until all the
+  sessions had terminated. This is now fixed and password changes
+  takes effect immediately.
+
+* Monit 5.1 now makes sure that it sends heartbeat to M/Monit
+  even if it is busy in long testing cycles to prevent false
+  alerts generated by M/Monit about non-responsive Monit agents.
+
+
+Version 2.1.1
+-------------
+
+IMPROVEMENTS:
+
+* In admin/hosts, if an outbound IP-address was specified for
+  Monit, display this address in the hosts table.
+
+* Allow non-fully qualified domain for jabber users.
+
+BUG FIXES:
+
+* Fixed a thread storage problem that caused M/Monit virtual
+  memory usage to grow during event processing. This in turn 
+  could lead M/Monit to grow out of available virtual memory
+  and to a full stop. Many thanks to Asim for bug report.
+
+
+
+Version 2.1
+-----------
+
+NEW FEATURES:
+
+* M/Monit will now send an alert if a Monit agent does not report
+  in on time.
+
+* Various caching strategies has been added internally. This
+  should help M/Monit scale to hundreds of hosts and beyond.
+
+* Replaced the Host drop down menu with a host search field in
+  the events page.
+
+* Host groups can now be used, in addition to hosts, when
+  specifying an alert rule.
+  
+* Service groups can now be used, in addition to services, when
+  specifying an alert rule. A service group is defined in your
+  monitrc control file
+
+* M/Monit can now send Jabber/GTalk alert messages in addition to 
+  Mail messages. 
+  
+* The M/Monit server now supports SSL. See the manual and the
+  description of <Connector> and <Host> in server.xml for how to
+  configure M/Monit to use SSL.
+  
+* The web user interface has got a modest face lift.
+
+BUG FIXES:
+
+* Evaluate all rules when processing events for sending alerts.
+  Previous versions only evaluated and acted on the first
+  matching rule. Thanks to Andrew Stott for report.
+
+* Services and service groups are now pre-fetched from Monit when
+  Monit starts up and report to M/Monit. In earlier versions of
+  M/Monit, an event had to occur on a service before the service
+  was made available when specifying alert rules. Note: this
+  feature requires Monit-5.1, Monit-5.0.3 will also work, but
+  service names won't be synced.
+  
+* Added timezone in date header for mails sent by M/Monit. Thanks 
+  to Thorsten Kampe for requesting this feature.
+
+* Fixed a possible crash in Dashboard when an event from Monit
+  was received with a system time ahead of M/Monit's system time.
+  Thanks to Aleksander Kamenik for report.
+
+* Improved the AJAX host search field to allow for a more
+  interactive search
+
+* Improved mail queue handling
+
+* FreeBSD releases of M/Monit are now built using FreeBSD version
+  6.0 and 7.0 instead of version 6.4 and 7.2. This allows M/Monit
+  to support a wider range of 6.x and 7.x FreeBSD OS versions.
+
+
+Version 2.0.3
+-------------
+
+BUG FIXES:
+
+* Fixed a potential NumberFormatException error when clicking on
+  a host row in the host status page. Many thanks to Aleksander
+  Kamenik for finding this bug and helping us resolve it.
+
+* The grey delete icon in admin tables is changed to a red icon
+  on mouse hover to give better UI feedback.
+  
+* Ignore invalid cookies. Previous versions aborted the request
+  with a 404 error. Thanks to Ron McKown for debug help.
+  
+* In the admin page only display real active login sessions.
+
+* Expanded host table columns platformname, platformrelease,
+  platformversion, platformmachine to allow for up to 255
+  characters.
+
+
+
+Version 2.0.2
+-------------
+
+NEW FEATURES:
+
+* You can now change the name and description of host groups.
+
+* Quick delete added to admin page tables for hosts, users and
+  rules. These tables have now a new delete icon in the rightmost
+  column. Clicking on the icon deletes the table entry. This is a
+  shortcut so you don't have to open the entry first to delete
+  it. Thanks to Nicola Tiling for suggestion.
+
+* Added Monit version information to admin/hosts table. This
+  allows you to quickly see which Monit version is running on
+  each host. Thanks to Aleksander Kamenik for suggestion.
+
+* Increased skew rate for Monit agents from 2 to 3 cycles.
+
+* OpenBSD support added.
+
+* Updated all shared libraries to latest version.
+
+BUG FIXES:
+
+* Stability fixes.
+
+* Internal performance improvements in the connection pool driver
+  for SQLite. The new changes makes SQLite scale much better and
+  able to handle many more hosts.
+
+* Expanded host.platformrelease column in the database to allow
+  for up to 100 characters. Some OS use a long release name which
+  did not fit in the original 20 characters limit used in the
+  database. M/Monit could refuse message from these hosts and not
+  update the host status. Thanks to Aaron Scamehorn for report.
+
+* Increased read timeout from 3 seconds to 30 seconds when
+  communicating with SMTP servers to allow for slow servers.
+
+* Fixed possible "Number format exception" error when trying to
+  open host status or use host admin for monit hosts which were
+  imported from older M/Monit versions. Thanks to Nicola Tiling
+  for report.
+
+* Fix possible OpenSolaris crash. Thanks to Christoffer Torris
+  Olsen for report.
+  
+
+
+Version 2.0.1
+-------------
+
+* Added missing files to SDK.
+
+
+Version 2.0
+-----------
+
+CHANGES:
+
+* M/Monit now has the following event states:
+     - succeeded
+     - failed
+     - changed
+  The states, match, instance and action has been folded
+  into the changed state.

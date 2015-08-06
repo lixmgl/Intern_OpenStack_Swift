@@ -1,0 +1,21 @@
+Package: keystone
+Version: 1.0.0
+Architecture: all
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Installed-Size: 122
+Depends: python, upstart-job, python-keystone (= 1.0.0), adduser
+Section: python
+Priority: extra
+Homepage: http://launchpad.net/keystone
+Description: Proposed OpenStack identity service - Daemons
+ Keystone is a proposed independent authentication service for OpenStack.
+ .
+ This initial proof of concept aims to address the current use cases in Swift
+ and Nova which are:
+ .
+  * REST-based, token auth for Swift
+  * many-to-many relationship between identity and tenant for Nova. Keystone
+    does authentication and stuff
+ .
+ This package contains the daemons.
+Original-Maintainer: Monty Taylor <mordred@inaugust.com>

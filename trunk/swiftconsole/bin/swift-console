@@ -1,0 +1,121 @@
+#!/usr/bin/python -u
+
+import swiftconsole.ui.commands as commands
+import argparse
+import sys
+
+def run_command(command, *args):
+    cmd = command.replace('-','_')
+    try:
+        func = commands.__dict__[cmd]
+        retcode = func(*args)
+        return (retcode, '')
+    except Exception as error:
+        print "Error for running command : %s\n % s" % (cmd, error)
+        sys.exit(-1)
+
+#####################################################################################
+## Main function start from here
+##
+cmd_parser = argparse.ArgumentParser(description='Swift console')
+cmd_parser.add_argument('command',
+                        choices=["show-ring", "push-config", "rebuild-ring", "push-ring", "rebalance-ring", "remove-device", "add-device", "remove-storagenode", "add-storagenode", "node-status"])
+
+if len(sys.argv) < 2:
+    cmd_parser.print_help()
+    sys.exit(1)
+
+command = sys.argv[1]
+cmd_args = sys.argv[2:]
+run_prog = "%s %s" % (sys.argv[0], command)
+
+
+if command in ['-h', '--help']:
+    cmd_parser.print_help()
+    
+elif command == 'show-ring':
+    parser = argparse.ArgumentParser(description="Show ring configuration", prog=run_prog)
+    parser.add_argument('-r',
+                        '--ring',
+                        help = 'Name of the ring, could be account/container/object',
+                        choices = ['object', 'container', 'account'],
+                        type = str,
+                        required=True)
+    args = parser.parse_args(cmd_args)    
+
+    run_command(command, args.ring)
+    
+elif command == 'push-config':
+    parser = argparse.ArgumentParser(description="Push ring configuration", prog=run_prog)
+    parser.add_argument('-t',
+                        '--nodetype',
+                        help = 'Could be proxy/storage',
+                        choices = ['storage', 'proxy'],
+                        type = str,
+                        required=True)
+    args = parser.parse_args(cmd_args)
+
+    run_command(command, args.nodetype)
+
+elif command == 'node-status':
+    parser = argparse.ArgumentParser(description="Show node status", prog=run_prog)
+    parser.add_argument('-t',
+                        '--nodetype',
+                        help = 'Could be proxy/storage/all',
+                        choices = ['storage', 'proxy', 'all'],
+                        type = str,
+                        required=True)
+    args = parser.parse_args(cmd_args)
+
+    run_command(command, args.nodetype)
+
+elif command == 'remove-storagenode':
+    parser = argparse.ArgumentParser(description="Remove a storage node", prog=run_prog)
+    parser.add_argument('-n',
+                        '--node',
+                        help = 'The hostname of the storage node which we are going to remove from ring',
+                        type = str,
+                        required=True)
+    args = parser.parse_args(cmd_args)
+
+    run_command(command, args.node)
+
+elif command == 'add-storagenode':
+    parser = argparse.ArgumentParser(description="Add a storage node", prog=run_prog)
+    parser.add_argument('-n',
+                        '--node',
+                        help = 'The hostname of the storage node which we are going to add into ring',
+                        type = str,
+                        required=True)
+    args = parser.parse_args(cmd_args)
+
+    run_command(command, args.node)
+
+elif command == 'remove-device':
+    parser = argparse.ArgumentParser(description="Remove a device", prog=run_prog)
+    parser.add_argument('-d',
+                        '--device',
+                        help = 'devices: The list of devices which we want to add [IP:PORT/sda6,.....]',
+                        type = str,
+                        required=True)
+    args = parser.parse_args(cmd_args)
+
+    run_command(command, args.device)
+
+elif command == 'add-device':
+    parser = argparse.ArgumentParser(description="Add a device", prog=run_prog)
+    parser.add_argument('-d',
+                        '--device',
+                        help = 'devices: The list of devices which we want to remove [IP:PORT/sda6,.....]',
+                        type = str,
+                        required=True)
+    args = parser.parse_args(cmd_args)
+
+    run_command(command, args.device)
+
+elif command=='rebuild-ring' or command=='push-ring' or command=='rebalance-ring':
+    run_command(command)
+
+else:
+    print "Not supported command."
+    cmd_parser.print_help()

@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ldap Package &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="up" title="common Package" href="keystone.common.html" />
+    <link rel="next" title="sql Package" href="keystone.common.sql.html" />
+    <link rel="prev" title="common Package" href="keystone.common.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.common.sql.html" title="sql Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keystone.common.html" title="common Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" >keystone Package</a> &raquo;</li>
+          <li><a href="keystone.common.html" accesskey="U">common Package</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">ldap Package</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">ldap</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-keystone.common.ldap.core"><tt class="docutils literal"><span class="pre">core</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-keystone.common.ldap.fakeldap"><tt class="docutils literal"><span class="pre">fakeldap</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="keystone.common.html"
+                                  title="previous chapter">common Package</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="keystone.common.sql.html"
+                                  title="next chapter">sql Package</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/keystone.common.ldap.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ldap-package">
+<h1>ldap Package<a class="headerlink" href="#ldap-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">ldap</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-keystone.common.ldap"></span></div>
+<div class="section" id="module-keystone.common.ldap.core">
+<span id="core-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">core</span></tt> Module<a class="headerlink" href="#module-keystone.common.ldap.core" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="keystone.common.ldap.core.BaseLdap">
+<em class="property">class </em><tt class="descclassname">keystone.common.ldap.core.</tt><tt class="descname">BaseLdap</tt><big>(</big><em>conf</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="attribute">
+<dt id="keystone.common.ldap.core.BaseLdap.DEFAULT_ID_ATTR">
+<tt class="descname">DEFAULT_ID_ATTR</tt><em class="property"> = 'cn'</em><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.DEFAULT_ID_ATTR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.common.ldap.core.BaseLdap.DEFAULT_OBJECTCLASS">
+<tt class="descname">DEFAULT_OBJECTCLASS</tt><em class="property"> = None</em><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.DEFAULT_OBJECTCLASS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.common.ldap.core.BaseLdap.DEFAULT_OU">
+<tt class="descname">DEFAULT_OU</tt><em class="property"> = None</em><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.DEFAULT_OU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.common.ldap.core.BaseLdap.DEFAULT_STRUCTURAL_CLASSES">
+<tt class="descname">DEFAULT_STRUCTURAL_CLASSES</tt><em class="property"> = None</em><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.DEFAULT_STRUCTURAL_CLASSES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.common.ldap.core.BaseLdap.DEFAULT_SUFFIX">
+<tt class="descname">DEFAULT_SUFFIX</tt><em class="property"> = 'dc=example,dc=com'</em><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.DEFAULT_SUFFIX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.common.ldap.core.BaseLdap.DUMB_MEMBER_DN">
+<tt class="descname">DUMB_MEMBER_DN</tt><em class="property"> = 'cn=dumb,dc=nonexistent'</em><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.DUMB_MEMBER_DN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.BaseLdap.affirm_unique">
+<tt class="descname">affirm_unique</tt><big>(</big><em>values</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.affirm_unique" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.common.ldap.core.BaseLdap.attribute_ignore">
+<tt class="descname">attribute_ignore</tt><em class="property"> = []</em><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.attribute_ignore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.common.ldap.core.BaseLdap.attribute_mapping">
+<tt class="descname">attribute_mapping</tt><em class="property"> = {}</em><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.attribute_mapping" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.BaseLdap.create">
+<tt class="descname">create</tt><big>(</big><em>values</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.BaseLdap.delete">
+<tt class="descname">delete</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.BaseLdap.get">
+<tt class="descname">get</tt><big>(</big><em>id</em>, <em>filter=None</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.BaseLdap.get_all">
+<tt class="descname">get_all</tt><big>(</big><em>filter=None</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.get_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.BaseLdap.get_connection">
+<tt class="descname">get_connection</tt><big>(</big><em>user=None</em>, <em>password=None</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.get_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.BaseLdap.get_page">
+<tt class="descname">get_page</tt><big>(</big><em>marker</em>, <em>limit</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.get_page" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.BaseLdap.get_page_markers">
+<tt class="descname">get_page_markers</tt><big>(</big><em>marker</em>, <em>limit</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.get_page_markers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.common.ldap.core.BaseLdap.model">
+<tt class="descname">model</tt><em class="property"> = None</em><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.common.ldap.core.BaseLdap.options_name">
+<tt class="descname">options_name</tt><em class="property"> = None</em><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.options_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.common.ldap.core.BaseLdap.tree_dn">
+<tt class="descname">tree_dn</tt><em class="property"> = None</em><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.tree_dn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.BaseLdap.update">
+<tt class="descname">update</tt><big>(</big><em>id</em>, <em>values</em>, <em>old_obj=None</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.BaseLdap.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.ldap.core.LdapWrapper">
+<em class="property">class </em><tt class="descclassname">keystone.common.ldap.core.</tt><tt class="descname">LdapWrapper</tt><big>(</big><em>url</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.LdapWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="keystone.common.ldap.core.LdapWrapper.add_s">
+<tt class="descname">add_s</tt><big>(</big><em>dn</em>, <em>attrs</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.LdapWrapper.add_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.LdapWrapper.delete_s">
+<tt class="descname">delete_s</tt><big>(</big><em>dn</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.LdapWrapper.delete_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.LdapWrapper.modify_s">
+<tt class="descname">modify_s</tt><big>(</big><em>dn</em>, <em>modlist</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.LdapWrapper.modify_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.LdapWrapper.search_s">
+<tt class="descname">search_s</tt><big>(</big><em>dn</em>, <em>scope</em>, <em>query</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.LdapWrapper.search_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.core.LdapWrapper.simple_bind_s">
+<tt class="descname">simple_bind_s</tt><big>(</big><em>user</em>, <em>password</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.LdapWrapper.simple_bind_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.ldap.core.ldap2py">
+<tt class="descclassname">keystone.common.ldap.core.</tt><tt class="descname">ldap2py</tt><big>(</big><em>val</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.ldap2py" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.ldap.core.py2ldap">
+<tt class="descclassname">keystone.common.ldap.core.</tt><tt class="descname">py2ldap</tt><big>(</big><em>val</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.py2ldap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.ldap.core.safe_iter">
+<tt class="descclassname">keystone.common.ldap.core.</tt><tt class="descname">safe_iter</tt><big>(</big><em>attrs</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.core.safe_iter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-keystone.common.ldap.fakeldap">
+<span id="fakeldap-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">fakeldap</span></tt> Module<a class="headerlink" href="#module-keystone.common.ldap.fakeldap" title="Permalink to this headline">¶</a></h2>
+<p>Fake LDAP server for test harness.</p>
+<p>This class does very little error checking, and knows nothing about ldap
+class definitions.  It implements the minimum emulation of the python ldap
+library to work with nova.</p>
+<dl class="class">
+<dt id="keystone.common.ldap.fakeldap.FakeLdap">
+<em class="property">class </em><tt class="descclassname">keystone.common.ldap.fakeldap.</tt><tt class="descname">FakeLdap</tt><big>(</big><em>url</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.fakeldap.FakeLdap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Fake LDAP connection.</p>
+<dl class="method">
+<dt id="keystone.common.ldap.fakeldap.FakeLdap.add_s">
+<tt class="descname">add_s</tt><big>(</big><em>dn</em>, <em>attrs</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.fakeldap.FakeLdap.add_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an object with the specified attributes at dn.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.fakeldap.FakeLdap.delete_s">
+<tt class="descname">delete_s</tt><big>(</big><em>dn</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.fakeldap.FakeLdap.delete_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the ldap object at specified dn.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.fakeldap.FakeLdap.modify_s">
+<tt class="descname">modify_s</tt><big>(</big><em>dn</em>, <em>attrs</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.fakeldap.FakeLdap.modify_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the object at dn using the attribute list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dn</strong> &#8211; an LDAP DN</li>
+<li><strong>attrs</strong> &#8211; a list of tuples in the following form:
+([MOD_ADD | MOD_DELETE | MOD_REPACE], attribute, value)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.fakeldap.FakeLdap.search_s">
+<tt class="descname">search_s</tt><big>(</big><em>dn</em>, <em>scope</em>, <em>query=None</em>, <em>fields=None</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.fakeldap.FakeLdap.search_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for all matching objects under dn using the query.</p>
+<p>Args:
+dn &#8211; dn to search under
+scope &#8211; only SCOPE_BASE and SCOPE_SUBTREE are supported
+query &#8211; query to filter objects by
+fields &#8211; fields to return. Returns all fields if not specified</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.fakeldap.FakeLdap.simple_bind_s">
+<tt class="descname">simple_bind_s</tt><big>(</big><em>dn</em>, <em>password</em><big>)</big><a class="headerlink" href="#keystone.common.ldap.fakeldap.FakeLdap.simple_bind_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is ignored, but provided for compatibility.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.fakeldap.FakeLdap.unbind_s">
+<tt class="descname">unbind_s</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.common.ldap.fakeldap.FakeLdap.unbind_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is ignored, but provided for compatibility.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.ldap.fakeldap.FakeShelve">
+<em class="property">class </em><tt class="descclassname">keystone.common.ldap.fakeldap.</tt><tt class="descname">FakeShelve</tt><a class="headerlink" href="#keystone.common.ldap.fakeldap.FakeShelve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></p>
+<dl class="classmethod">
+<dt id="keystone.common.ldap.fakeldap.FakeShelve.get_instance">
+<em class="property">classmethod </em><tt class="descname">get_instance</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.common.ldap.fakeldap.FakeShelve.get_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.ldap.fakeldap.FakeShelve.sync">
+<tt class="descname">sync</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.common.ldap.fakeldap.FakeShelve.sync" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.common.sql.html" title="sql Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keystone.common.html" title="common Package"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" >keystone Package</a> &raquo;</li>
+          <li><a href="keystone.common.html" >common Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    
+    <link href="../css/main.css" media="screen" rel="Stylesheet">
+    
+    <script src="../build/yuiloader/yuiloader-min.js"></script>
+    <script src="../js/mmonit.js"></script>
+    
+    <title>M/Monit Status | Topography</title>
+    
+    <style>
+        #spinner {position:relative;top:50px;left:100px;float:left;}
+        #platform, #version, #cpu, #memory {width:225px;height:225px;}
+        #charts td {padding:0 50px 25px 0; text-align:center;}
+    </style>
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li  id="current">
+                        <a href="../status/"><span>Status</span></a>
+                    </li>
+                    <li>
+                        <a href="../reports/"><span>Reports</span></a>
+                        <ul>
+                            <li><a href="../reports/">Overview</a></li>
+                                    <li><a href="../reports/events/">Events</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="../admin/"><span>Admin</span></a>
+                        <ul>
+                            <li><a href="../admin/">Overview</a></li>
+                            <li><a href="../admin/hosts/">Hosts</a></li>
+                            <li><a href="../admin/groups/">Groups</a></li>
+                            <li><a href="../admin/users/">Users</a></li>
+                            <li><a href="../admin/rules/">Alerts</a></li>
+        				</ul>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../status/">Overview</a></li>
+                    <li><a href="../status/topography" class="current">Topography</a></li>
+                </ul>
+            </div>
+            <h1>Topography</h1>
+        </div> <!-- Title -->
+
+        <div id="Main" class="clearfix">
+
+            <table id="Area">
+                <tr>
+                    <td class="main-content">
+
+                        <?cs if:Topography_Filter_error ?>
+                        <p class="error-text">
+                            <?cs var:Topography_Filter_error ?>
+                        </p>
+                        <?cs /if ?>
+                        <table id="charts">
+                            <tr>
+                                <td>
+                                    <h2>Operating Systems</h2>
+                                    <img src="../img/spinner.gif" id="spinner">
+                                    <div id="platform"></div>
+                                </td>
+                                <td>
+                                    <h2>Monit Versions</h2>
+                                    <div id="version"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h2>Average CPU usage</h2>
+                                    <div id="cpu"></div>
+                                </td>
+                                <td>
+                                    <h2>Average memory usage</h2>
+                                    <div id="memory"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <div class="drilldown">
+
+                            <div class="reset">
+                                <a href="../status/topography?Reset=1">Reset</a>
+                            </div>
+
+                            <div class="menuitem"></div>
+
+                            <form id="formHostGroup" name="formHostGroup" action="../status/topography" method="GET">
+                                <label>Host Group</label>
+                                <div id="HostGroupContainer"></div>
+                                <input type="hidden" id="Topography_HostGroup" name="Topography_HostGroup" value="<?cs var:Topography_HostGroup ?>">
+                            </form>
+
+                            <div class="menuitem"></div>
+
+                            <form id="formHostPlatform" name="formHostPlatform" action="../status/topography" method="GET">
+                                <label>
+                                    Operating System
+                                </label>
+                                <div id="HostPlatformContainer"></div>
+                                <input type="hidden" id="Topography_HostPlatform" name="Topography_HostPlatform" value="<?cs var:Topography_HostPlatform ?>">
+                            </form>
+
+                            <div class="menuitem"></div>
+
+                            <form id="formHostMachine" name="formHostMachine" action="../status/topography" method="GET">
+                                <label>Machine</label>
+                                <div id="HostMachineContainer"></div>
+                                <input type="hidden" id="Topography_HostMachine" name="Topography_HostMachine" value="<?cs var:Topography_HostMachine ?>">
+                            </form>
+
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+    <script>
+
+    var loader = new YAHOO.util.YUILoader();
+    loader.loadOptional = true;
+    loader.base = '../build/';
+    loader.require('charts', 'json', 'datasource', 'button');
+    loader.insert({
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+
+                YAHOO.widget.Chart.SWFURL = "../build/charts/assets/charts.swf";
+                
+                /* A DataSource Proxy for all topography charts. Data is fetched
+                 once and a sub-set dished out in each chart's DataSource. */
+                var myData = function() {
+                    var n = 4; // n must be equal to the number of charts so refresh and caching works
+                    var Data = null;
+                    var refresh = function() {
+                        var rs = YAHOO.lang.JSON.parse(MMONIT.sjax.post("../json/status/topography", ''));
+                        Data = rs.records.Data;
+                    };
+                    refresh();
+                    MMONIT.layer.hide('spinner');
+                    return {
+                        get: function () {
+                            if (--n < 0) { 
+                                refresh(); 
+                                n = 4; 
+                            }
+                            return Data;
+                        }
+                    };
+                }();
+                
+                // Platforms Chart
+                var platformData = new YAHOO.util.DataSource(function() {
+                    return myData.get().platform;
+                });
+                platformData.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+                platformData.responseSchema = { fields: ["type", "count"] };
+                var myPlatformChart = new YAHOO.widget.PieChart( "platform", platformData,
+                {
+                    dataField     : "count",
+                    categoryField : "type",
+                    polling       : <?cs var:#Request.Param.refresh ?>
+                });
+
+                // Version Chart
+                var versionData = new YAHOO.util.DataSource(function() {
+                    return myData.get().version;
+                });
+                versionData.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+                versionData.responseSchema = { fields: ["type", "count"] };
+                var myVersionChart = new YAHOO.widget.PieChart( "version", versionData,
+                {
+                    dataField     : "count",
+                    categoryField : "type",
+                    polling       : <?cs var:#Request.Param.refresh ?>
+                });
+
+                // CPU Chart
+                var cpuData = new YAHOO.util.DataSource(function() {
+                    return myData.get().cpu;
+                });
+                cpuData.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+                cpuData.responseSchema = { fields: ["type", "count"] };
+                var myCPUChart = new YAHOO.widget.PieChart( "cpu", cpuData,
+                {
+                    dataField     : "count",
+                    categoryField : "type",
+                    series        : [{style:{colors:[0xffff00, 0xff9900, 0xdd0000, 0x00dd00]}}],
+                    polling       : <?cs var:#Request.Param.refresh ?>
+                });
+
+                // Memory Chart
+                var memoryData = new YAHOO.util.DataSource(function() {
+                    return myData.get().memory;
+                });
+                memoryData.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+                memoryData.responseSchema = { fields: ["type", "count"] };
+                var myMemoryChart = new YAHOO.widget.PieChart( "memory", memoryData,
+                {
+                    dataField     : "count",
+                    categoryField : "type",
+                    //                               blue,     green
+                    series        : [{style:{colors:[0x0000dd, 0x00dd00]}}],
+                    polling       : <?cs var:#Request.Param.refresh ?>
+                });
+                   
+                //
+                // Drill-down Menu
+                //
+
+                /// Host Group
+                function onHostGroupClick(p_sType, p_aArgs, p_oItem) {
+                    var txt = document.getElementById("Topography_HostGroup");
+                    txt.value = p_oItem.value;
+                    document.formHostGroup.submit();
+                }
+                var HostGroupMenu = [
+                    <?cs set:init = 1 ?>
+                    <?cs each:list = ListHostGroup ?>
+                        <?cs if:init == 0 ?>,<?cs /if ?><?cs set:init = 0 ?>{ text: "<?cs var:list.name ?>", value: "<?cs var:list.value ?>", onclick: {fn: onHostGroupClick}}
+                    <?cs /each ?>
+                ];
+                var HostGroupButton = new YAHOO.widget.Button({
+                    type         : "menu",
+                    label        : "<em><?cs each:list = ListHostGroup ?><?cs if:list.value == Topography_HostGroup ?><?cs var:list.name ?><?cs /if ?><?cs /each ?></em>",
+                    menu         : HostGroupMenu,
+                    container    : "HostGroupContainer",
+                    lazyloadmenu : true
+                });
+                HostGroupButton.getMenu().cfg.setProperty("scrollincrement", 5);
+                
+                /// Host Platform
+                function onHostPlatformClick(p_sType, p_aArgs, p_oItem) {
+                    var txt = document.getElementById("Topography_HostPlatform");
+                    txt.value = p_oItem.value;
+                    document.formHostPlatform.submit();
+                }
+                var HostPlatformMenu = [
+                    <?cs set:init = 1 ?>
+                    <?cs each:list = ListHostPlatform ?>
+                        <?cs if:init == 0 ?>,<?cs /if ?><?cs set:init = 0 ?>{ text: "<?cs var:list.name ?>", value: "<?cs var:list.value ?>", onclick: {fn: onHostPlatformClick}}
+                    <?cs /each ?>
+                ];
+                var HostPlatformButton = new YAHOO.widget.Button({
+                    type         : "menu",
+                    label        : "<em><?cs each:list = ListHostPlatform ?><?cs if:list.value == Topography_HostPlatform ?><?cs var:list.name ?><?cs /if ?><?cs /each ?></em>",
+                    menu         : HostPlatformMenu,
+                    container    : "HostPlatformContainer",
+                    lazyloadmenu : true
+                });
+                HostPlatformButton.getMenu().cfg.setProperty("scrollincrement", 5);
+
+                /// Host Machine
+                function onHostMachineClick(p_sType, p_aArgs, p_oItem) {
+                    var txt = document.getElementById("Topography_HostMachine");
+                    txt.value = p_oItem.value;
+                    document.formHostMachine.submit();
+                }
+                var HostMachineMenu = [
+                    <?cs set:init = 1 ?>
+                    <?cs each:list = ListHostMachine ?>
+                        <?cs if:init == 0 ?>,<?cs /if ?><?cs set:init = 0 ?>{ text: "<?cs var:list.name ?>", value: "<?cs var:list.value ?>", onclick: {fn: onHostMachineClick}}
+                    <?cs /each ?>
+                ];
+                var HostMachineButton = new YAHOO.widget.Button({
+                    type         : "menu",
+                    label        : "<em><?cs each:list = ListHostMachine ?><?cs if:list.value == Topography_HostMachine ?><?cs var:list.name ?><?cs /if ?><?cs /each ?></em>",
+                    menu         : HostMachineMenu,
+                    container    : "HostMachineContainer",
+                    lazyloadmenu : true
+                });
+                HostMachineButton.getMenu().cfg.setProperty("scrollincrement", 5);
+
+            });
+        }
+    });
+    </script>
+</body>
+
+</html>

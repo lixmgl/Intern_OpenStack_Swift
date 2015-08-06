@@ -1,0 +1,28 @@
+10
+
+dir
+395
+svn://engsvnserv4.corp.webex.com/openstack/trunk/monit-package/monit-5.4/libmonit/src/util/.libs
+svn://engsvnserv4.corp.webex.com/openstack
+
+
+
+2012-07-05T16:45:26.279304Z
+359
+cmalfait
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+4a083582-653f-4f4c-8dd4-6b54de6a16f1
+

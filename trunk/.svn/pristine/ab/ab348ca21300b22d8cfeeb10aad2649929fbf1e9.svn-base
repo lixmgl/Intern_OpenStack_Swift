@@ -1,0 +1,555 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Service API Examples Using Curl &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="next" title="keystone" href="modules.html" />
+    <link rel="prev" title="Middleware Architecture" href="middlewarearchitecture.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="keystone"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="middlewarearchitecture.html" title="Middleware Architecture"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Service API Examples Using Curl</a><ul>
+<li><a class="reference internal" href="#get">GET /</a></li>
+<li><a class="reference internal" href="#get-extensions">GET /extensions</a></li>
+<li><a class="reference internal" href="#post-tokens">POST /tokens</a></li>
+<li><a class="reference internal" href="#get-tenants">GET /tenants</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id1">Admin API Examples Using Curl</a><ul>
+<li><a class="reference internal" href="#id2">GET /</a></li>
+<li><a class="reference internal" href="#id3">GET /extensions</a></li>
+<li><a class="reference internal" href="#id4">POST /tokens</a></li>
+<li><a class="reference internal" href="#get-tokens-token-id">GET /tokens/{token_id}</a></li>
+<li><a class="reference internal" href="#head-tokens-token-id">HEAD /tokens/{token_id}</a></li>
+<li><a class="reference internal" href="#get-tokens-token-id-endpoints">GET /tokens/{token_id}/endpoints</a></li>
+<li><a class="reference internal" href="#id5">GET /tenants</a></li>
+<li><a class="reference internal" href="#get-tenants-tenant-id">GET /tenants/{tenant_id}</a></li>
+<li><a class="reference internal" href="#get-tenants-tenant-id-users-user-id-roles">GET /tenants/{tenant_id}/users/{user_id}/roles</a></li>
+<li><a class="reference internal" href="#get-users-user-id">GET /users/{user_id}</a></li>
+<li><a class="reference internal" href="#get-users-user-id-roles">GET /users/{user_id}/roles</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="middlewarearchitecture.html"
+                                  title="previous chapter">Middleware Architecture</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="modules.html"
+                                  title="next chapter">keystone</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/api_curl_examples.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="service-api-examples-using-curl">
+<h1>Service API Examples Using Curl<a class="headerlink" href="#service-api-examples-using-curl" title="Permalink to this headline">¶</a></h1>
+<p>The service API is defined to be a subset of the Admin API and, by
+default, runs on port 5000.</p>
+<div class="section" id="get">
+<h2>GET /<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h2>
+<p>This call is identical to that documented for the Admin API, except
+that it uses port 5000, instead of port 35357, by default:</p>
+<div class="highlight-python"><pre>$ curl http://0.0.0.0:5000</pre>
+</div>
+<p>or:</p>
+<div class="highlight-python"><pre>$ curl http://0.0.0.0:5000/v2.0/</pre>
+</div>
+<p>See the <a class="reference external" href="adminAPI_curl_examples.html">Admin API Examples Using Curl</a> for more info.</p>
+</div>
+<div class="section" id="get-extensions">
+<h2>GET /extensions<a class="headerlink" href="#get-extensions" title="Permalink to this headline">¶</a></h2>
+<p>This call is identical to that documented for the Admin API.</p>
+</div>
+<div class="section" id="post-tokens">
+<h2>POST /tokens<a class="headerlink" href="#post-tokens" title="Permalink to this headline">¶</a></h2>
+<p>This call is identical to that documented for the Admin API.</p>
+</div>
+<div class="section" id="get-tenants">
+<h2>GET /tenants<a class="headerlink" href="#get-tenants" title="Permalink to this headline">¶</a></h2>
+<p>List all of the tenants your token can access:</p>
+<div class="highlight-python"><pre>$ curl -H "X-Auth-Token:887665443383838" http://localhost:5000/v2.0/tenants</pre>
+</div>
+<p>Returns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;tenants_links&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;tenants&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+            <span class="s">&quot;description&quot;</span><span class="p">:</span> <span class="s">&quot;None&quot;</span><span class="p">,</span>
+            <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;customer-x&quot;</span><span class="p">,</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id1">
+<h1>Admin API Examples Using Curl<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>These examples assume a default port value of 35357, and depend on the
+<tt class="docutils literal"><span class="pre">sampledata</span></tt> bundled with keystone.</p>
+<div class="section" id="id2">
+<h2>GET /<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Disover API version information, links to documentation (PDF, HTML, WADL),
+and supported media types:</p>
+<div class="highlight-python"><pre>$ curl http://0.0.0.0:35357</pre>
+</div>
+<p>or:</p>
+<div class="highlight-python"><pre>$ curl http://0.0.0.0:35357/v2.0/</pre>
+</div>
+<p>Returns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;version&quot;</span><span class="p">:{</span>
+        <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;v2.0&quot;</span><span class="p">,</span>
+        <span class="s">&quot;status&quot;</span><span class="p">:</span><span class="s">&quot;beta&quot;</span><span class="p">,</span>
+        <span class="s">&quot;updated&quot;</span><span class="p">:</span><span class="s">&quot;2011-11-19T00:00:00Z&quot;</span><span class="p">,</span>
+        <span class="s">&quot;links&quot;</span><span class="p">:[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;rel&quot;</span><span class="p">:</span><span class="s">&quot;self&quot;</span><span class="p">,</span>
+                <span class="s">&quot;href&quot;</span><span class="p">:</span><span class="s">&quot;http://127.0.0.1:35357/v2.0/&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s">&quot;rel&quot;</span><span class="p">:</span><span class="s">&quot;describedby&quot;</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;text/html&quot;</span><span class="p">,</span>
+                <span class="s">&quot;href&quot;</span><span class="p">:</span><span class="s">&quot;http://docs.openstack.org/api/openstack-identity-service/2.0/content/&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s">&quot;rel&quot;</span><span class="p">:</span><span class="s">&quot;describedby&quot;</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;application/pdf&quot;</span><span class="p">,</span>
+                <span class="s">&quot;href&quot;</span><span class="p">:</span><span class="s">&quot;http://docs.openstack.org/api/openstack-identity-service/2.0/identity-dev-guide-2.0.pdf&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s">&quot;rel&quot;</span><span class="p">:</span><span class="s">&quot;describedby&quot;</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;application/vnd.sun.wadl+xml&quot;</span><span class="p">,</span>
+                <span class="s">&quot;href&quot;</span><span class="p">:</span><span class="s">&quot;http://127.0.0.1:35357/v2.0/identity-admin.wadl&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;media-types&quot;</span><span class="p">:[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;base&quot;</span><span class="p">:</span><span class="s">&quot;application/xml&quot;</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;application/vnd.openstack.identity-v2.0+xml&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s">&quot;base&quot;</span><span class="p">:</span><span class="s">&quot;application/json&quot;</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;application/vnd.openstack.identity-v2.0+json&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>GET /extensions<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>Discover the API extensions enabled at the endpoint:</p>
+<div class="highlight-python"><pre>$ curl http://0.0.0.0:35357/extensions</pre>
+</div>
+<p>Returns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;extensions&quot;</span><span class="p">:{</span>
+        <span class="s">&quot;values&quot;</span><span class="p">:[]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>POST /tokens<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>Authenticate by exchanging credentials for an access token:</p>
+<div class="highlight-python"><pre>$ curl -d '{"auth":{"passwordCredentials":{"username": "joeuser", "password": "secrete"}}}' -H "Content-type: application/json" http://localhost:35357/v2.0/tokens</pre>
+</div>
+<p>Returns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;access&quot;</span><span class="p">:{</span>
+        <span class="s">&quot;token&quot;</span><span class="p">:{</span>
+            <span class="s">&quot;expires&quot;</span><span class="p">:</span><span class="s">&quot;2012-02-05T00:00:00&quot;</span><span class="p">,</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;887665443383838&quot;</span><span class="p">,</span>
+            <span class="s">&quot;tenant&quot;</span><span class="p">:{</span>
+                <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;customer-x&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s">&quot;serviceCatalog&quot;</span><span class="p">:[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;endpoints&quot;</span><span class="p">:[</span>
+                <span class="p">{</span>
+                    <span class="s">&quot;adminURL&quot;</span><span class="p">:</span><span class="s">&quot;http://swift.admin-nets.local:8080/&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;region&quot;</span><span class="p">:</span><span class="s">&quot;RegionOne&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;internalURL&quot;</span><span class="p">:</span><span class="s">&quot;http://127.0.0.1:8080/v1/AUTH_1&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;publicURL&quot;</span><span class="p">:</span><span class="s">&quot;http://swift.publicinternets.com/v1/AUTH_1&quot;</span>
+                <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;object-store&quot;</span><span class="p">,</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;swift&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s">&quot;endpoints&quot;</span><span class="p">:[</span>
+                <span class="p">{</span>
+                    <span class="s">&quot;adminURL&quot;</span><span class="p">:</span><span class="s">&quot;http://cdn.admin-nets.local/v1.1/1&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;region&quot;</span><span class="p">:</span><span class="s">&quot;RegionOne&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;internalURL&quot;</span><span class="p">:</span><span class="s">&quot;http://127.0.0.1:7777/v1.1/1&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;publicURL&quot;</span><span class="p">:</span><span class="s">&quot;http://cdn.publicinternets.com/v1.1/1&quot;</span>
+                <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span><span class="s">&quot;object-store&quot;</span><span class="p">,</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;cdn&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;user&quot;</span><span class="p">:{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s">&quot;roles&quot;</span><span class="p">:[</span>
+                <span class="p">{</span>
+                <span class="s">&quot;tenantId&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span>
+                <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;3&quot;</span><span class="p">,</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;Member&quot;</span>
+                <span class="p">}</span>
+            <span class="p">],</span>
+            <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;joeuser&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Take note of the value [&#8216;access&#8217;][&#8216;token&#8217;][&#8216;id&#8217;] value produced here (<tt class="docutils literal"><span class="pre">887665443383838</span></tt>, above), as you can use it in the calls below.</p>
+</div>
+</div>
+<div class="section" id="get-tokens-token-id">
+<h2>GET /tokens/{token_id}<a class="headerlink" href="#get-tokens-token-id" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This call refers to a token known to be valid, <tt class="docutils literal"><span class="pre">887665443383838</span></tt> in this case.</p>
+</div>
+<p>Validate a token:</p>
+<div class="highlight-python"><pre>$ curl -H "X-Auth-Token:999888777666" http://localhost:35357/v2.0/tokens/887665443383838</pre>
+</div>
+<p>If the token is valid, returns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;access&quot;</span><span class="p">:{</span>
+        <span class="s">&quot;token&quot;</span><span class="p">:{</span>
+            <span class="s">&quot;expires&quot;</span><span class="p">:</span><span class="s">&quot;2012-02-05T00:00:00&quot;</span><span class="p">,</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;887665443383838&quot;</span><span class="p">,</span>
+            <span class="s">&quot;tenant&quot;</span><span class="p">:{</span>
+                <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;customer-x&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s">&quot;user&quot;</span><span class="p">:{</span>
+            <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;joeuser&quot;</span><span class="p">,</span>
+            <span class="s">&quot;tenantName&quot;</span><span class="p">:</span><span class="s">&quot;customer-x&quot;</span><span class="p">,</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s">&quot;roles&quot;</span><span class="p">:[</span>
+                <span class="p">{</span>
+                    <span class="s">&quot;serviceId&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;3&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;Member&quot;</span>
+                <span class="p">}</span>
+            <span class="p">],</span>
+            <span class="s">&quot;tenantId&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="head-tokens-token-id">
+<h2>HEAD /tokens/{token_id}<a class="headerlink" href="#head-tokens-token-id" title="Permalink to this headline">¶</a></h2>
+<p>This is a high-performance variant of the GET call documented above, which
+by definition, returns no response body:</p>
+<div class="highlight-python"><pre>$ curl -I -H "X-Auth-Token:999888777666" http://localhost:35357/v2.0/tokens/887665443383838</pre>
+</div>
+<p>... which returns <tt class="docutils literal"><span class="pre">200</span></tt>, indicating the token is valid:</p>
+<div class="highlight-python"><pre>HTTP/1.1 200 OK
+Content-Length: 0
+Content-Type: None
+Date: Tue, 08 Nov 2011 23:07:44 GMT</pre>
+</div>
+</div>
+<div class="section" id="get-tokens-token-id-endpoints">
+<h2>GET /tokens/{token_id}/endpoints<a class="headerlink" href="#get-tokens-token-id-endpoints" title="Permalink to this headline">¶</a></h2>
+<p>List all endpoints for a token:</p>
+<div class="highlight-python"><pre>$ curl -H "X-Auth-Token:999888777666" http://localhost:35357/v2.0/tokens/887665443383838/endpoints</pre>
+</div>
+<p>Returns:</p>
+<div class="highlight-python"><pre>{
+    "endpoints_links": [
+        {
+            "href": "http://127.0.0.1:35357/tokens/887665443383838/endpoints?'marker=5&amp;limit=10'",
+            "rel": "next"
+        }
+    ],
+    "endpoints": [
+        {
+            "internalURL": "http://127.0.0.1:8080/v1/AUTH_1",
+            "name": "swift",
+            "adminURL": "http://swift.admin-nets.local:8080/",
+            "region": "RegionOne",
+            "tenantId": 1,
+            "type": "object-store",
+            "id": 1,
+            "publicURL": "http://swift.publicinternets.com/v1/AUTH_1"
+        },
+        {
+            "internalURL": "http://localhost:8774/v1.0",
+            "name": "nova_compat",
+            "adminURL": "http://127.0.0.1:8774/v1.0",
+            "region": "RegionOne",
+            "tenantId": 1,
+            "type": "compute",
+            "id": 2,
+            "publicURL": "http://nova.publicinternets.com/v1.0/"
+        },
+        {
+            "internalURL": "http://localhost:8774/v1.1",
+            "name": "nova",
+            "adminURL": "http://127.0.0.1:8774/v1.1",
+            "region": "RegionOne",
+            "tenantId": 1,
+            "type": "compute",
+            "id": 3,
+            "publicURL": "http://nova.publicinternets.com/v1.1/
+        },
+        {
+            "internalURL": "http://127.0.0.1:9292/v1.1/",
+            "name": "glance",
+            "adminURL": "http://nova.admin-nets.local/v1.1/",
+            "region": "RegionOne",
+            "tenantId": 1,
+            "type": "image",
+            "id": 4,
+            "publicURL": "http://glance.publicinternets.com/v1.1/"
+        },
+        {
+            "internalURL": "http://127.0.0.1:7777/v1.1/1",
+            "name": "cdn",
+            "adminURL": "http://cdn.admin-nets.local/v1.1/1",
+            "region": "RegionOne",
+            "tenantId": 1,
+            "versionId": "1.1",
+            "versionList": "http://127.0.0.1:7777/",
+            "versionInfo": "http://127.0.0.1:7777/v1.1",
+            "type": "object-store",
+            "id": 5,
+            "publicURL": "http://cdn.publicinternets.com/v1.1/1"
+        }
+    ]
+}</pre>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>GET /tenants<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>List all of the tenants in the system (requires an Admin <tt class="docutils literal"><span class="pre">X-Auth-Token</span></tt>):</p>
+<div class="highlight-python"><pre>$ curl -H "X-Auth-Token:999888777666" http://localhost:35357/v2.0/tenants</pre>
+</div>
+<p>Returns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;tenants_links&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;tenants&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s">&quot;description&quot;</span><span class="p">:</span> <span class="s">&quot;None&quot;</span><span class="p">,</span>
+            <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;project-y&quot;</span><span class="p">,</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;3&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+            <span class="s">&quot;description&quot;</span><span class="p">:</span> <span class="s">&quot;None&quot;</span><span class="p">,</span>
+            <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;ANOTHER:TENANT&quot;</span><span class="p">,</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;2&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+            <span class="s">&quot;description&quot;</span><span class="p">:</span> <span class="s">&quot;None&quot;</span><span class="p">,</span>
+            <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;customer-x&quot;</span><span class="p">,</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-tenants-tenant-id">
+<h2>GET /tenants/{tenant_id}<a class="headerlink" href="#get-tenants-tenant-id" title="Permalink to this headline">¶</a></h2>
+<p>Retrieve information about a tenant, by tenant ID:</p>
+<div class="highlight-python"><pre>$ curl -H "X-Auth-Token:999888777666" http://localhost:35357/v2.0/tenants/1</pre>
+</div>
+<p>Returns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;tenant&quot;</span><span class="p">:{</span>
+        <span class="s">&quot;enabled&quot;</span><span class="p">:</span><span class="n">true</span><span class="p">,</span>
+        <span class="s">&quot;description&quot;</span><span class="p">:</span><span class="s">&quot;None&quot;</span><span class="p">,</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;customer-x&quot;</span><span class="p">,</span>
+        <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-tenants-tenant-id-users-user-id-roles">
+<h2>GET /tenants/{tenant_id}/users/{user_id}/roles<a class="headerlink" href="#get-tenants-tenant-id-users-user-id-roles" title="Permalink to this headline">¶</a></h2>
+<p>List the roles a user has been granted on a tenant:</p>
+<div class="highlight-python"><pre>$ curl -H "X-Auth-Token:999888777666" http://localhost:35357/v2.0/tenants/1/users/1/roles</pre>
+</div>
+<p>Returns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;roles_links&quot;</span><span class="p">:[],</span>
+    <span class="s">&quot;roles&quot;</span><span class="p">:[</span>
+        <span class="p">{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;3&quot;</span><span class="p">,</span>
+            <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;Member&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-users-user-id">
+<h2>GET /users/{user_id}<a class="headerlink" href="#get-users-user-id" title="Permalink to this headline">¶</a></h2>
+<p>Retrieve information about a user, by user ID:</p>
+<div class="highlight-python"><pre>$ curl -H "X-Auth-Token:999888777666" http://localhost:35357/v2.0/users/1</pre>
+</div>
+<p>Returns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;user&quot;</span><span class="p">:{</span>
+        <span class="s">&quot;tenantId&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span>
+        <span class="s">&quot;enabled&quot;</span><span class="p">:</span><span class="n">true</span><span class="p">,</span>
+        <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;1&quot;</span><span class="p">,</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;joeuser&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-users-user-id-roles">
+<h2>GET /users/{user_id}/roles<a class="headerlink" href="#get-users-user-id-roles" title="Permalink to this headline">¶</a></h2>
+<p>Retrieve the roles granted to a user, given a user ID:</p>
+<div class="highlight-python"><pre>$ curl -H "X-Auth-Token:999888777666" http://localhost:35357/v2.0/users/4/roles</pre>
+</div>
+<p>Returns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;roles_links&quot;</span><span class="p">:[],</span>
+    <span class="s">&quot;roles&quot;</span><span class="p">:[</span>
+        <span class="p">{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span><span class="s">&quot;2&quot;</span><span class="p">,</span>
+            <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;KeystoneServiceAdmin&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="keystone"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="middlewarearchitecture.html" title="Middleware Architecture"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+keystone Package
+================
+
+:mod:`clean` Module
+-------------------
+
+.. automodule:: keystone.clean
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`cli` Module
+-----------------
+
+.. automodule:: keystone.cli
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`config` Module
+--------------------
+
+.. automodule:: keystone.config
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`exception` Module
+-----------------------
+
+.. automodule:: keystone.exception
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`service` Module
+---------------------
+
+.. automodule:: keystone.service
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`test` Module
+------------------
+
+.. automodule:: keystone.test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+    keystone.catalog
+    keystone.common
+    keystone.contrib
+    keystone.identity
+    keystone.middleware
+    keystone.openstack
+    keystone.policy
+    keystone.token
+

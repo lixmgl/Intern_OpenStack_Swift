@@ -1,0 +1,342 @@
+# Copyright (c) 2010-2011 OpenStack, LLC.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import errno
+import os, time
+
+from webob import Request, Response
+from swift.common.utils import split_path, get_logger
+from swift.common.ring.ring import Ring
+from swift.common.client import http_connection
+from swift.common.constraints import check_mount
+from resource import getpagesize
+from hashlib import md5
+try:
+    import simplejson as json
+except ImportError:
+    import json
+
+
+class ReconMiddleware(object):
+    """
+    Recon middleware used for monitoring.
+
+    /recon/load|mem|async... will return various system metrics.
+
+    Needs to be added to the pipeline and a requires a filter
+    declaration in the object-server.conf:
+
+    [filter:recon]
+    use = egg:swift#recon
+    recon_cache_path = /var/cache/swift
+    """
+
+    def __init__(self, app, conf, *args, **kwargs):
+        self.app = app
+        self.devices = conf.get('devices', '/srv/node/')
+        swift_dir = conf.get('swift_dir', '/etc/swift')
+        self.logger = get_logger(conf, log_route='recon')
+        self.recon_cache_path = conf.get('recon_cache_path', \
+            '/var/cache/swift')
+        self.object_recon_cache = "%s/object.recon" % self.recon_cache_path
+        self.account_ring_path = os.path.join(swift_dir, 'account.ring.gz')
+        self.container_ring_path = os.path.join(swift_dir, 'container.ring.gz')
+        self.object_ring_path = os.path.join(swift_dir, 'object.ring.gz')
+        self.rings = [self.account_ring_path, self.container_ring_path, \
+            self.object_ring_path]
+        self.mount_check = conf.get('mount_check', 'true').lower() in \
+                              ('true', 't', '1', 'on', 'yes', 'y')
+                              
+        self.__last_ring_load = time.time()
+        self.__object_reload_interval = 300 #seconds
+        self.__object_ring = Ring(self.object_ring_path)
+        
+    #######################################################
+    ## Descriptor for object ring
+    def getobject_ring(self):
+        curr_time = time.time()
+        if (curr_time - self.last_ring_load) > self.object_reload_interval:
+            self.__object_ring = Ring(self.object_ring_path)
+        return self.__object_ring
+    
+    def setobject_ring(self, ring):
+        self.__object_ring = ring
+    
+    object_ring = property(setobject_ring, getobject_ring, None, "Property __object_ring")
+
+    def get_mounted(self):
+        """get ALL mounted fs from /proc/mounts"""
+        mounts = []
+        with open('/proc/mounts', 'r') as procmounts:
+            for line in procmounts:
+                mount = {}
+                mount['device'], mount['path'], opt1, opt2, opt3, \
+                    opt4 = line.rstrip().split()
+                mounts.append(mount)
+        return mounts
+
+    def get_load(self):
+        """get info from /proc/loadavg"""
+        loadavg = {}
+        onemin, fivemin, ftmin, tasks, procs \
+            = open('/proc/loadavg', 'r').readline().rstrip().split()
+        loadavg['1m'] = float(onemin)
+        loadavg['5m'] = float(fivemin)
+        loadavg['15m'] = float(ftmin)
+        loadavg['tasks'] = tasks
+        loadavg['processes'] = int(procs)
+        return loadavg
+
+    def get_mem(self):
+        """get info from /proc/meminfo"""
+        meminfo = {}
+        with open('/proc/meminfo', 'r') as memlines:
+            for i in memlines:
+                entry = i.rstrip().split(":")
+                meminfo[entry[0]] = entry[1].strip()
+        return meminfo
+
+    def get_async_info(self):
+        """get # of async pendings"""
+        asyncinfo = {}
+        
+        if os.path.exists(self.object_recon_cache) == False:
+            return asyncinfo
+        
+        with open(self.object_recon_cache, 'r') as f:
+            recondata = json.load(f)
+            if 'async_pending' in recondata:
+                asyncinfo['async_pending'] = recondata['async_pending']
+            else:
+                self.logger.notice( \
+                    _('NOTICE: Async pendings not in recon data.'))
+                asyncinfo['async_pending'] = -1
+        return asyncinfo
+
+    def get_replication_info(self):
+        """grab last object replication time"""
+        repinfo = {}
+        if os.path.exists(self.object_recon_cache) == False:
+            return repinfo
+        
+        with open(self.object_recon_cache, 'r') as f:
+            recondata = json.load(f)
+            if 'object_replication_time' in recondata:
+                repinfo['object_replication_time'] = \
+                    recondata['object_replication_time']
+            else:
+                self.logger.notice( \
+                    _('NOTICE: obj replication time not in recon data'))
+                repinfo['object_replication_time'] = -1
+        return repinfo
+
+    def get_device_info(self):
+        """place holder, grab dev info"""
+        return self.devices
+
+    def get_unmounted(self):
+        """list unmounted (failed?) devices"""
+        mountlist = []
+        for entry in os.listdir(self.devices):
+            mpoint = {'device': entry, \
+                "mounted": check_mount(self.devices, entry)}
+            if not mpoint['mounted']:
+                mountlist.append(mpoint)
+        return mountlist
+
+    def get_diskusage(self):
+        """get disk utilization statistics"""
+        devices = []
+        for entry in os.listdir(self.devices):
+            if check_mount(self.devices, entry):
+                path = "%s/%s" % (self.devices, entry)
+                disk = os.statvfs(path)
+                capacity = disk.f_bsize * disk.f_blocks
+                available = disk.f_bsize * disk.f_bavail
+                used = disk.f_bsize * (disk.f_blocks - disk.f_bavail)
+                devices.append({'device': entry, 'mounted': True, \
+                    'size': capacity, 'used': used, 'avail': available})
+            else:
+                devices.append({'device': entry, 'mounted': False, \
+                    'size': 0, 'used': 0, 'avail': 0})
+        return devices
+            
+    def get_diskusage_by_account(self, account):
+        object_nodes = set()
+        for dev in self.__object_ring.devs:
+            url = "http://%s:%d/recon/diskusage" % (dev['ip'], dev['port'])
+            object_nodes.add(url)
+        
+        total_space = 0
+        used_space = 0
+        avail_space = 0
+        for url in object_nodes:
+            ##self.logger.critical("url = %s" % url)
+            (parsed, conn) = http_connection(url)
+            conn.request('GET', parsed.path, '', {})
+            resp = conn.getresponse()
+            resp_data = resp.read()
+            #self.logger.critical("resp = %s" % resp_data)
+            device_list = json.loads(resp_data)
+            
+            for device in device_list:
+                if (device['size'] != ""):
+                    total_space += int(device['size'])
+                if (device['used'] != ""):
+                    used_space += int(device['used'])
+                if (device['avail'] != ""):
+                    avail_space += int(device['avail'])
+                #self.logger.critical("[get_diskusage_by_account] %s:%s - %s" % (url,device['device'], str(device['size'])))
+                
+        ret = dict()
+        ret['account'] = account
+        ret['total'] = total_space
+        ret['used'] = used_space
+        ret['avail'] = avail_space
+        return ret
+
+
+    def get_ring_md5(self):
+        """get all ring md5sum's"""
+        sums = {}
+        for ringfile in self.rings:
+            md5sum = md5()
+            with open(ringfile, 'rb') as f:
+                block = f.read(4096)
+                while block:
+                    md5sum.update(block)
+                    block = f.read(4096)
+            sums[ringfile] = md5sum.hexdigest()
+        return sums
+
+    def get_quarantine_count(self):
+        """get obj/container/account quarantine counts"""
+        qcounts = {"objects": 0, "containers": 0, "accounts": 0}
+        qdir = "quarantined"
+        for device in os.listdir(self.devices):
+            for qtype in qcounts:
+                qtgt = os.path.join(self.devices, device, qdir, qtype)
+                if os.path.exists(qtgt):
+                    linkcount = os.lstat(qtgt).st_nlink
+                    if linkcount > 2:
+                        qcounts[qtype] += linkcount - 2
+        return qcounts
+
+    def get_socket_info(self):
+        """
+        get info from /proc/net/sockstat and sockstat6
+
+        Note: The mem value is actually kernel pages, but we return bytes
+        allocated based on the systems page size.
+        """
+        sockstat = {}
+        try:
+            with open('/proc/net/sockstat') as proc_sockstat:
+                for entry in proc_sockstat:
+                    if entry.startswith("TCP: inuse"):
+                        tcpstats = entry.split()
+                        sockstat['tcp_in_use'] = int(tcpstats[2])
+                        sockstat['orphan'] = int(tcpstats[4])
+                        sockstat['time_wait'] = int(tcpstats[6])
+                        sockstat['tcp_mem_allocated_bytes'] = \
+                            int(tcpstats[10]) * getpagesize()
+        except IOError as e:
+            if e.errno != errno.ENOENT:
+                    raise
+        try:
+            with open('/proc/net/sockstat6') as proc_sockstat6:
+                for entry in proc_sockstat6:
+                    if entry.startswith("TCP6: inuse"):
+                        sockstat['tcp6_in_use'] = int(entry.split()[2])
+        except IOError as e:
+            if e.errno != errno.ENOENT:
+                raise
+        return sockstat
+
+    def GET(self, req):
+        error = False
+        [root, type, params ] = split_path(req.path, 1, 3, True)
+        #self.logger.debug("[recon] path = %s, type = %s, params = %s" % (req.path, type, params))
+        try:
+            if type == "mem":
+                content = json.dumps(self.get_mem())
+            elif type == "load":
+                try:
+                    content = json.dumps(self.get_load(), sort_keys=True)
+                except IOError as e:
+                    error = True
+                    content = "load - %s" % e
+            elif type == "async":
+                try:
+                    content = json.dumps(self.get_async_info())
+                except IOError as e:
+                    error = True
+                    content = "async - %s" % e
+            elif type == "replication":
+                try:
+                    content = json.dumps(self.get_replication_info())
+                except IOError as e:
+                    error = True
+                    content = "replication - %s" % e
+            elif type == "mounted":
+                content = json.dumps(self.get_mounted())
+            elif type == "unmounted":
+                content = json.dumps(self.get_unmounted())
+            elif type == "diskusage":
+                #params = split_path(req.path, 1,3, False)
+                if (params != None):
+                    account =  params
+                    content = json.dumps(self.get_diskusage_by_account(account))
+                else:
+                    content = json.dumps(self.get_diskusage())
+            elif type == "ringmd5":
+                content = json.dumps(self.get_ring_md5())
+            elif type == "quarantined":
+                content = json.dumps(self.get_quarantine_count())
+            elif type == "sockstat":
+                content = json.dumps(self.get_socket_info())
+            else:
+                content = "Invalid path: %s" % req.path
+                return Response(request=req, status="400 Bad Request", \
+                    body=content, content_type="text/plain")
+        except ValueError as e:
+            error = True
+            content = "ValueError: %s" % e
+
+        if not error:
+            return Response(request=req, body=content, \
+                content_type="application/json")
+        else:
+            msg = 'CRITICAL recon - %s' % str(content)
+            self.logger.critical(msg)
+            body = "Internal server error."
+            return Response(request=req, status="500 Server Error", \
+                body=body, content_type="text/plain")
+
+    def __call__(self, env, start_response):
+        req = Request(env)
+        if req.path.startswith('/recon/'):
+            return self.GET(req)(env, start_response)
+        else:
+            return self.app(env, start_response)
+
+
+def filter_factory(global_conf, **local_conf):
+    conf = global_conf.copy()
+    conf.update(local_conf)
+
+    def recon_filter(app):
+        return ReconMiddleware(app, conf)
+    return recon_filter

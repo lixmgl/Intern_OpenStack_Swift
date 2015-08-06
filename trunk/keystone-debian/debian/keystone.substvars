@@ -1,0 +1,2 @@
+misc:Depends=upstart-job
+python:Depends=python

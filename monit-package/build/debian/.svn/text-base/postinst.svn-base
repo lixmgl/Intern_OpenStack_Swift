@@ -1,0 +1,7 @@
+#!/bin/bash
+
+mkdir -p /opt/monit/logs
+mkdir -p /opt/monit/events
+chown -R root:root /opt/monit
+cp /opt/monit/bin/monit_rc /etc/init.d/monit
+cp /opt/monit/etc/monit /etc/default

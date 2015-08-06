@@ -1,0 +1,2 @@
+check program glance_e2e with path "/opt/monit/scripts/glance_e2e.bash"
+        if status != 0 then alert

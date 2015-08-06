@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <link href="../css/main.css" media="screen" rel="Stylesheet">
+    <link href="../css/form.css" media="screen" rel="Stylesheet">
+    <link href="../admin/assets/admin.css" media="screen" rel="Stylesheet">
+
+    <script src="../js/mmonit.js"></script>
+    <script src="../build/yuiloader/yuiloader-min.js"></script>
+
+    <title>M/Monit Admin</title>
+</head>
+
+<body class="yui-skin-sam">
+
+<div id="Wrapper">
+    <div id="Header">
+        <div id="Logout" title="Logout">
+            <a href="../login/logout.csp"></a>
+        </div>
+        <h1 id="Logo">
+            <a href="../"></a>
+        </h1>
+        <div>
+            <ul id="Nav">
+                <li>
+                        <a href="../index.csp"><span>Dashboard</span></a>
+                </li>
+                <li>
+                    <a href="../status/"><span>Status</span></a>
+                    <ul>
+                        <li><a href="../status/">Overview</a></li>
+                        <li><a href="../status/topography">Topography</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="../reports/"><span>Reports</span></a>
+                    <ul>
+                        <li><a href="../reports/">Overview</a></li>
+                            <li><a href="../reports/events/">Events</a></li>
+                    </ul>
+                </li>
+                <li id="current">
+                    <a href="../admin/"><span>Admin</span></a>
+                </li>
+            </ul>
+        </div>
+    </div> <!-- Header -->
+    
+    <div id="Title" style="background: #fff url(../img/bulldog.png) no-repeat 98% 8px;">
+        <div class="sub-menu">
+            <ul class="piped">
+                <li class="first">
+                    <a href="../admin/" class="current" name="current">Overview</a> 
+                </li>
+                <li>
+                    <a href="../admin/hosts/">Hosts</a> 
+                </li>
+                <li>
+                    <a href="../admin/groups/">Groups</a> 
+                </li>
+                <li>
+                    <a href="../admin/users/">Users</a>
+                </li>
+                <li>
+                    <a href="../admin/rules/">Alerts</a>
+                </li>
+            </ul>
+        </div>
+        <h1>
+            Settings and Summary
+        </h1>
+    </div> <!-- Title -->
+    
+    <div id="Main" class="clearfix">
+        
+        <table id="Area" border="0">
+            <tr>
+                <td style="padding-right: 48px; width:100%; min-width: 580px;">
+                    <!-- Tabbed Panel -->
+                    <div id="settings" class="yui-navset" style="display:none;">
+
+                        <!-- Tab navigation -->
+                        <ul class="yui-nav" style="min-width:500px;">
+                            <li <?cs if:(!Request.Attr.tab || Request.Attr.tab == 1) ?>class="selected"<?cs /if ?>><a href="#tab1"><em>Summary</em></a></li>
+                            <li <?cs if:(Request.Attr.tab == 2) ?>class="selected"<?cs /if ?>><a href="#tab2"><em>Mail servers</em></a></li>
+                            <li <?cs if:(Request.Attr.tab == 3) ?>class="selected"<?cs /if ?>><a href="#tab3"><em>Jabber servers</em></a></li>
+                            <li <?cs if:(Request.Attr.tab == 4) ?>class="selected"<?cs /if ?>><a href="#tab4"><em>Message format</em></a></li>
+                            <li <?cs if:(Request.Attr.tab == 5) ?>class="selected"<?cs /if ?>><a href="#tab5"><em>Message queue</em></a></li>
+                        </ul>
+
+                        <div class="yui-content">
+
+                            <div id="tab1">
+                                <table cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th>
+                                            M/Monit version:
+                                        </th>
+                                        <td colspan="2">
+                                            <?cs var:Request.Param.version ?>-<?cs var:Request.Param.platform ?>-<?cs var:Request.Param.machine ?>
+                                        </td>
+                                    </tr>
+                                    <tr class="vspace">
+                                        <th>
+                                            License information:
+                                        </th>
+                                        <?cs if:Request.Param.license_expire?>
+                                        <td colspan="2">
+                                            This license will expire on <?cs var:Request.Param.license_expire ?>
+                                        </td>
+                                        <?cs else ?>
+                                        <td>
+                                            Owner: 
+                                        </td>
+                                        <td>
+                                            <?cs var:Request.Param.license_owner ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            Serial number:
+                                        </td>
+                                        <td>
+                                            <?cs var:Request.Param.license_serial ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            License type:
+                                        </td>
+                                        <td>
+                                            <?cs var:Request.Param.license_type ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            Date registered:
+                                        </td>
+                                        <td>
+                                            <?cs var:Request.Param.license_registered ?>
+                                        </td>
+                                    </tr>
+                                    <?cs /if ?>
+                                    <?cs each:connector = Request.Param.connector ?>
+                                    <tr class="vspace">
+                                        <th>
+                                            Connector IPv<?cs var:connector.ipversion ?>:
+                                        </th>
+                                        <td  colspan="2">
+                                            Scheme '<?cs var:connector.scheme ?>' at <?cs var:connector.addr ?>:<?cs var:connector.port ?>  with max <?cs var:connector.processors ?> processor threads
+                                        </td>
+                                    </tr>
+                                    <?cs /each ?>
+                                    <tr class="vspace">
+                                        <th>
+                                            Connection Pool:
+                                        </th>
+                                        <td>
+                                            Database type: 
+                                        </td>
+                                        <td>
+                                            <?cs var:Request.Param.database_type ?> 
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            Active connections: 
+                                        </td>
+                                        <td>
+                                            <?cs var:Request.Param.database_pool_active ?> 
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            Available connections: 
+                                        </td>
+                                        <td>
+                                            <?cs var:Request.Param.database_pool_size ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            Minimum size: 
+                                        </td>
+                                        <td>
+                                            <?cs var:Request.Param.database_pool_min_size ?> connections 
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            Maximum size: 
+                                        </td>
+                                        <td>
+                                            <?cs var:Request.Param.database_pool_max_size ?> connections
+                                        </td>
+                                    </tr>
+                                    <tr class="vspace">
+                                        <th>
+                                            Login Sessions:
+                                        </th>
+                                        <td>
+                                            Active Sessions: 
+                                        </td>
+                                        <td>
+                                            <?cs var:Request.Param.session_active ?> 
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            Session timeout: 
+                                        </td>
+                                        <td>
+                                            <?cs var:Request.Param.session_timeout / 60 ?> Minutes
+                                        </td>
+                                    </tr>
+                                    <tr class="vspace">
+                                        <th>
+                                            Log files:
+                                        </th>
+                                        <td colspan="2">
+                                            <?cs var:Request.Param.error_logfile ?> <br>
+                                            <?cs var:Request.Param.logfile ?> <br>
+                                            <?cs var:Request.Param.access_logfile ?>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div> <!-- Tab 1 -->
+
+                            <div id="tab2">
+                                <form method="POST" action="" name="MailServerForm">
+                                    <div id="mailserverTable"></div>
+                                    <ul>
+                                        <?cs if:Has_Error ?>
+                                        <li class="section first error">
+                                            <h3 id="errorMsgLbl">
+                                                There was a problem with your submission.
+                                            </h3>
+                                            <p id="errorMsg">
+                                                Errors have been highlighted below.
+                                            </p>
+                                        </li>   
+                                        <?cs /if?>
+                                        <li class="whitespace <?cs if:Request.Attr.mailhost_error|| Request.Attr.mailport_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div class="left" style="clear: both" >
+                                                <label for="mailhost">
+                                                    Server name or IP-address<span class="req"> * </span>
+                                                </label>
+                                                <input id="mailhost" name="mailhost" class="field text large" type="text" maxlength="256" value="<?cs var:Request.Param.mailhost ?>">
+                                                <?cs if:Request.Attr.mailhost_error ?>
+                                                <p class="error"><?cs var:Request.Attr.mailhost_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                            <div class="right">
+                                                <label for="mailport">
+                                                    Server port <span class="req"> * </span>
+                                                </label>
+                                                <input id="mailport" name="mailport" class="field text" type="text" maxlength="6" size="6" value="<?cs var:Request.Param.mailport ?>">
+                                                <?cs if:Request.Attr.mailport_error ?>
+                                                <p class="error"><?cs var:Request.Attr.mailport_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="left" style="clear: both">
+                                                <input id="mailusessl" name="mailusessl" class="field checkbox" type="checkbox" <?cs if:Request.Param.mailusessl ?>checked<?cs /if ?> value="1">
+                                                <label class="choice" for="mailusessl">
+                                                    Use SSL?
+                                                </label>
+                                                <?cs if:Request.Attr.mailusessl_error ?>
+                                                <p class="error"><?cs var:Request.Attr.mailusessl_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                            <div class="left" style="clear: both">
+                                                <input id="mailserverdefault" name="mailserverdefault" class="field checkbox" type="checkbox" <?cs if:Request.Param.mailserverdefault ?>checked<?cs /if ?> value="1">
+                                                <label class="choice" for="mailserverdefault">
+                                                    Set as default?
+                                                </label>
+                                                <?cs if:Request.Attr.mailserverdefault_error ?>
+                                                <p class="error"><?cs var:Request.Attr.mailserverdefault_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                        <li class="<?cs if:Request.Attr.mailuser_error || Request.Attr.mailpassword_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div style="clear: both">
+                                                <span style="font-size:11px">Server authentication:
+                                                    <select id="authSelector" size="1">
+                                                        <option value="0" >None</option>
+                                                        <option value="1" <?cs if:Request.Param.mailuser ?>selected<?cs /if ?>>Password</option>
+                                                    </select>
+                                                </span>
+                                            </div>
+                                            <div id="authLayer" style="clear: both; <?cs if:!Request.Param.mailuser ?>display: none<?cs /if ?>">
+                                                <fieldset id="auth-fields">
+                                                    <legend>Server Authentication</legend>
+                                                    <div class="left" style="clear: both">
+                                                        <label>Username</label>
+                                                        <input id="mailuser" name="mailuser" class="field text full" type="text" maxlength="128" value="<?cs var:Request.Param.mailuser ?>">
+                                                        <?cs if:Request.Attr.mailuser_error ?>
+                                                        <p class="error"><?cs var:Request.Attr.mailuser_error?></p>
+                                                        <?cs /if ?>
+                                                    </div>
+                                                    <div class="right">
+                                                        <label>Password</label>
+                                                        <input id="mailpassword" name="mailpassword" class="field text full" type="password" maxlength="128" value="<?cs var:Request.Param.mailpassword ?>">
+                                                        <?cs if:Request.Attr.mailpassword_error ?>
+                                                        <p class="error"><?cs var:Request.Attr.mailpassword_error ?></p>
+                                                        <?cs /if ?>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </li>
+                                        <!-- Test connection setup -->
+                                        <li class="whitespace desc">
+                                            <div class="left" style="clear: both">
+                                                <a  href="#" id="test-mail-server">
+                                                    Test connection
+                                                </a>
+                                            </div>
+                                            <div id="mailresult" class="right"></div> 
+                                        </li>
+                                    </ul>
+                                    <input type="hidden" name="MailServerForm" value="1">
+                                    <input type="hidden" name="mailserverid" id="mailserverid" value="<?cs var:Request.Param.mailserverid ?>">
+                                    <div class="Buttons">
+                                        <div class="toleft">
+                                            <input type="submit" id="MailServerSave" name="MailServerSave" value="Add">
+                                            <input type="reset" id="MailServerReset" name="MailServerReset" value="Reset">
+                                        </div>
+                                        <div class="toright">
+                                            <span id="mailserverdeletebutton" style="visibility:hidden;">
+                                                <input style="visibility:hidden;" type="submit" id="MailServerDelete" name="MailServerDelete" value="Delete">
+                                            </span>
+                                            <img src="../img/help.png" onclick="MMONIT_mailserversHelp.show();" alt="help">
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div> <!-- Tab 2 -->
+
+                            <div id="tab3">
+                                <form method="POST" action="" name="JabberServerForm">
+                                    <div id="jabberserverTable"></div>
+                                    <ul>
+                                        <?cs if:Has_Error ?>
+                                        <li class="section first error">
+                                            <h3 id="errorMsgLbl">
+                                                There was a problem with your submission.
+                                            </h3>
+                                            <p id="errorMsg">
+                                                Errors have been highlighted below.
+                                            </p>
+                                        </li>
+                                        <?cs /if?>
+                                        <li class="whitespace <?cs if:Request.Attr.jabberhost_error|| Request.Attr.jabberport_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div class="left" style="clear: both" >
+                                                <label for="jabberhost">
+                                                    Server name or IP-address<span class="req"> * </span>
+                                                </label>
+                                                <input id="jabberhost" name="jabberhost" class="field text large" type="text" maxlength="256" value="<?cs var:Request.Param.jabberhost ?>">
+                                                <?cs if:Request.Attr.jabberhost_error ?>
+                                                <p class="error"><?cs var:Request.Attr.jabberhost_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                            <div class="right">
+                                                <label for="jabberport">
+                                                    Server port <span class="req"> * </span>
+                                                </label>
+                                                <input id="jabberport" name="jabberport" class="field text" type="text" maxlength="6" size="6" value="<?cs var:Request.Param.jabberport ?>">
+                                                <?cs if:Request.Attr.jabberport_error ?>
+                                                <p class="error"><?cs var:Request.Attr.jabberport_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                        <li class="whitespace <?cs if:Request.Attr.jabberuser_error || Request.Attr.jabberpassword_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div class="left" style="clear: both">
+                                                <label for="jabberuser">
+                                                    Username (JID)<span class="req"> * </span>
+                                                </label>
+                                                <input id="jabberuser" name="jabberuser" class="field text full" type="text" maxlength="128" value="<?cs var:Request.Param.jabberuser ?>">
+                                                <?cs if:Request.Attr.jabberuser_error ?>
+                                                <p class="error"><?cs var:Request.Attr.jabberuser_error?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                            <div class="right">
+                                                <label for="jabberpassword">
+                                                    Password<span class="req"> * </span>
+                                                </label>
+                                                <input id="jabberpassword" name="jabberpassword" class="field text full" type="password" maxlength="128" value="<?cs var:Request.Param.jabberpassword ?>">
+                                                <?cs if:Request.Attr.jabberpassword_error ?>
+                                                <p class="error"><?cs var:Request.Attr.jabberpassword_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="left" style="clear: both">
+                                                <input id="jabberserverdefault" name="jabberserverdefault" class="field checkbox" type="checkbox" <?cs if:Request.Param.jabberserverdefault ?>checked<?cs /if ?> value="1">
+                                                <label class="choice" for="jabberserverdefault">
+                                                    Set as default?
+                                                </label>
+                                                <?cs if:Request.Attr.jabberserverdefault_error ?>
+                                                <p class="error"><?cs var:Request.Attr.jabberserverdefault_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                        <!-- Test connection setup -->
+                                        <li class="whitespace desc">
+                                            <div class="left" style="clear: both">
+                                                <a  href="#" id="test-jabber-server" >
+                                                    Test connection
+                                                </a>
+                                            </div>
+                                            <div id="jabberresult" class="right"></div>
+                                        </li>
+                                    </ul>
+                                    <input type="hidden" name="JabberServerForm" value="1">
+                                    <input type="hidden" name="jabberserverid" id="jabberserverid" value="<?cs var:Request.Param.jabberserverid ?>">
+                                    <div class="Buttons">
+                                        <div class="toleft">
+                                            <input type="submit" id="JabberServerSave" name="JabberServerSave" value="Add">
+                                            <input type="reset" id="JabberServerReset" name="JabberServerReset" value="Reset">
+                                        </div>
+                                        <div class="toright">
+                                            <span id="jabberserverdeletebutton" style="visibility:hidden;">
+                                                <input style="visibility:hidden;" type="submit" id="JabberServerDelete" name="JabberServerDelete" value="Delete">
+                                            </span>
+                                            <img src="../img/help.png" onclick="MMONIT_jabberserversHelp.show();" alt="help">
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div> <!-- Tab 3 -->
+
+                            <div id="tab4">
+                                <form method="POST" action="" name="MessageFormatForm">
+                                    <ul>
+                                        <?cs if:Has_Error ?>
+                                        <li class="section first error">
+                                            <h3 id="errorMsgLbl">
+                                                There was a problem with your submission.
+                                            </h3>
+                                            <p id="errorMsg">
+                                                Errors have been highlighted below.
+                                            </p>
+                                        </li>   
+                                        <?cs /if?>
+                                        <li class="<?cs if:Request.Attr.messagefrom_error?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div style="clear: both">
+                                                <label for="messagefrom">
+                                                    From
+                                                </label>
+                                                <input id="messagefrom" name="messagefrom" class="field text medium" type="text" maxlength="256" value="<?cs var:Request.Param.messagefrom ?>" />
+                                                <?cs if:Request.Attr.messagefrom_error ?>
+                                                <p class="error"><?cs var:Request.Attr.messagefrom_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                        <li class="<?cs if:Request.Attr.subject_error?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div style="clear: both">
+                                                <label for="subject">
+                                                    Subject
+                                                </label>
+                                                <input id="subject" name="subject" class="field text medium" type="text" maxlength="256" value="<?cs var:Request.Param.subject ?>" />
+                                                <?cs if:Request.Attr.subject_error ?>
+                                                <p class="error"><?cs var:Request.Attr.subject_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                        <li class="<?cs if:Request.Attr.message_error?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div style="clear: both">
+                                                <label for="message">
+                                                    Message
+                                                </label>
+                                                <textarea id="message" class="field textarea large" name="message" rows="4"><?cs var:Request.Param.message ?></textarea>
+                                                <?cs if:Request.Attr.message_error ?>
+                                                <p class="error"><?cs var:Request.Attr.message_error?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <input type="hidden" name="MessageFormatForm" value="1">
+                                    <input type="hidden" name="formatid" id="formatid" value="<?cs var:Request.Param.formatid ?>">
+                                    <div class="Buttons">
+                                        <div class="toleft">
+                                            <input type="submit" id="FormatSave" name="FormatSave" value="OK">
+                                        </div>
+                                        <div class="toright">
+                                            <img src="../img/help.png" onclick="MMONIT_messageformatHelp.show();" alt="help">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div> <!-- Tab 4 -->
+
+                            <div id="tab5">
+                                <form method="POST" action="" name="MessageQueueForm">
+                                    <ul>
+                                        <?cs if:Has_Error ?>
+                                        <li class="section first error">
+                                            <h3 id="errorMsgLbl">
+                                                There was a problem with your submission.
+                                            </h3>
+                                            <p id="errorMsg">
+                                                Errors have been highlighted below.
+                                            </p>
+                                        </li>   
+                                        <?cs /if?>
+                                        <li class="whitespace <?cs if:Request.Attr.deferredsize_error?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div style="clear: both">
+                                                <label for="deferredsize">
+                                                    Maximum deferred queue size:
+                                                </label>
+                                                <select id="deferredsize" name="deferredsize" size="1">
+                                                    <option value="100"  <?cs if:(#Request.Param.deferredsize == 100)  ?>selected<?cs /if ?>>100 messages</option>
+                                                    <option value="1000" <?cs if:(#Request.Param.deferredsize == 1000) ?>selected<?cs /if ?>>1000 messages</option>
+                                                    <option value="-1"   <?cs if:(#Request.Param.deferredsize == -1)   ?>selected<?cs /if ?>>No limit</option>
+                                                </select>
+                                                <?cs if:Request.Attr.deferredsize_error ?>
+                                                <p class="error"><?cs var:Request.Attr.deferredsize_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                        <li class="whitespace <?cs if:Request.Attr.retry_error?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div style="clear: both">
+                                                <label for="retry">
+                                                    Retry if delivery failed:
+                                                </label>
+                                                <select id="retry" name="retry" size="1">
+                                                    <option value="0"  <?cs if:(#Request.Param.retry == 0)  ?>selected<?cs /if ?>>Don't retry</option>
+                                                    <option value="2"  <?cs if:(#Request.Param.retry == 2)  ?>selected<?cs /if ?>>2 times</option>
+                                                    <option value="5"  <?cs if:(#Request.Param.retry == 5)  ?>selected<?cs /if ?>>5 times</option>
+                                                    <option value="10" <?cs if:(#Request.Param.retry == 10) ?>selected<?cs /if ?>>10 times</option>
+                                                    <option value="-1" <?cs if:(#Request.Param.retry == -1) ?>selected<?cs /if ?>>Until delivered</option>
+                                                </select>
+                                                <?cs if:Request.Attr.retry_error ?>
+                                                <p class="error"><?cs var:Request.Attr.retry_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                        <li class="whitespace <?cs if:Request.Attr.minbackoff_error?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div style="clear: both">
+                                                <label for="minbackoff">
+                                                    Minimum back-off time:
+                                                </label>
+                                                <input id="minbackoff" name="minbackoff" class="field text" type="text" maxlength="6" size="6" value="<?cs var:Request.Param.minbackoff ?>"> seconds
+                                                <?cs if:Request.Attr.minbackoff_error ?>
+                                                <p class="error"><?cs var:Request.Attr.minbackoff_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                        <li class="whitespace <?cs if:Request.Attr.maxbackoff_error?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div style="clear: both">
+                                                <label for="maxbackoff">
+                                                    Maximum back-off time:
+                                                </label>
+                                                <input id="maxbackoff" name="maxbackoff" class="field text" type="text" maxlength="6" size="6" value="<?cs var:Request.Param.maxbackoff ?>"> seconds
+                                                <?cs if:Request.Attr.maxbackoff_error ?>
+                                                <p class="error"><?cs var:Request.Attr.maxbackoff_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                        <li class="whitespace <?cs if:Request.Attr.flush_error?>error<?cs else ?>desc<?cs /if ?>">
+                                            <div style="clear: both">
+                                                <label for="flush">
+                                                    Process message queue every:
+                                                </label>
+                                                <input id="flush" name="flush" class="field text" type="text" maxlength="6" size="6" value="<?cs var:Request.Param.flush ?>"> seconds
+                                                <?cs if:Request.Attr.flush_error ?>
+                                                <p class="error"><?cs var:Request.Attr.flush_error ?></p>
+                                                <?cs /if ?>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <input type="hidden" name="MessageQueueForm" value="1">
+                                    <div class="Buttons">
+                                        <div class="toleft">
+                                            <input type="submit" id="QueueSave" name="QueueSave" value="OK">
+                                        </div>
+                                        <div class="toright">
+                                            <input type="submit" id="QueuePurge" name="QueuePurge" value="Purge queue">
+                                            <input type="submit" id="QueueFlush" name="QueueFlush" value="Flush queue">
+                                            <img src="../img/help.png" onclick="MMONIT_messagequeueHelp.show();" alt="help">
+                                        </div>
+
+                                    </div>
+                                </form>
+                                <div id="queueTable" style="clear:both; width: 100%; margin: 3em 0 1em 0;"></div>
+                            </div> <!-- Tab 5 -->
+
+                        </div> <!-- yui-content -->
+                       
+                    </div>  <!-- Tabbed Panel -->
+                </td>
+                <td id="info" class="blue-gradient">
+                    <h2>
+                        Support
+                    </h2>
+                    <ul>
+                        <li>
+                            <a href="mailto:support@mmonit.com?subject=[M/Monit #<?cs var:Request.Param.license_serial ?>] ">Email</a>
+                        </li>
+                        <li>
+                            <a href="http://mmonit.com/documentation/">Documentation</a>
+                        </li>
+                        <li>
+                            <a href="http://mmonit.com/">M/Monit web site</a>
+                        </li>
+                        <li>
+                            <a href="http://www.tildeslash.com/mailman/listinfo/mmonit-announce">M/Monit announce mailing list</a>
+                        </li>
+                    </ul>
+
+                    <hr size="1">
+                    <h2>
+                        Contact information
+                    </h2>
+
+                    <div>
+                        M/Monit is a product of <a href="http://tildeslash.com/">Tildeslash Ltd</a>. For
+                        inquires about this Software, see <a href="http://mmonit.com/contact/">contact
+                        information</a>.
+                    </div>
+
+                    <hr size="1">
+                    <h2>
+                        Announcements
+                    </h2>
+
+                    <!-- M/Monit news -->
+                    <div id="feed"></div>
+                </td>
+            </tr>
+        </table>
+
+    </div> <!-- Main -->
+</div> <!-- Wrapper -->
+
+<div id="Footer">
+    <div class="toleft dark-grey-text">
+         Logged in as <?cs var:Request.RemoteUser ?>
+    </div>
+    <div class="toright">
+        <ul class="piped">
+            <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+            <li><a href="http://mmonit.com/">M/Monit</a></li>
+            <li><a href="http://mmonit.com/monit/">Monit</a></li>
+            <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+        </ul>
+    </div>
+</div> <!-- Footer -->
+
+
+<!-- Dialogs -->
+
+<!-- tab2: mail servers help -->
+<div id="mailserversHelp" class="help-dialog" style="display: none;">
+    <div class="hd">Mail Servers Help</div>
+    <div class="bd">
+        <p>
+            Specify SMTP servers M/Monit should use for alert
+            notification. To specify a new server, fill in required fields
+            and click Add. If Add is not showing, click Reset first. To
+            edit an existing server, select the server from the table,
+            edit the fields and click update. When sending an alert
+            message, M/Monit will start with the default Mail Server and
+            if not available, continue trying the next Mail Servers in the
+            list until the message is sent. 
+        </p>
+        <p>
+            If <i>Use SSL</i> is selected, M/Monit will use
+            <i>smtps</i>, unless the mail server port number is 25 or
+            587 in which case <i>starttls</i> is used.
+        </p> 
+        <p>
+            Click "Test connection" to validate current server setup.
+            This will test if M/Monit can connect to the server and,
+            if specified, test if authentication and SSL works
+        </p>
+    </div>
+</div>
+
+<!-- tab3: jabber servers help -->
+<div id="jabberserversHelp" class="help-dialog" style="display: none;">
+    <div class="hd">
+        Jabber Servers Help
+    </div>
+    <div class="bd">
+        <p>
+            Specify Jabber servers M/Monit should use for alert notification.
+        </p>
+        <p>
+            If you use GTalk the server name should be,
+            <i>talk.google.com</i>, the port number <i>5222</i>, the username
+            should be your gmail.com address and the password your gmail
+            password.
+        </p>
+        <p>
+            Note that the user you specify here should be different from the
+            one you will use in your Jabber client. Otherwise the Jabber
+            server will think that you are sending messages to yourself and
+            not send the alert message to your client.
+        </p>
+        <p>
+            To specify a new server, fill in required fields and click Add. If
+            Add is not showing, click Reset first. To edit an existing server,
+            select the server from the table, edit the fields and click
+            update. When sending an alert message, M/Monit will start with the
+            default Jabber Server and if not available, continue trying the
+            next Jabber Servers in the list until the message is sent.
+        </p> 
+        <p>
+            If the port number is 5223 M/Monit will connect using
+            <i>SSL/TLS</i> otherwise it will switch to a secure connection and
+            use <i>STARTTLS</i> if required by the server. The default Jabber
+            port number is 5222 and if in doubt, use that number.
+        </p>
+        <p>
+            Username (Jabber ID) and password are required and identify the
+            user that will send alert messages.
+        </p> 
+        <p>
+            Click "Test connection" to validate current server setup. This
+            will test if M/Monit can connect to the specified server and, if
+            authentication and SSL works.
+        </p>
+    </div>
+</div>
+
+<!-- tab4: message format help -->
+<div id="messageformatHelp" class="help-dialog" style="display: none;">
+    <div class="hd">Message Format Help</div>
+    <div class="bd">
+        <p>
+            Specify the format to be used in alert messages. The following
+            substitution variables can be used:
+        </p>
+        <table>
+            <tr>
+                <th>
+                    Variable
+                </th>
+                <th>
+                    Description
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    $EVENT
+                </td>
+                <td>
+                    A short string describing the event that occurred
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    $SERVICE
+                </td>
+                <td>
+                    The name of the service generating the event
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    $DATE
+                </td>
+                <td>
+                    The date and time the event occurred
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    $HOST
+                </td>
+                <td>
+                    The name of the Monit Host the event
+                    originated from. If $HOST is used in the
+                    From field, the value of the host running
+                    M/Monit.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    $ACTION
+                </td>
+                <td>
+                    The name of the action which was performed by Monit
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    $DESCRIPTION
+                </td>
+                <td>
+                    A description of the event condition. I.e. why the event was sent
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- tab5: message queue help -->
+<div id="messagequeueHelp" class="help-dialog" style="display: none;">
+    <div class="hd">Message Queue Help</div>
+    <div class="bd">
+        <p>
+            Set message queue properties:
+        </p>
+        <ul>
+            <li>
+                Maximum deferred queue size - M/Monit will queue messages in a
+                deferred queue when messages cannot be sent and resend
+                should be attempted later. Messages are only put in the
+                queue if a temporary error occurred, such as, if no mail or
+                instant messaging servers are online or if the server returned
+                a temporary error. If the server returns a permanent
+                error, messages are dropped and not added to the queue. If
+                the queue has reached maximum size, M/Monit will drop new
+                failed messages.
+            </li>
+            <li>
+                Retry if delivery failed - number of times M/Monit should
+                try to resend a message before giving up and deleting the
+                message
+            </li>
+            <li>
+                Minimum back-off time - when message delivery fails,
+                M/Monit will try to send the message again using an
+                exponential back-off strategy; starting with minimum
+                back-off time and increasing the retry time with every
+                failed attempt up to maximum back-off time.
+            </li>
+            <li>
+                Maximum back-off time - max time between message delivery
+                retries.
+            </li>
+            <li>
+                Process message queue every - The transmitter thread will
+                sleep for this number of seconds before waking up and
+                processing queued messages.
+            </li>
+        </ul>
+        <p>
+            Message queue management. Click the <i>Purge queue</i> button
+            to purge the queue and drop all deferred messages. Click the
+            <i>Flush queue</i> button to wake up the transmitter thread
+            and send all queued messages regardless of scheduled retry.
+        </p>
+    </div>
+</div>
+
+<script>
+var loader = new YAHOO.util.YUILoader();
+loader.loadOptional = true;
+loader.base = '../build/';
+loader.require('tabview','dom','element','connection','container','button','json','datatable', 'get');
+loader.insert({
+    onSuccess: function() {
+        YAHOO.util.Event.onDOMReady(function() {
+            
+            var Event = YAHOO.util.Event;
+            
+            // Setup dialog for mail servers help
+            MMONIT.layer.show('mailserversHelp');
+            MMONIT_mailserversHelp = new YAHOO.widget.Dialog("mailserversHelp", {
+                width               : "30em",
+                fixedcenter         : true,
+                visible             : false,
+                constraintoviewport : true,
+                modal               : false,
+                underlay            : "none"
+            });
+            MMONIT_mailserversHelp.render();
+
+            // Setup dialog for jabber servers help
+            MMONIT.layer.show('jabberserversHelp');
+            MMONIT_jabberserversHelp = new YAHOO.widget.Dialog("jabberserversHelp", {
+                width               : "30em",
+                fixedcenter         : true,
+                visible             : false,
+                constraintoviewport : true,
+                modal               : false,
+                underlay            : "none"
+            });
+            MMONIT_jabberserversHelp.render();
+
+            // Setup dialog for message format help
+            MMONIT.layer.show('messageformatHelp');
+            MMONIT_messageformatHelp = new YAHOO.widget.Dialog("messageformatHelp", {
+                width               : "30em",
+                fixedcenter         : true,
+                visible             : false,
+                constraintoviewport : true,
+                modal               : false,
+                underlay            : "none"
+            });
+            MMONIT_messageformatHelp.render();
+
+            // Setup dialog message queue help
+            MMONIT.layer.show('messagequeueHelp');
+            MMONIT_messagequeueHelp = new YAHOO.widget.Dialog("messagequeueHelp", {
+                width               : "40em",
+                fixedcenter         : true,
+                visible             : false,
+                constraintoviewport : true,
+                modal               : false,
+                underlay            : "none"
+            });
+            MMONIT_messagequeueHelp.render();
+
+            // Show TabView. Initially hidden to avoid flickering
+            MMONIT.layer.show('settings');
+
+            var tabView = new YAHOO.widget.TabView('settings');
+            
+
+            // Build Mail Server UI
+            (function(){
+                var myIsdefaultFormatter = function(elCell, oRecord, oColumn, oData) {
+                    YAHOO.util.Dom.addClass(elCell, "Default");
+                    if (oRecord.getData("isdefault") == 1)
+                        elCell.innerHTML = '<strong>' + oRecord.getData(oColumn.getKey()) + '</strong>';
+                    else
+                        elCell.innerHTML = oRecord.getData(oColumn.getKey());
+                };
+                var myColumnDefs = [
+                    {key:"host", label:"Server", sortable:true, formatter:myIsdefaultFormatter},
+                    {key:"port", label:"Port",   sortable:true, formatter:myIsdefaultFormatter}
+                    ];
+                var myDataSource = new YAHOO.util.XHRDataSource("../json/admin/mailservers");
+                    myDataSource.connMethodPost = true;
+                    myDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                    myDataSource.responseSchema = {
+                        resultsList: "records", 
+                        fields: ["id","host","port","user","password","ssl","isdefault"],
+                        metaFields: {totalRecords: 'totalRecords'}
+                    };
+                var myConfigs = {
+                    selectionMode:"single",
+                    paginator : new YAHOO.widget.Paginator({
+                        alwaysVisible: false,
+                        rowsPerPage    : 10, 
+                        rowsPerPageOptions : [10, 20, 50, 100, 200],
+                        template       : "{PageLinks} {RowsPerPageDropdown}"
+                        })
+                    };
+                var myServerDataTable = new YAHOO.widget.DataTable("mailserverTable", myColumnDefs, myDataSource, myConfigs);
+                    myServerDataTable.subscribe("rowMouseoverEvent", myServerDataTable.onEventHighlightRow);
+                    myServerDataTable.subscribe("rowMouseoutEvent", myServerDataTable.onEventUnhighlightRow);
+                    myServerDataTable.subscribe("rowClickEvent", function(e) {
+                        myServerDataTable.onEventSelectRow(e);
+                        var f = document.MailServerForm;
+                            f.mailserverid.value        = myServerDataTable.getRecord(e.target).getData("id");
+                            f.mailhost.value            = myServerDataTable.getRecord(e.target).getData("host");
+                            f.mailport.value            = myServerDataTable.getRecord(e.target).getData("port");
+                            f.mailuser.value            = myServerDataTable.getRecord(e.target).getData("user");
+                            f.mailpassword.value        = myServerDataTable.getRecord(e.target).getData("password");
+                            f.mailusessl.checked        = (myServerDataTable.getRecord(e.target).getData("ssl") == 1);
+                            f.mailserverdefault.checked = (myServerDataTable.getRecord(e.target).getData("isdefault") == 1);
+                            document.getElementById("mailserverlabel").innerHTML = "Update";
+                            MMONIT.layer.vshow('mailserverdeletebutton');
+                            if (f.mailuser.value) {
+                                f.authSelector[0].selected = false;
+                                f.authSelector[1].selected = true;
+                                MMONIT.layer.show('authLayer');
+                            } else {
+                                f.authSelector[0].selected = true;
+                                f.authSelector[1].selected = false;
+                                MMONIT.layer.hide('authLayer');
+                            }
+                            document.getElementById("mailresult").innerHTML = '';
+                    });
+                // Mail Servers Form buttons
+                var saveMailServerButton = new YAHOO.widget.Button("MailServerSave", {label: "<em id=\"mailserverlabel\">Add</em>"});
+                var resetMailServerButton = new YAHOO.widget.Button("MailServerReset");
+                var deleteMailServerButton = new YAHOO.widget.Button("MailServerDelete");
+                    resetMailServerButton.addListener("click", function() {
+                        document.getElementById("mailserverlabel").innerHTML = "Add";
+                        document.getElementById("mailserverid").setAttribute('value', '');
+                        MMONIT.layer.vhide('mailserverdeletebutton');
+                        MMONIT.layer.hide('authLayer');
+                        document.getElementById("mailresult").innerHTML = '';
+                        myServerDataTable.unselectAllRows();
+                    });
+
+                    // ------------------------------------------------------------------ Link/Form handlers
+
+                    /* Show layer for specifying server authentication if server authentication
+                    [password] was selected otherwise clear credentials and hide layer */
+                    Event.addListener("authSelector", "change", function(e) {
+                        if (document.getElementById('authSelector').selectedIndex > 0) {
+                            MMONIT.layer.show('authLayer');
+                        } else {
+                            document.MailServerForm.mailuser.value = '';
+                            document.MailServerForm.mailpassword.value = '';
+                            MMONIT.layer.hide('authLayer');
+                        }
+                    });
+                    /* Connect to MTA and verify setup */
+                    Event.addListener("test-mail-server", "click", function(e) {
+                        var f = document.MailServerForm;
+                        var result = document.getElementById("mailresult");
+                        result.innerHTML = "";
+                        if(! (f.mailhost.value && f.mailport.value)) {
+                            result.innerHTML = "<span style='color:red'>Please specify a host and a port number</span>";
+                        } else if(isNaN(f.mailport.value)) {
+                            result.innerHTML = "<span style='color:red'>Port is not a number!</span>";
+                        } else {
+                            result.innerHTML = "<img src='../img/spinner_small.gif' height='12' width='12' />";
+                            var oCallback = {
+                                success : function(o) { result.innerHTML = "<span style='color:green'>" + o.responseText +"</span>"; },
+                                failure : function(o) { result.innerHTML = "<span style='color:red'>" + (o.responseText || o.statusText) +"</span>"; },
+                                timeout: 5000
+                            };
+                            var d = document.createElement('input'); 
+                            d.setAttribute('type', 'hidden');
+                            d.setAttribute('name', 'testMTA'); 
+                            d.setAttribute('value', 'test');
+                            f.appendChild(d);
+                            YAHOO.util.Connect.setForm(f);
+                            YAHOO.util.Connect.asyncRequest('POST', '.', oCallback);
+                        }
+                    });
+            })(); // Mail Server UI
+            
+            
+            // Build Jabber Server UI
+            (function(){
+                var myIsdefaultFormatter = function(elCell, oRecord, oColumn, oData) {
+                    YAHOO.util.Dom.addClass(elCell, "Default");
+                    if (oRecord.getData("isdefault") == 1)
+                    elCell.innerHTML = '<strong>' + oRecord.getData(oColumn.getKey()) + '</strong>';
+                    else
+                    elCell.innerHTML = oRecord.getData(oColumn.getKey());
+                };
+                var myColumnDefs = [
+                {key:"host", label:"Server", sortable:true, formatter:myIsdefaultFormatter},
+                {key:"port", label:"Port",   sortable:true, formatter:myIsdefaultFormatter}
+                ];
+                var myDataSource = new YAHOO.util.XHRDataSource("../json/admin/jabberservers");
+                myDataSource.connMethodPost = true;
+                myDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                myDataSource.responseSchema = {
+                    resultsList: "records",
+                    fields: ["id","host","port","user","password","isdefault"],
+                    metaFields: {totalRecords: 'totalRecords'}
+                };
+                var myConfigs = {
+                    selectionMode:"single",
+                    paginator : new YAHOO.widget.Paginator({
+                        alwaysVisible: false,
+                        rowsPerPage    : 10,
+                        rowsPerPageOptions : [10, 20, 50, 100, 200],
+                        template       : "{PageLinks} {RowsPerPageDropdown}"
+                    })
+                };
+                var myServerDataTable = new YAHOO.widget.DataTable("jabberserverTable", myColumnDefs, myDataSource, myConfigs);
+                myServerDataTable.subscribe("rowMouseoverEvent", myServerDataTable.onEventHighlightRow);
+                myServerDataTable.subscribe("rowMouseoutEvent", myServerDataTable.onEventUnhighlightRow);
+                myServerDataTable.subscribe("rowClickEvent", function(e) {
+                    myServerDataTable.onEventSelectRow(e);
+                    var f = document.JabberServerForm;
+                    f.jabberserverid.value        = myServerDataTable.getRecord(e.target).getData("id");
+                    f.jabberhost.value            = myServerDataTable.getRecord(e.target).getData("host");
+                    f.jabberport.value            = myServerDataTable.getRecord(e.target).getData("port");
+                    f.jabberuser.value            = myServerDataTable.getRecord(e.target).getData("user");
+                    f.jabberpassword.value        = myServerDataTable.getRecord(e.target).getData("password");
+                    f.jabberserverdefault.checked = (myServerDataTable.getRecord(e.target).getData("isdefault") == 1);
+                    document.getElementById("jabberserverlabel").innerHTML = "Update";
+                    MMONIT.layer.vshow('jabberserverdeletebutton');
+                    document.getElementById("jabberresult").innerHTML = '';
+                });
+                // Jabber Servers Form buttons
+                var saveJabberServerButton = new YAHOO.widget.Button("JabberServerSave", {label: "<em id=\"jabberserverlabel\">Add</em>"});
+                var resetJabberServerButton = new YAHOO.widget.Button("JabberServerReset");
+                var deleteJabberServerButton = new YAHOO.widget.Button("JabberServerDelete");
+                resetJabberServerButton.addListener("click", function() {
+                    document.getElementById("jabberserverlabel").innerHTML = "Add";
+                    document.getElementById("jabberserverid").setAttribute('value', '');
+                    MMONIT.layer.vhide('jabberserverdeletebutton');
+                    MMONIT.layer.hide('authLayer');
+                    document.getElementById("jabberresult").innerHTML = '';
+                    myServerDataTable.unselectAllRows();
+                });
+                
+                // ------------------------------------------------------------------ Link handler
+
+                /* Connect to Jabber and verify setup */
+                Event.addListener("test-jabber-server", "click", function(e) {
+                    var f = document.JabberServerForm;
+                    var result = document.getElementById("jabberresult");
+                    result.innerHTML = "";
+                    if(! (f.jabberhost.value && f.jabberport.value && f.jabberuser.value && f.jabberpassword.value)) {
+                        result.innerHTML = "<span style='color:red'>Please specify all required fields; host, port, username (JID) and password</span>";
+                    } else if(isNaN(f.jabberport.value)) {
+                        result.innerHTML = "<span style='color:red'>Port is not a number!</span>";
+                    } else {
+                        result.innerHTML = "<img src='../img/spinner_small.gif' height='12' width='12' />";
+                        var oCallback = {
+                            success : function(o) { result.innerHTML = "<span style='color:green'>" + o.responseText +"</span>"; },
+                            failure : function(o) { result.innerHTML = "<span style='color:red'>" + (o.responseText || o.statusText) +"</span>"; },
+                            timeout: 5000
+                        };
+                        var d = document.createElement('input');
+                        d.setAttribute('type', 'hidden');
+                        d.setAttribute('name', 'testJabber');
+                        d.setAttribute('value', 'test');
+                        f.appendChild(d);
+                        YAHOO.util.Connect.setForm(f);
+                        YAHOO.util.Connect.asyncRequest('POST', '.', oCallback);
+                    }
+                });
+            })(); // Jabber Server UI
+
+
+            // Build Message Format UI
+            var saveFormatButton = new YAHOO.widget.Button("FormatSave");
+            
+
+            // Build Message Queue UI
+            (function(){
+                var myRecipientFormatter = function(elCell, oRecord, oColumn, oData) {
+                    YAHOO.util.Dom.addClass(elCell, "Recipients");
+                    for (var i = oRecord.getData("recipients").length - 1; i >= 0; i--)
+                    elCell.innerHTML += oRecord.getData("recipients")[i] + '<br>';
+                };
+                var myColumnDefs = [
+                {key:"date",       label:"Sent on",      sortable:true},
+                {key:"subject",    label:"Subject",      sortable:true},
+                {key:"recipients", label:"Recipients",   sortable:true, formatter:myRecipientFormatter},
+                {key:"retry",      label:"Retries",      sortable:true},
+                {key:"nextretry",  label:"Next attempt", sortable:true},
+                {key:"error",      label:"Last error",   sortable:true}
+                ];
+                var myDataSource = new YAHOO.util.XHRDataSource("../json/admin/messagequeue");
+                myDataSource.connMethodPost = true;
+                myDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                myDataSource.responseSchema = {
+                    resultsList: "records", 
+                    fields: ["date","subject","recipients","retry","nextretry","error"],
+                    metaFields: {totalRecords: 'totalRecords'}
+                };
+                var myConfigs = {
+                    selectionMode:"single",
+                    paginator : new YAHOO.widget.Paginator({
+                        alwaysVisible: false,
+                        rowsPerPage    : 10, 
+                        rowsPerPageOptions : [10, 20, 50, 100, 200],
+                        template       : "{PageLinks} {RowsPerPageDropdown}"
+                    })
+                };
+                var myQueueDataTable = new YAHOO.widget.DataTable("queueTable", myColumnDefs, myDataSource, myConfigs);
+                <?cs if:(#Request.Param.refresh > 1) ?>
+                myQueueDataTable.getDataSource().setInterval(<?cs var:Request.Param.refresh ?>, "" , {
+                    success  : myQueueDataTable.onDataReturnSetRows,
+                    scope    : myQueueDataTable,
+                    argument : myQueueDataTable.getState()
+                });
+                <?cs /if ?>
+                // Message Queue Form buttons
+                var saveQueueButton = new YAHOO.widget.Button("QueueSave");
+                var purgeQueueButton = new YAHOO.widget.Button("QueuePurge");
+                var flushQueueButton = new YAHOO.widget.Button("QueueFlush");
+            })(); // Message Queue UI
+            
+            
+            // Get and display news feed from mmonit.com
+            YAHOO.util.Get.script("https://www.tildeslash.com/feed.js", { 
+                onSuccess: function(o) {
+                    try {
+                        YAHOO.util.Dom.get("feed").innerHTML = com_mmonit_feed.text;
+                    } catch(e) {
+                    }
+                },
+                timeout : 2000
+            });
+            
+        }); // onDOMReady
+    } // onSuccess
+}); // loader.insert
+</script>
+
+</body>
+</html>

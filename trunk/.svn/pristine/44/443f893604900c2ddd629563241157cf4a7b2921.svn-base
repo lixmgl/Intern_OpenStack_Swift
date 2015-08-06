@@ -1,0 +1,468 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configuring Services to work with Keystone &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="next" title="Getting Involved" href="community.html" />
+    <link rel="prev" title="keystone" href="man/keystone-all.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="community.html" title="Getting Involved"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="man/keystone-all.html" title="keystone"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Configuring Services to work with Keystone</a><ul>
+<li><a class="reference internal" href="#setting-up-credentials">Setting up credentials</a><ul>
+<li><a class="reference internal" href="#admin-token">Admin Token</a></li>
+<li><a class="reference internal" href="#setting-up-tenants-users-and-roles">Setting up tenants, users, and roles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setting-up-services">Setting up services</a><ul>
+<li><a class="reference internal" href="#creating-service-users">Creating Service Users</a></li>
+<li><a class="reference internal" href="#defining-services">Defining Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setting-up-middleware">Setting Up Middleware</a><ul>
+<li><a class="reference internal" href="#keystone-auth-token-middleware">Keystone Auth-Token Middleware</a></li>
+<li><a class="reference internal" href="#configuring-nova-to-use-keystone">Configuring Nova to use Keystone</a></li>
+<li><a class="reference internal" href="#configuring-swift-to-use-keystone">Configuring Swift to use Keystone</a></li>
+<li><a class="reference internal" href="#configuring-swift-with-s3-emulation-to-use-keystone">Configuring Swift with S3 emulation to use Keystone</a></li>
+<li><a class="reference internal" href="#auth-token-middleware-with-username-and-password">Auth-Token Middleware with Username and Password</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="man/keystone-all.html"
+                                  title="previous chapter">keystone</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="community.html"
+                                  title="next chapter">Getting Involved</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/configuringservices.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="configuring-services-to-work-with-keystone">
+<h1>Configuring Services to work with Keystone<a class="headerlink" href="#configuring-services-to-work-with-keystone" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<p>Once Keystone is installed and running (see <a class="reference internal" href="configuration.html"><em>Configuring Keystone</em></a>), services
+need to be configured to work with it. To do this, we primarily install and
+configure middleware for the OpenStack service to handle authentication tasks
+or otherwise interact with Keystone.</p>
+<p>In general:</p>
+<ul class="simple">
+<li>Clients making calls to the service will pass in an authentication token.</li>
+<li>The Keystone middleware will look for and validate that token, taking the
+appropriate action.</li>
+<li>It will also retrive additional information from the token such as user
+name, id, tenant name, id, roles, etc...</li>
+</ul>
+<p>The middleware will pass those data down to the service as headers. More
+details on the architecture of that setup is described in
+<a class="reference internal" href="middlewarearchitecture.html"><em>Middleware Architecture</em></a></p>
+<div class="section" id="setting-up-credentials">
+<h2>Setting up credentials<a class="headerlink" href="#setting-up-credentials" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="admin-token">
+<h3>Admin Token<a class="headerlink" href="#admin-token" title="Permalink to this headline">¶</a></h3>
+<p>For a default installation of Keystone, before you can use the REST API, you
+need to define an authorization token. This is configured in <tt class="docutils literal"><span class="pre">keystone.conf</span></tt>
+file under the section <tt class="docutils literal"><span class="pre">[DEFAULT]</span></tt>. In the sample file provided with the
+keystone project, the line defining this token is</p>
+<blockquote>
+<div>[DEFAULT]
+admin_token = ADMIN</div></blockquote>
+<p>This configured token is a &#8220;shared secret&#8221; between keystone and other
+openstack services, and is used by the client to communicate with the API to
+create tenants, users, roles, etc.</p>
+</div>
+<div class="section" id="setting-up-tenants-users-and-roles">
+<h3>Setting up tenants, users, and roles<a class="headerlink" href="#setting-up-tenants-users-and-roles" title="Permalink to this headline">¶</a></h3>
+<p>You need to minimally define a tenant, user, and role to link the tenant and
+user as the most basic set of details to get other services authenticating
+and authorizing with keystone.</p>
+<p>You will also want to create service users for nova, glance, swift, etc. to
+be able to use to authenticate users against keystone. The <tt class="docutils literal"><span class="pre">auth_token</span></tt>
+middleware supports using either the shared secret described above as
+<cite>admin_token</cite> or users for each service.</p>
+<p>See doc:<cite>configuration</cite> for a walk through on how to create tenants, users,
+and roles.</p>
+</div>
+</div>
+<div class="section" id="setting-up-services">
+<h2>Setting up services<a class="headerlink" href="#setting-up-services" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-service-users">
+<h3>Creating Service Users<a class="headerlink" href="#creating-service-users" title="Permalink to this headline">¶</a></h3>
+<p>To configure the OpenStack services with service users, we need to create
+a tenant for all the services, and then users for each of the services. We
+then assign those service users an Admin role on the service tenant. This
+allows them to validate tokens - and authenticate and authorize other user
+requests.</p>
+<p>Create a tenant for the services, typically named &#8216;service&#8217; (however, the name can be whatever you choose):</p>
+<div class="highlight-python"><pre>keystone tenant-create --name=service</pre>
+</div>
+<p>This returns a UUID of the tenant - keep that, you&#8217;ll need it when creating
+the users and specifying the roles.</p>
+<p>Create service users for nova, glance, swift, and quantum (or whatever
+subset is relevant to your deployment):</p>
+<div class="highlight-python"><pre>keystone user-create --name=nova \
+                     --pass=Sekr3tPass \
+                     --tenant_id=[the uuid of the tenant] \
+                     --email=nova@nothing.com</pre>
+</div>
+<p>Repeat this for each service you want to enable. Email is a required field
+in keystone right now, but not used in relation to the service accounts. Each
+of these commands will also return a UUID of the user. Keep those to assign
+the Admin role.</p>
+<p>For adding the Admin role to the service accounts, you&#8217;ll need to know the UUID
+of the role you want to add. If you don&#8217;t have them handy, you can look it
+up quickly with:</p>
+<div class="highlight-python"><pre>keystone role-list</pre>
+</div>
+<p>Once you have it, assign the service users to the Admin role. This is all
+assuming that you&#8217;ve already created the basic roles and settings as described
+in <a class="reference internal" href="configuration.html"><em>Configuring Keystone</em></a>:</p>
+<div class="highlight-python"><pre>keystone user-role-add --tenant_id=[uuid of the service tenant] \
+                       --user=[uuid of the service account] \
+                       --role=[uuid of the Admin role]</pre>
+</div>
+</div>
+<div class="section" id="defining-services">
+<h3>Defining Services<a class="headerlink" href="#defining-services" title="Permalink to this headline">¶</a></h3>
+<p>Keystone also acts as a service catalog to let other OpenStack systems know
+where relevant API endpoints exist for OpenStack Services. The OpenStack
+Dashboard, in particular, uses this heavily - and this <strong>must</strong> be configured
+for the OpenStack Dashboard to properly function.</p>
+<p>The endpoints for these services are defined in a template, an example of
+which is in the project as the file <tt class="docutils literal"><span class="pre">etc/default_catalog.templates</span></tt>.</p>
+<p>Keystone supports two means of defining the services, one is the catalog
+template, as described above - in which case everything is detailed in that
+template.</p>
+<p>The other is a SQL backend for the catalog service, in which case after
+keystone is online, you need to add the services to the catalog:</p>
+<div class="highlight-python"><pre>keystone service-create --name=nova \
+                               --type=compute \
+                               --description="Nova Compute Service"
+keystone service-create --name=ec2 \
+                               --type=ec2 \
+                               --description="EC2 Compatibility Layer"
+keystone service-create --name=glance \
+                               --type=image \
+                               --description="Glance Image Service"
+keystone service-create --name=keystone \
+                               --type=identity \
+                               --description="Keystone Identity Service"
+keystone service-create --name=swift \
+                               --type=object-store \
+                               --description="Swift Service"</pre>
+</div>
+</div>
+</div>
+<div class="section" id="setting-up-middleware">
+<h2>Setting Up Middleware<a class="headerlink" href="#setting-up-middleware" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="keystone-auth-token-middleware">
+<h3>Keystone Auth-Token Middleware<a class="headerlink" href="#keystone-auth-token-middleware" title="Permalink to this headline">¶</a></h3>
+<p>The Keystone auth_token middleware is a WSGI component that can be inserted in
+the WSGI pipeline to handle authenticating tokens with Keystone. You can
+get more details of the middleware in <a class="reference internal" href="middlewarearchitecture.html"><em>Middleware Architecture</em></a>.</p>
+</div>
+<div class="section" id="configuring-nova-to-use-keystone">
+<h3>Configuring Nova to use Keystone<a class="headerlink" href="#configuring-nova-to-use-keystone" title="Permalink to this headline">¶</a></h3>
+<p>When configuring Nova, it is important to create a admin service token for
+the service (from the Configuration step above) and include that as the key
+&#8216;admin_token&#8217; in Nova&#8217;s api-paste.ini.</p>
+</div>
+<div class="section" id="configuring-swift-to-use-keystone">
+<h3>Configuring Swift to use Keystone<a class="headerlink" href="#configuring-swift-to-use-keystone" title="Permalink to this headline">¶</a></h3>
+<p>Similar to Nova, swift can be configured to use Keystone for authentication
+rather than its built in &#8216;tempauth&#8217;.</p>
+<ol class="arabic">
+<li><p class="first">Add a service endpoint for Swift to Keystone</p>
+</li>
+<li><p class="first">Configure the paste file for swift-proxy (<cite>/etc/swift/swift-proxy.conf</cite>)</p>
+</li>
+<li><p class="first">Reconfigure Swift&#8217;s proxy server to use Keystone instead of TempAuth.
+Here&#8217;s an example <cite>/etc/swift/proxy-server.conf</cite>:</p>
+<div class="highlight-python"><pre>[DEFAULT]
+bind_port = 8888
+user = &lt;user&gt;
+
+[pipeline:main]
+pipeline = catch_errors healthcheck cache authtoken keystone proxy-server
+
+[app:proxy-server]
+use = egg:swift#proxy
+account_autocreate = true
+
+[filter:keystone]
+paste.filter_factory = keystone.middleware.swift_auth:filter_factory
+operator_roles = admin, swiftoperator
+
+[filter:authtoken]
+paste.filter_factory = keystone.middleware.auth_token:filter_factory
+# Delaying the auth decision is required to support token-less
+# usage for anonymous referrers ('.r:*') or for tempurl/formpost
+# middleware.
+delay_auth_decision = 1
+auth_port = 35357
+auth_host = 127.0.0.1
+auth_token = ADMIN
+admin_token = ADMIN
+
+[filter:cache]
+use = egg:swift#memcache
+set log_name = cache
+
+[filter:catch_errors]
+use = egg:swift#catch_errors
+
+[filter:healthcheck]
+use = egg:swift#healthcheck</pre>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Your user needs to have the role swiftoperator or admin by default
+to be able to operate on an swift account or as specified by the
+variable <cite>operator_roles</cite>.</p>
+</div>
+<ol class="arabic" start="4">
+<li><p class="first">Restart swift</p>
+</li>
+<li><p class="first">Verify that keystone is providing authentication to Swift</p>
+<blockquote>
+<div><p>$ swift -V 2 -A <a class="reference external" href="http://localhost:5000/v2.0">http://localhost:5000/v2.0</a> -U admin:admin -K ADMIN stat</p>
+</div></blockquote>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Instead of connecting to Swift here, as you would with other services, we
+are connecting directly to Keystone.</p>
+</div>
+</div>
+<div class="section" id="configuring-swift-with-s3-emulation-to-use-keystone">
+<h3>Configuring Swift with S3 emulation to use Keystone<a class="headerlink" href="#configuring-swift-with-s3-emulation-to-use-keystone" title="Permalink to this headline">¶</a></h3>
+<p>Keystone supports validating S3 tokens using the same tokens as the
+generated EC2 tokens. When you have generated a pair of EC2 access
+token and secret you can access your swift cluster directly with the
+S3 API.</p>
+<ol class="arabic">
+<li><p class="first">Ensure you have defined the S3 service in your <cite>keystone.conf</cite>. First, define the filter as follows:</p>
+<div class="highlight-python"><pre>[filter:s3_extension]
+paste.filter_factory = keystone.contrib.s3:S3Extension.factory</pre>
+</div>
+</li>
+</ol>
+<p>Then, ensure that the filter is being called by the admin_api pipeline, as follows:</p>
+<div class="highlight-python"><pre>[pipeline:admin_api]
+pipeline = token_auth [....] ec2_extension s3_extension [...]</pre>
+</div>
+<ol class="arabic" start="2">
+<li><p class="first">Configure the paste file for swift-proxy
+(<cite>/etc/swift/swift-proxy.conf</cite> to use S3token and Swift3
+middleware.</p>
+<p>Here&#8217;s an example that by default communicates with keystone via https</p>
+<div class="highlight-python"><pre>[DEFAULT]
+bind_port = 8080
+user = &lt;user&gt;
+
+[pipeline:main]
+pipeline = catch_errors healthcheck cache swift3 s3token authtoken keystone proxy-server
+
+[app:proxy-server]
+use = egg:swift#proxy
+account_autocreate = true
+
+[filter:catch_errors]
+use = egg:swift#catch_errors
+
+[filter:healthcheck]
+use = egg:swift#healthcheck
+
+[filter:cache]
+use = egg:swift#memcache
+
+[filter:swift3]
+use = egg:swift#swift3
+
+[filter:keystone]
+paste.filter_factory = keystone.middleware.swift_auth:filter_factory
+operator_roles = admin, swiftoperator
+
+[filter:s3token]
+paste.filter_factory = keystone.middleware.s3_token:filter_factory
+# uncomment the following line if you don't want to use SSL
+# auth_protocol = http
+auth_port = 35357
+auth_host = 127.0.0.1
+
+[filter:authtoken]
+paste.filter_factory = keystone.middleware.auth_token:filter_factory
+# uncomment the following line if you don't want to use SSL
+# auth_protocol = http
+auth_port = 35357
+auth_host = 127.0.0.1
+auth_token = ADMIN
+admin_token = ADMIN</pre>
+</div>
+</li>
+<li><p class="first">You can then access directly your Swift via the S3 API, here&#8217;s an
+example with the <cite>boto</cite> library:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">boto</span>
+<span class="kn">import</span> <span class="nn">boto.s3.connection</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">connect_s3</span><span class="p">(</span>
+    <span class="n">aws_access_key_id</span><span class="o">=</span><span class="s">&#39;&lt;ec2 access key for user&gt;&#39;</span><span class="p">,</span>
+    <span class="n">aws_secret_access_key</span><span class="o">=</span><span class="s">&#39;&lt;ec2 secret access key for user&gt;&#39;</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">,</span>
+    <span class="n">host</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span>
+    <span class="n">is_secure</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">calling_format</span><span class="o">=</span><span class="n">boto</span><span class="o">.</span><span class="n">s3</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">OrdinaryCallingFormat</span><span class="p">())</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">With the S3 middleware you are connecting to the <cite>Swift</cite> proxy and
+not to <cite>keystone</cite>.</p>
+</div>
+</div>
+<div class="section" id="auth-token-middleware-with-username-and-password">
+<h3>Auth-Token Middleware with Username and Password<a class="headerlink" href="#auth-token-middleware-with-username-and-password" title="Permalink to this headline">¶</a></h3>
+<p>It is also possible to configure Keystone&#8217;s auth_token middleware using the
+&#8216;admin_user&#8217; and &#8216;admin_password&#8217; options. When using the &#8216;admin_user&#8217; and
+&#8216;admin_password&#8217; options the &#8216;admin_token&#8217; parameter is optional. If
+&#8216;admin_token&#8217; is specified it will by used only if the specified token is
+still valid.</p>
+<p>Here is an example paste config filter that makes use of the &#8216;admin_user&#8217; and
+&#8216;admin_password&#8217; parameters:</p>
+<div class="highlight-python"><pre>[filter:authtoken]
+paste.filter_factory = keystone.middleware.auth_token:filter_factory
+auth_port = 35357
+auth_host = 127.0.0.1
+auth_token = 012345SECRET99TOKEN012345
+admin_user = admin
+admin_password = keystone123</pre>
+</div>
+<p>It should be noted that when using this option an admin tenant/role
+relationship is required. The admin user is granted access to to the &#8216;Admin&#8217;
+role to the &#8216;admin&#8217; tenant.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="community.html" title="Getting Involved"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="man/keystone-all.html" title="keystone"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

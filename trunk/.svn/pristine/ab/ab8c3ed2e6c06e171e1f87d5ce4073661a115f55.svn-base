@@ -1,0 +1,16 @@
+{
+	"totalCount":2,
+	"identifier": "Name",
+	"items":[
+		{
+			"Name":"Chad",
+			"Objects":"2",
+			"Size":"32.0 KB"
+		},
+		{
+			"Name":"suchi",
+			"Objects":"1",
+			"Size":"30.9 KB"
+		}
+	]
+}

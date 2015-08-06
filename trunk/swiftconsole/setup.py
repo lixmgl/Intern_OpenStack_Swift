@@ -1,0 +1,28 @@
+from setuptools import setup, find_packages
+import sys, os
+
+version = '1.0.0'
+
+setup(name='swiftconsole',
+      version=version,
+      description="Distributed console for swift cluster management",
+      long_description="""\
+Distributed console for swift cluster management""",
+      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      keywords='swiftconsole',
+      author='Autumn Wang',
+      author_email='autumn@cisco.com',
+      url='',
+      license='CISCO',
+      packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+      include_package_data=True,
+      zip_safe=False,
+      scripts=["bin/swift-console",
+               ],
+      install_requires=[
+          # -*- Extra requirements: -*-
+      ],
+      entry_points="""
+      # -*- Entry points: -*-
+      """,
+      )

@@ -1,0 +1,30 @@
+'''
+Created on Jul 18, 2012
+
+@author: Tameem
+'''
+
+import time
+import subprocess as sub
+
+def exec_command(param_list):
+    """
+    Execute a command:
+      @param param_list: ['cmd param1 param2']
+    """
+    s_time = time.time()
+    p = sub.Popen(param_list, stdout = sub.PIPE, stderr = sub.PIPE, shell=True)
+    output, errors = p.communicate()
+    p.wait()
+    e_time  = time.time()
+    interval = e_time - s_time
+    return (p.returncode, output, errors, interval)
+
+
+########################################################################
+# Testing
+if __name__ == '__main__':
+    cmd = "swift-ring-builder /etc/swift/account.builder"
+    retcode, output, errors, interval = exec_command([cmd])
+    print "retcode : %d \noutput: \n%r" % (retcode, output)
+

@@ -1,0 +1,79 @@
+/*-------------------------------------------------
+M/MONIT POP-OUT YUI PANEL CSS
+
+Use context:["id","tl","tl", null, [15,-20]] with 
+YAHOO.widget.Panel to position the panel. 
+-------------------------------------------------*/
+
+.yui-panel-container.shadow .underlay {
+    display: none;
+}
+.yui-skin-sam  .yui-panel {
+    border: none;
+    overflow:visible;
+}
+/* Style the close icon */
+.yui-panel .container-close {
+    position:absolute;
+    top:-12px;
+    right:-12px;
+    height:30px;
+    width:30px;
+    background:url(../img/close.png) no-repeat;
+}
+.yui-panel .container-close:hover {
+    background:url(../img/close.png) no-repeat 0 -30px;
+}
+/* Hide the header */
+.yui-panel .hd {
+    display: none;
+}
+/* Panel content */
+.yui-skin-sam .yui-panel .bd {
+    overflow:hidden;
+	padding: 15px 20px;
+    color: #f0f0f0;
+    /* Transparent background */
+	background: rgb(0, 0, 0);
+	background: rgba(0, 0, 0, 0.8);
+	/* Border */
+	border: none;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	border-radius:8px;
+}
+/* Triangle to left */
+.yui-panel .bd:after {
+	content:"\00a0";
+	display:block;
+	position:absolute;
+	z-index:-1;
+	top:20px;
+	left:-21px;
+	width:0;
+	height:0;
+	border-style:solid;
+	border-width:10px 10px;
+	border-color:transparent rgb(0, 0, 0) transparent transparent;
+	border-color:transparent rgba(0, 0, 0, 0.8) transparent transparent;
+}
+/* Remove triangle arrow from panel */
+.yui-panel .bd.no-triangle:after {
+    border:none!important;
+}
+/* Opaque background without triangle */
+.yui-panel .bd.opaque {
+    border:1px solid #777;
+	background: rgb(254,254,238)!important;
+    color:#222!important; 
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0, .3);
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0, .3);
+	box-shadow: 0 1px 3px rgba(0,0,0, .3);
+}
+.yui-panel .bd.opaque:after {
+    border:none!important;
+}
+/* Hide the footer */
+.yui-panel .ft {
+    display: none;
+}

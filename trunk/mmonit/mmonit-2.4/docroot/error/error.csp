@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8" />
+
+    <link href="<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>css/main.css" media="screen" rel="Stylesheet">
+
+    <title>Error <?cs var:Error.status_code ?></title>
+
+</head>
+<body onclick="history.back();" style="cursor:pointer">
+    
+    <div id="Wrapper">
+
+        <div id="Main" class="clearfix">
+            
+            <div id="Area" class="error-page">
+
+                <div class="text">
+
+                    <?cs if:Error.status_code == 400 ?>
+                        <h1>Bad Request</h1>
+                    <?cs elif:Error.status_code == 401 ?>
+                        <h1>Unauthorized</h1>
+                    <?cs elif:Error.status_code == 404 ?> 
+                        <h1>Not Found</h1>
+                    <?cs elif:Error.status_code == 500 ?> 
+                        <h1>Internal Server Error</h1>
+                    <?cs else ?>
+                        <h1>Error <?cs var:Error.status_code ?></h1>
+                    <?cs /if ?>
+                    <h3><?cs var:Error.message ?></h3>
+
+                </div>
+
+                <div class="toright">
+
+                    <img src="<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>img/panic.jpg" border="0">
+
+                </div>
+
+            </div>
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+</body>
+</html>

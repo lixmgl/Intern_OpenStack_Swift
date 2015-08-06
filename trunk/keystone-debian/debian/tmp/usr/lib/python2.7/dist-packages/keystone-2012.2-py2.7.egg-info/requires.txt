@@ -1,0 +1,11 @@
+pam==0.1.4
+WebOb==1.0.8
+eventlet
+greenlet
+PasteDeploy
+paste
+routes
+sqlalchemy
+sqlalchemy-migrate
+passlib
+lxml

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <link href="../../css/main.css" media="screen" rel="Stylesheet">
+    
+    <script src="../../build/yuiloader/yuiloader-min.js"></script>
+    <script src="../../js/mmonit.js"></script>
+    
+    <title>M/Monit Admin | Hosts</title>
+
+    <style media="screen">
+        .yui-skin-sam .yui-dt tbody td.up {
+            background:url('../../img/remove.png') no-repeat center;
+        }
+        .yui-skin-sam .yui-dt tbody td.hover {
+            background:url('../../img/remove_hover.png') no-repeat center;
+        }
+        /* Hide bottom paginator */
+        #yui-dt0-paginator1 {
+            display: none!important;
+        }
+        #Area p {
+            padding-bottom:10px;
+        }
+    </style>
+
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="../../status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="../../status/">Overview</a></li>
+                            <li><a href="../../status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="../../reports/"><span>Reports</span></a>
+                        <ul>
+                            <li><a href="../../reports/">Overview</a></li>
+                            <li><a href="../../reports/events/">Events</a></li>
+                        </ul>
+                    </li>
+                    <li id="current">
+                        <a href="../../admin/"><span>Admin</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+        
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../../admin/">Overview</a></li>
+                    <li><a href="../../admin/hosts/" class="current">Hosts</a></li>
+                    <li><a href="../../admin/groups/">Groups</a></li>
+                    <li><a href="../../admin/users/">Users</a></li>
+                    <li><a href="../../admin/rules/">Alerts</a></li>
+                </ul>
+            </div>
+            <h1>
+                Hosts
+            </h1>
+        </div> <!-- Title -->
+        
+        <div id="Main" class="clearfix">
+
+            <div id="Area">
+                <p>
+                    Hosts with Monit agents registered in M/Monit. Click on a row to change the settings for the host. 
+                    <a href="#" onclick="this.innerHTML='';MMONIT.layer.show('help');return false;">More...</a>
+                    <span id="help" style="display:none;">
+                        Monit will automatically create a new Host entry the first time it reports in to M/Monit. To make
+                        Monit report to M/Monit, please use the <code>set mmonit</code> statement in your
+                        <code>.monitrc</code> file. After Monit has registered itself in M/Monit you can edit the Host in the
+                        table below. See also the <a href="http://mmonit.com/documentation/">M/Monit manual</a> for more
+                        details.
+                    </span>
+                </p>
+                <div id="hostTable" class="toleft"></div>
+            </div> <!-- Area -->
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+    <script>
+
+    var loader = new YAHOO.util.YUILoader();
+    loader.loadOptional = true;
+    loader.base = '../../build/';
+    loader.require('element', 'connection', 'json', 'datatable');
+    loader.insert({
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+
+                var myHostFormatter = function(elCell, oRecord, oColumn, oData) {
+                    elCell.innerHTML = '<a href="../../status/detail?id=' + oRecord.getData("id") +'">' + oData + '</a>';
+                };
+                var myDeleteFormatter = function(elCell, oRecord, oColumn, oData) {
+                    YAHOO.util.Dom.addClass(elCell, "delete");
+                    if (oData)
+                        YAHOO.util.Dom.replaceClass(elCell.parentNode, "down", "up");
+                    else
+                        YAHOO.util.Dom.replaceClass(elCell.parentNode, "up", "down");
+                };
+                var myColumnDefs = [
+                    {key:"host",   label:"Host",        sortable:true, minWidth:200, formatter:myHostFormatter},
+                    {key:"addr",   label:"Address",     sortable:true, minWidth:100},
+                    {key:"status", label:"Status",      sortable:true},
+                    {key:"version",label:"Monit",       sortable:true},
+                    {key:"desc",   label:"Description", sortable:false, minWidth:100},
+                    {key:"delete", label:"",            sortable:false, formatter:myDeleteFormatter, width:15}
+                ];
+                var myDataSource = new YAHOO.util.XHRDataSource("../../json/admin/hosts/list");
+                myDataSource.connMethodPost = true;
+                myDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                myDataSource.responseSchema = {
+                    resultsList: "records",
+                    fields: ["id","host","addr","desc","version","status"],
+                    metaFields : { 
+                        totalRecords : 'totalRecords'
+                    }
+                };
+                var myConfig = {
+                    selectionMode:"single",
+                    sortedBy : {key: "host", dir: YAHOO.widget.DataTable.CLASS_ASC},
+                    paginator : new YAHOO.widget.Paginator({
+                        alwaysVisible: false,
+                        rowsPerPage    : 15,
+                        rowsPerPageOptions : [15, 60, 100, 500],
+                        template       : '<input class="search-field toright" type="text" id="searchField" size="15">' + "{PageLinks} {RowsPerPageDropdown}"
+                    })
+                };
+                myConfig.paginator.subscribe('render', function(e) {
+                    /* If the top paginator is displayed; Setup the datatable search field defined inside the paginator container
+                    and make the paginator always visible to avoid having the search field disappear if table size change on search */
+                    if (this.getContainerNodes()[0].style.display == '') {
+                        MMONIT.datatable.search.client(myDataTable, 'host', 'searchField', 'Find host..');
+                        this.set('alwaysVisible', true);
+                    }
+                });
+                var myDataTable = new YAHOO.widget.DataTable("hostTable", myColumnDefs, myDataSource, myConfig);
+                myDataTable.subscribe("renderEvent", function(e) {
+                    myDataTable.sortColumn(myDataTable.getColumn("host"), YAHOO.widget.DataTable.CLASS_ASC);
+                    myDataTable.unsubscribe("renderEvent");
+                });
+                myDataTable.subscribe("rowMouseoverEvent", function(e) {
+                    var row = myDataTable.getRecord(e.target);
+                    if (row) {
+                        var id = row.getData("id");
+                        myDataTable.highlightRow(row);
+                        var column = myDataTable.getColumn("delete");
+                        if (column) {
+                            myDataTable.updateCell(row, column, id);
+                        }
+                    }
+                });
+                myDataTable.subscribe("rowMouseoutEvent", function(e) {
+                    var row = myDataTable.getRecord(e.target);
+                    if (row) {
+                        myDataTable.unhighlightRow(row);
+                        var column = myDataTable.getColumn("delete");
+                        if (column) {
+                            myDataTable.updateCell(row, column);
+                        }
+                    }
+                });
+                myDataTable.subscribe("rowClickEvent", function(e) {
+                      window.location = MMONIT.location('edit?id=' + myDataTable.getRecord(e.target).getData("id"));
+                });   
+                myDataTable.subscribe("cellClickEvent", function(e) {
+                    if (myDataTable.getColumn(e.target).key == "delete") {
+                        if (window.confirm("Are you sure you want to delete " + myDataTable.getRecord(e.target).getData("host") + "? Stored events for the host will be remove as well. There is no undo.")) {
+                            var myPostData = "id=" + myDataTable.getRecord(e.target).getData("id") + "&Delete=1";
+                            var myCallback = {
+                                success: function(o) {
+                                    myDataTable.deleteRow(myDataTable.getRecord(e.target).getId());
+                                },
+                                failure: function(o) {
+                                    alert(o.responseText);
+                                },
+                                timeout: 5000
+                            };
+                            YAHOO.util.Connect.asyncRequest('POST', '.', myCallback, myPostData);
+                        }
+                        return false;
+                    }
+                }); 
+                myDataTable.subscribe("cellMouseoverEvent", function(e, t) {
+                    if (myDataTable.getColumn(e.target).key == "delete") {
+                        YAHOO.util.Dom.replaceClass(e.target, "up", "hover");
+                    }
+                });   
+                myDataTable.subscribe("cellMouseoutEvent", function(e, t) {
+                    if (myDataTable.getColumn(e.target).key == "delete") {
+                        YAHOO.util.Dom.replaceClass(e.target, "hover", "up");
+                    }
+                });
+                // Truncate long descriptions strings to keep table width reasonable
+                myDataTable.doBeforeLoadData = function(sRequest, oResponse, oPayload) {
+                    if (oResponse.error)
+                        myDataTable.showTableMessage("Load error: " + oResponse.statusText);
+                    for (var i = 0, length = oResponse.results.length; i < length; i++)
+                        oResponse.results[i].desc = oResponse.results[i].desc.trunc(88);
+                    return true;
+                };
+            });
+        }
+    });
+
+    </script>
+</body>
+</html>

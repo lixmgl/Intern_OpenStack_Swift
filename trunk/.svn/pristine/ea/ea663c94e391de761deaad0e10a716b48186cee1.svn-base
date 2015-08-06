@@ -1,0 +1,54 @@
+#!/bin/sh -e
+# upstart-job
+#
+# Symlink target for initscripts that have been converted to Upstart.
+
+set -e
+
+INITSCRIPT="$(basename "$0")"
+JOB=statsdpy-server
+CONFIG_FILE="/etc/statsdpy/statsd.conf"
+PID=`ps -ef | grep python | grep "$JOB" | awk '{print $2}'`
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 start|stop|restart" 1>&2
+    exit 1
+fi
+
+COMMAND="$1"
+shift
+
+case $COMMAND in
+start)
+	if [ "X$PID" != 'X' ]
+	then
+		echo "$JOB is runnging."
+		exit 0 
+	fi
+	"$JOB" start "--conf=$CONFIG_FILE"
+	PID=`ps -ef | grep python | grep "$JOB" | awk '{print $2}'`
+	echo "$JOB started [$PID]."
+	;;
+stop)
+	if [ "X$PID" = 'X' ]
+	then
+		echo "$JOB is not running."
+		exit 0
+	fi
+	"$JOB" stop "--conf=$CONFIG_FILE"
+	echo "$JOB is stopped."
+	;;
+restart)
+    if [ "X$PID" != 'X' ]
+    then
+    	"$JOB" stop "--conf=$CONFIG_FILE"
+    fi
+    "$JOB" start "--conf=$CONFIG_FILE"
+    PID=`ps -ef | grep python | grep "$JOB" | awk '{print $2}'`
+    echo "$JOB is restarted [$PID]."
+    ;;
+*)
+    $ECHO
+    $ECHO "$COMMAND is not supported!" 1>&2
+    exit 1
+esac

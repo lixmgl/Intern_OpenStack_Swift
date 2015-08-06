@@ -1,0 +1,45 @@
+check process keystone matching 'keystone-all'
+       start program = "/usr/local/bin/keystone-control auth start" with timeout 30 seconds
+       stop program  = "/usr/local/bin/keystone-control auth stop"
+       if failed port 5000 type TCP then restart
+       if failed port 35357 type TCP then restart
+       if 3 restarts within 3 cycles then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'Keystone server is down' 'keystone'"
+       
+## Monitor the changing of cofniguration files and auto-reload to applications           
+check file keystone.conf with path /etc/keystone/keystone.conf
+       if changed timestamp then exec "/usr/bin/msend.sh WARNING pncell_BMBTPRO 'Keystone config file changed' 'keystone'"
+          
+## Monitor of mysql
+check process mysql with pidfile /var/run/mysqld/mysqld.pid
+   group database
+   start program = "/etc/init.d/mysql start"
+   stop program = "/etc/init.d/mysql stop"
+   if failed host 127.0.0.1 port 3306 protocol mysql then restart
+   if 5 restarts within 5 cycles then timeout
+   depends on mysql_bin
+   depends on mysql_rc
+
+check file mysql_bin with path /usr/sbin/mysqld
+   group database
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+
+check file mysql_rc with path /etc/init.d/mysql
+   group database
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+   
+## Check system volume
+check filesystem os-sda1 with path /dev/sda1
+       if failed permission 0660 then unmonitor
+       if failed uid root then unmonitor
+       if failed gid disk then unmonitor
+       if space usage > 90 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'System disk usage is greater than 90 percent' 'keystone'"
+       if inode usage > 90 % then exec "/usr/bin/msend.sh CRITICAL pncell_BMBTPRO 'System disk inode is greater than 90 percent' 'keystone'"
+
+       
+

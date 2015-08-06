@@ -1,0 +1,462 @@
+/*
+ * Copyright (c) 2009-2012 Cisco Systems, Inc.
+ * All rights reserved.
+ */		
+
+/* Base Icon Class */
+.baseicon {
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+/* Add Project Icon*/
+.addproject {
+	background-image: url(../images/newproject.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.addprojectHover {
+	background-image: url(../images/newprojectHover.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.addprojectPressed {
+	background-image: url(../images/newprojectPressed.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.addprojectDisabled {
+	background-image: url(../images/newprojectDisabled.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+/* Add Org Icon*/
+.addorg {
+	background-image: url(../images/addorg.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.addorgHover {
+	background-image: url(../images/addorgHover.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.addorgPressed {
+	background-image: url(../images/addorgPressed.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.addorgDisabled {
+	background-image: url(../images/addorgDisabled.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+/* Monitoring Icon */
+.monitor {
+	background-image: url(../images/monitor.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.monitorHover {
+	background-image: url(../images/monitorHover.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.monitorPressed {
+	background-image: url(../images/monitorPressed.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.monitorDisabled {
+	background-image: url(../images/monitorDisabled.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+/* Add Compute Instance Icon */
+.newcompute {
+	background-image: url(../images/newinstance.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.newcomputeHover {
+	background-image: url(../images/newinstanceHover.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.newcomputePressed {
+	background-image: url(../images/newinstancePressed.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.newcomputeDisabled {
+	background-image: url(../images/newinstanceDisabled.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+/* Add ObjectStore Bucket Icon */
+.newbucket {
+	background-image: url(../images/newbucket.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.newbucketHover {
+	background-image: url(../images/newbucketHover.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.newbucketPressed {
+	background-image: url(../images/newbucketPressed.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.newbucketDisabled {
+	background-image: url(../images/newbucketDisabled.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+/* Upload Image Icon */
+.upload {
+	background-image: url(../images/upload.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.uploadHover {
+	background-image: url(../images/uploadHover.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.uploadPressed {
+	background-image: url(../images/uploadPressed.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.uploadDisabled {
+	background-image: url(../images/uploadDisabled.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+/* Upload Image Icon */
+.projmgmt {
+	background-image: url(../images/projmgmt.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.projmgmtHover {
+	background-image: url(../images/projmgmtHover.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.projmgmtPressed {
+	background-image: url(../images/projmgmtPressed.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.projmgmtDisabled {
+	background-image: url(../images/projmgmtDisabled.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+/* Alert Project Icon*/
+.alert {
+	background-image: url(../images/alert.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.alertHover {
+	background-image: url(../images/alertHover.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.alertPressed {
+	background-image: url(../images/alertPressed.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.alertDisabled {
+	background-image: url(../images/alertDisabled.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.search {
+	background-image: url(../images/search.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.searchHover {
+	background-image: url(../images/searchHover.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.searchPressed {
+	background-image: url(../images/searchPressed.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.searchDisabled {
+	background-image: url(../images/searchDisabled.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.docs {
+	background-image: url(../images/docs.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.docsHover {
+	background-image: url(../images/docsHover.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.docsPressed {
+	background-image: url(../images/docsPressed.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}
+
+.docsDisabled {
+	background-image: url(../images/docsDisabled.png);
+	background-repeat: no-repeat; 
+	background-position: center center;
+	height:72px;
+	text-align:center;
+	width:72px;
+	margin:0;
+	padding:0;
+}

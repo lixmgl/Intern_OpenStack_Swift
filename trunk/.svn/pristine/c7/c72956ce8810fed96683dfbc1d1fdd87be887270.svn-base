@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>catalog Package &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="up" title="keystone Package" href="keystone.html" />
+    <link rel="next" title="backends Package" href="keystone.catalog.backends.html" />
+    <link rel="prev" title="keystone Package" href="keystone.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.catalog.backends.html" title="backends Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keystone.html" title="keystone Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" accesskey="U">keystone Package</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">catalog Package</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">catalog</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-keystone.catalog.core"><tt class="docutils literal"><span class="pre">core</span></tt> Module</a></li>
+<li><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="keystone.html"
+                                  title="previous chapter">keystone Package</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="keystone.catalog.backends.html"
+                                  title="next chapter">backends Package</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/keystone.catalog.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="catalog-package">
+<h1>catalog Package<a class="headerlink" href="#catalog-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">catalog</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-keystone.catalog"></span></div>
+<div class="section" id="module-keystone.catalog.core">
+<span id="core-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">core</span></tt> Module<a class="headerlink" href="#module-keystone.catalog.core" title="Permalink to this headline">¶</a></h2>
+<p>Main entry point into the Catalog service.</p>
+<dl class="class">
+<dt id="keystone.catalog.core.Driver">
+<em class="property">class </em><tt class="descclassname">keystone.catalog.core.</tt><tt class="descname">Driver</tt><a class="headerlink" href="#keystone.catalog.core.Driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Interface description for an Catalog driver.</p>
+<dl class="method">
+<dt id="keystone.catalog.core.Driver.create_endpoint">
+<tt class="descname">create_endpoint</tt><big>(</big><em>endpoint_id</em>, <em>endpoint_ref</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.Driver.create_endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.Driver.create_service">
+<tt class="descname">create_service</tt><big>(</big><em>service_id</em>, <em>service_ref</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.Driver.create_service" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.Driver.delete_endpoint">
+<tt class="descname">delete_endpoint</tt><big>(</big><em>endpoint_id</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.Driver.delete_endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.Driver.delete_service">
+<tt class="descname">delete_service</tt><big>(</big><em>service_id</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.Driver.delete_service" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.Driver.get_catalog">
+<tt class="descname">get_catalog</tt><big>(</big><em>user_id</em>, <em>tenant_id</em>, <em>metadata=None</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.Driver.get_catalog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retreive and format the current service catalog.</p>
+<dl class="docutils">
+<dt>Returns: A nested dict representing the service catalog or an</dt>
+<dd>empty dict.</dd>
+</dl>
+<p>Example:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>{ &#8216;RegionOne&#8217;:</dt>
+<dd><dl class="first last docutils">
+<dt>{&#8216;compute&#8217;: {</dt>
+<dd><blockquote class="first">
+<div>&#8216;adminURL&#8217;: u&#8217;<a class="reference external" href="http://host:8774/v1.1/tenantid">http://host:8774/v1.1/tenantid</a>&#8216;,
+&#8216;internalURL&#8217;: u&#8217;<a class="reference external" href="http://host:8774/v1.1/tenant_id">http://host:8774/v1.1/tenant_id</a>&#8216;,
+&#8216;name&#8217;: &#8216;Compute Service&#8217;,
+&#8216;publicURL&#8217;: u&#8217;<a class="reference external" href="http://host:8774/v1.1/tenantid">http://host:8774/v1.1/tenantid</a>&#8216;},</div></blockquote>
+<dl class="last docutils">
+<dt>&#8216;ec2&#8217;: {</dt>
+<dd>&#8216;adminURL&#8217;: &#8216;<a class="reference external" href="http://host:8773/services/Admin">http://host:8773/services/Admin</a>&#8216;,
+&#8216;internalURL&#8217;: &#8216;<a class="reference external" href="http://host:8773/services/Cloud">http://host:8773/services/Cloud</a>&#8216;,
+&#8216;name&#8217;: &#8216;EC2 Service&#8217;,
+&#8216;publicURL&#8217;: &#8216;<a class="reference external" href="http://host:8773/services/Cloud">http://host:8773/services/Cloud</a>&#8216;}}</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.Driver.get_endpoint">
+<tt class="descname">get_endpoint</tt><big>(</big><em>endpoint_id</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.Driver.get_endpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get endpoint by id.</p>
+<p>Returns: endpoint_ref dict or None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.Driver.get_service">
+<tt class="descname">get_service</tt><big>(</big><em>service_id</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.Driver.get_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get service by id.</p>
+<p>Returns: service_ref dict or None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.Driver.list_endpoints">
+<tt class="descname">list_endpoints</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.catalog.core.Driver.list_endpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all endpoint ids in catalog.</p>
+<p>Returns: list of endpoint_ids or an empty list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.Driver.list_services">
+<tt class="descname">list_services</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.catalog.core.Driver.list_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all service ids in catalog.</p>
+<p>Returns: list of service_ids or an empty list.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.catalog.core.EndpointController">
+<em class="property">class </em><tt class="descclassname">keystone.catalog.core.</tt><tt class="descname">EndpointController</tt><a class="headerlink" href="#keystone.catalog.core.EndpointController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.html#keystone.common.wsgi.Application" title="keystone.common.wsgi.Application"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Application</span></tt></a></p>
+<dl class="method">
+<dt id="keystone.catalog.core.EndpointController.create_endpoint">
+<tt class="descname">create_endpoint</tt><big>(</big><em>context</em>, <em>endpoint</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.EndpointController.create_endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.EndpointController.delete_endpoint">
+<tt class="descname">delete_endpoint</tt><big>(</big><em>context</em>, <em>endpoint_id</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.EndpointController.delete_endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.EndpointController.get_endpoints">
+<tt class="descname">get_endpoints</tt><big>(</big><em>context</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.EndpointController.get_endpoints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.catalog.core.Manager">
+<em class="property">class </em><tt class="descclassname">keystone.catalog.core.</tt><tt class="descname">Manager</tt><a class="headerlink" href="#keystone.catalog.core.Manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.html#keystone.common.manager.Manager" title="keystone.common.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.manager.Manager</span></tt></a></p>
+<p>Default pivot point for the Catalog backend.</p>
+<p>See <a class="reference internal" href="keystone.common.html#keystone.common.manager.Manager" title="keystone.common.manager.Manager"><tt class="xref py py-mod docutils literal"><span class="pre">keystone.common.manager.Manager</span></tt></a> for more details on how this
+dynamically calls the backend.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.catalog.core.ServiceController">
+<em class="property">class </em><tt class="descclassname">keystone.catalog.core.</tt><tt class="descname">ServiceController</tt><a class="headerlink" href="#keystone.catalog.core.ServiceController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.html#keystone.common.wsgi.Application" title="keystone.common.wsgi.Application"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Application</span></tt></a></p>
+<dl class="method">
+<dt id="keystone.catalog.core.ServiceController.create_service">
+<tt class="descname">create_service</tt><big>(</big><em>context</em>, <em>OS_KSADM_service</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.ServiceController.create_service" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.ServiceController.delete_service">
+<tt class="descname">delete_service</tt><big>(</big><em>context</em>, <em>service_id</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.ServiceController.delete_service" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.ServiceController.get_service">
+<tt class="descname">get_service</tt><big>(</big><em>context</em>, <em>service_id</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.ServiceController.get_service" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.catalog.core.ServiceController.get_services">
+<tt class="descname">get_services</tt><big>(</big><em>context</em><big>)</big><a class="headerlink" href="#keystone.catalog.core.ServiceController.get_services" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="keystone.catalog.backends.html">backends Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="keystone.catalog.backends.html#module-keystone.catalog.backends.kvs"><tt class="docutils literal"><span class="pre">kvs</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.catalog.backends.html#module-keystone.catalog.backends.sql"><tt class="docutils literal"><span class="pre">sql</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.catalog.backends.html#module-keystone.catalog.backends.templated"><tt class="docutils literal"><span class="pre">templated</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.catalog.backends.html" title="backends Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keystone.html" title="keystone Package"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" >keystone Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

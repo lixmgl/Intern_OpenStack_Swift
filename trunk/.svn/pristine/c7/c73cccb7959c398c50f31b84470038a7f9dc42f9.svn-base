@@ -1,0 +1,9 @@
+setup.cfg
+setup.py
+swiftstats/__init__.py
+swiftstats.egg-info/PKG-INFO
+swiftstats.egg-info/SOURCES.txt
+swiftstats.egg-info/dependency_links.txt
+swiftstats.egg-info/entry_points.txt
+swiftstats.egg-info/not-zip-safe
+swiftstats.egg-info/top_level.txt

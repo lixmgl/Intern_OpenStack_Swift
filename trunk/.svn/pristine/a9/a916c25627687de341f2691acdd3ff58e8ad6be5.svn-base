@@ -1,0 +1,946 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>common Package &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="up" title="keystone Package" href="keystone.html" />
+    <link rel="next" title="ldap Package" href="keystone.common.ldap.html" />
+    <link rel="prev" title="backends Package" href="keystone.catalog.backends.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.common.ldap.html" title="ldap Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keystone.catalog.backends.html" title="backends Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" accesskey="U">keystone Package</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">common Package</a><ul>
+<li><a class="reference internal" href="#module-keystone.common.bufferedhttp"><tt class="docutils literal"><span class="pre">bufferedhttp</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-keystone.common.kvs"><tt class="docutils literal"><span class="pre">kvs</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-keystone.common.logging"><tt class="docutils literal"><span class="pre">logging</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-keystone.common.manager"><tt class="docutils literal"><span class="pre">manager</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-keystone.common.policy"><tt class="docutils literal"><span class="pre">policy</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-keystone.common.serializer"><tt class="docutils literal"><span class="pre">serializer</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-keystone.common.utils"><tt class="docutils literal"><span class="pre">utils</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-keystone.common.wsgi"><tt class="docutils literal"><span class="pre">wsgi</span></tt> Module</a></li>
+<li><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="keystone.catalog.backends.html"
+                                  title="previous chapter">backends Package</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="keystone.common.ldap.html"
+                                  title="next chapter">ldap Package</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/keystone.common.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="common-package">
+<h1>common Package<a class="headerlink" href="#common-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-keystone.common.bufferedhttp">
+<span id="bufferedhttp-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">bufferedhttp</span></tt> Module<a class="headerlink" href="#module-keystone.common.bufferedhttp" title="Permalink to this headline">¶</a></h2>
+<p>Monkey Patch httplib.HTTPResponse to buffer reads of headers. This can improve
+performance when making large numbers of small HTTP requests.  This module
+also provides helper functions to make HTTP connections using
+BufferedHTTPResponse.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you use this, be sure that the libraries you are using do not access
+the socket directly (xmlrpclib, I&#8217;m looking at you :/), and instead
+make all calls through httplib.</p>
+</div>
+<dl class="class">
+<dt id="keystone.common.bufferedhttp.BufferedHTTPConnection">
+<em class="property">class </em><tt class="descclassname">keystone.common.bufferedhttp.</tt><tt class="descname">BufferedHTTPConnection</tt><big>(</big><em>host</em>, <em>port=None</em>, <em>strict=None</em>, <em>timeout=&lt;object object at 0x1efb330&gt;</em>, <em>source_address=None</em><big>)</big><a class="headerlink" href="#keystone.common.bufferedhttp.BufferedHTTPConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPConnection</span></tt></p>
+<p>HTTPConnection class that uses BufferedHTTPResponse</p>
+<dl class="method">
+<dt id="keystone.common.bufferedhttp.BufferedHTTPConnection.connect">
+<tt class="descname">connect</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.common.bufferedhttp.BufferedHTTPConnection.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.bufferedhttp.BufferedHTTPConnection.getexpect">
+<tt class="descname">getexpect</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.common.bufferedhttp.BufferedHTTPConnection.getexpect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.bufferedhttp.BufferedHTTPConnection.getresponse">
+<tt class="descname">getresponse</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.common.bufferedhttp.BufferedHTTPConnection.getresponse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.bufferedhttp.BufferedHTTPConnection.putrequest">
+<tt class="descname">putrequest</tt><big>(</big><em>method</em>, <em>url</em>, <em>skip_host=0</em>, <em>skip_accept_encoding=0</em><big>)</big><a class="headerlink" href="#keystone.common.bufferedhttp.BufferedHTTPConnection.putrequest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.common.bufferedhttp.BufferedHTTPConnection.response_class">
+<tt class="descname">response_class</tt><a class="headerlink" href="#keystone.common.bufferedhttp.BufferedHTTPConnection.response_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#keystone.common.bufferedhttp.BufferedHTTPResponse" title="keystone.common.bufferedhttp.BufferedHTTPResponse"><tt class="xref py py-class docutils literal"><span class="pre">BufferedHTTPResponse</span></tt></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.bufferedhttp.BufferedHTTPResponse">
+<em class="property">class </em><tt class="descclassname">keystone.common.bufferedhttp.</tt><tt class="descname">BufferedHTTPResponse</tt><big>(</big><em>sock</em>, <em>debuglevel=0</em>, <em>strict=0</em>, <em>method=None</em><big>)</big><a class="headerlink" href="#keystone.common.bufferedhttp.BufferedHTTPResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPResponse</span></tt></p>
+<p>HTTPResponse class that buffers reading of headers</p>
+<dl class="method">
+<dt id="keystone.common.bufferedhttp.BufferedHTTPResponse.expect_response">
+<tt class="descname">expect_response</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.common.bufferedhttp.BufferedHTTPResponse.expect_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.bufferedhttp.http_connect">
+<tt class="descclassname">keystone.common.bufferedhttp.</tt><tt class="descname">http_connect</tt><big>(</big><em>ipaddr</em>, <em>port</em>, <em>device</em>, <em>partition</em>, <em>method</em>, <em>path</em>, <em>headers=None</em>, <em>query_string=None</em>, <em>ssl=False</em>, <em>key_file=None</em>, <em>cert_file=None</em><big>)</big><a class="headerlink" href="#keystone.common.bufferedhttp.http_connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to create an HTTPConnection object. If ssl is set True,
+HTTPSConnection will be used. However, if ssl=False, BufferedHTTPConnection
+will be used, which is buffered for backend Swift services.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ipaddr</strong> &#8211; IPv4 address to connect to</li>
+<li><strong>port</strong> &#8211; port to connect to</li>
+<li><strong>device</strong> &#8211; device of the node to query</li>
+<li><strong>partition</strong> &#8211; partition on the device</li>
+<li><strong>method</strong> &#8211; HTTP method to request (&#8216;GET&#8217;, &#8216;PUT&#8217;, &#8216;POST&#8217;, etc.)</li>
+<li><strong>path</strong> &#8211; request path</li>
+<li><strong>headers</strong> &#8211; dictionary of headers</li>
+<li><strong>query_string</strong> &#8211; request query string</li>
+<li><strong>ssl</strong> &#8211; set True if SSL should be used (default: False)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:param key_file Private key file (not needed if cert_file has private key)
+:param cert_file Certificate file (Keystore)
+:returns: HTTPConnection object</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.bufferedhttp.http_connect_raw">
+<tt class="descclassname">keystone.common.bufferedhttp.</tt><tt class="descname">http_connect_raw</tt><big>(</big><em>ipaddr</em>, <em>port</em>, <em>method</em>, <em>path</em>, <em>headers=None</em>, <em>query_string=None</em>, <em>ssl=False</em>, <em>key_file=None</em>, <em>cert_file=None</em><big>)</big><a class="headerlink" href="#keystone.common.bufferedhttp.http_connect_raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to create an HTTPConnection object. If ssl is set True,
+HTTPSConnection will be used. However, if ssl=False, BufferedHTTPConnection
+will be used, which is buffered for backend Swift services.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ipaddr</strong> &#8211; IPv4 address to connect to</li>
+<li><strong>port</strong> &#8211; port to connect to</li>
+<li><strong>method</strong> &#8211; HTTP method to request (&#8216;GET&#8217;, &#8216;PUT&#8217;, &#8216;POST&#8217;, etc.)</li>
+<li><strong>path</strong> &#8211; request path</li>
+<li><strong>headers</strong> &#8211; dictionary of headers</li>
+<li><strong>query_string</strong> &#8211; request query string</li>
+<li><strong>ssl</strong> &#8211; set True if SSL should be used (default: False)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:param key_file Private key file (not needed if cert_file has private key)
+:param cert_file Certificate file (Keystore)
+:returns: HTTPConnection object</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-keystone.common.kvs">
+<span id="kvs-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">kvs</span></tt> Module<a class="headerlink" href="#module-keystone.common.kvs" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="keystone.common.kvs.Base">
+<em class="property">class </em><tt class="descclassname">keystone.common.kvs.</tt><tt class="descname">Base</tt><big>(</big><em>db=None</em><big>)</big><a class="headerlink" href="#keystone.common.kvs.Base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.kvs.DictKvs">
+<em class="property">class </em><tt class="descclassname">keystone.common.kvs.</tt><tt class="descname">DictKvs</tt><a class="headerlink" href="#keystone.common.kvs.DictKvs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></p>
+<dl class="method">
+<dt id="keystone.common.kvs.DictKvs.delete">
+<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#keystone.common.kvs.DictKvs.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.kvs.DictKvs.set">
+<tt class="descname">set</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#keystone.common.kvs.DictKvs.set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-keystone.common.logging">
+<span id="logging-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">logging</span></tt> Module<a class="headerlink" href="#module-keystone.common.logging" title="Permalink to this headline">¶</a></h2>
+<p>Wrapper for built-in logging module.</p>
+<dl class="function">
+<dt id="keystone.common.logging.fail_gracefully">
+<tt class="descclassname">keystone.common.logging.</tt><tt class="descname">fail_gracefully</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#keystone.common.logging.fail_gracefully" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs exceptions and aborts.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.logging.log_debug">
+<tt class="descclassname">keystone.common.logging.</tt><tt class="descname">log_debug</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#keystone.common.logging.log_debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-keystone.common.manager">
+<span id="manager-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">manager</span></tt> Module<a class="headerlink" href="#module-keystone.common.manager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="keystone.common.manager.Manager">
+<em class="property">class </em><tt class="descclassname">keystone.common.manager.</tt><tt class="descname">Manager</tt><big>(</big><em>driver_name</em><big>)</big><a class="headerlink" href="#keystone.common.manager.Manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base class for intermediary request layer.</p>
+<p>The Manager layer exists to support additional logic that applies to all
+or some of the methods exposed by a service that are not specific to the
+HTTP interface.</p>
+<p>It also provides a stable entry point to dynamic backends.</p>
+<p>An example of a probable use case is logging all the calls.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-keystone.common.policy">
+<span id="policy-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">policy</span></tt> Module<a class="headerlink" href="#module-keystone.common.policy" title="Permalink to this headline">¶</a></h2>
+<p>Common Policy Engine Implementation</p>
+<dl class="class">
+<dt id="keystone.common.policy.Brain">
+<em class="property">class </em><tt class="descclassname">keystone.common.policy.</tt><tt class="descname">Brain</tt><big>(</big><em>rules=None</em>, <em>default_rule=None</em><big>)</big><a class="headerlink" href="#keystone.common.policy.Brain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Implements policy checking.</p>
+<dl class="method">
+<dt id="keystone.common.policy.Brain.add_rule">
+<tt class="descname">add_rule</tt><big>(</big><em>key</em>, <em>match</em><big>)</big><a class="headerlink" href="#keystone.common.policy.Brain.add_rule" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.policy.Brain.check">
+<tt class="descname">check</tt><big>(</big><em>match_list</em>, <em>target_dict</em>, <em>cred_dict</em><big>)</big><a class="headerlink" href="#keystone.common.policy.Brain.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks authorization of some rules against credentials.</p>
+<p>Detailed description of the check with examples in policy.enforce().</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>match_list</strong> &#8211; nested tuples of data to match against</li>
+<li><strong>target_dict</strong> &#8211; dict of object properties</li>
+<li><strong>credentials_dict</strong> &#8211; dict of actor properties</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the check passes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="keystone.common.policy.Brain.load_json">
+<em class="property">classmethod </em><tt class="descname">load_json</tt><big>(</big><em>data</em>, <em>default_rule=None</em><big>)</big><a class="headerlink" href="#keystone.common.policy.Brain.load_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init a brain using json instead of a rules dictionary.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.policy.HttpBrain">
+<em class="property">class </em><tt class="descclassname">keystone.common.policy.</tt><tt class="descname">HttpBrain</tt><big>(</big><em>rules=None</em>, <em>default_rule=None</em><big>)</big><a class="headerlink" href="#keystone.common.policy.HttpBrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#keystone.common.policy.Brain" title="keystone.common.policy.Brain"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.policy.Brain</span></tt></a></p>
+<p>A brain that can check external urls for policy.</p>
+<p>Posts json blobs for target and credentials.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="keystone.common.policy.NotAuthorized">
+<em class="property">exception </em><tt class="descclassname">keystone.common.policy.</tt><tt class="descname">NotAuthorized</tt><a class="headerlink" href="#keystone.common.policy.NotAuthorized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.policy.enforce">
+<tt class="descclassname">keystone.common.policy.</tt><tt class="descname">enforce</tt><big>(</big><em>match_list</em>, <em>target_dict</em>, <em>credentials_dict</em><big>)</big><a class="headerlink" href="#keystone.common.policy.enforce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enforces authorization of some rules against credentials.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>match_list</strong> &#8211; nested tuples of data to match against</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>The basic brain supports three types of match lists:</dt>
+<dd><ol class="first last arabic">
+<li><dl class="first docutils">
+<dt>rules</dt>
+<dd><p class="first last">looks like: (&#8216;rule:compute:get_instance&#8217;,)
+Retrieves the named rule from the rules dict and recursively
+checks against the contents of the rule.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>roles</dt>
+<dd><p class="first last">looks like: (&#8216;role:compute:admin&#8217;,)
+Matches if the specified role is in credentials_dict[&#8216;roles&#8217;].</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>generic</dt>
+<dd><p class="first last">(&#8216;tenant_id:%(tenant_id)s&#8217;,)
+Substitutes values from the target dict into the match using
+the % operator and matches them against the creds dict.</p>
+</dd>
+</dl>
+</li>
+</ol>
+</dd>
+<dt>Combining rules:</dt>
+<dd><p class="first">The brain returns True if any of the outer tuple of rules match
+and also True if all of the inner tuples match. You can use this to
+perform simple boolean logic.  For example, the following rule would
+return True if the creds contain the role &#8216;admin&#8217; OR the if the
+tenant_id matches the target dict AND the the creds contains the
+role &#8216;compute_sysadmin&#8217;:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;rule:combined&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s">&#39;role:admin&#39;</span><span class="p">,</span>
+        <span class="p">(</span><span class="s">&#39;tenant_id:</span><span class="si">%(tenant_id)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;role:compute_sysadmin&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>Note that rule and role are reserved words in the credentials match, so
+you can&#8217;t match against properties with those names. Custom brains may
+also add new reserved words. For example, the HttpBrain adds http as a
+reserved word.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target_dict</strong> &#8211; dict of object properties</td>
+</tr>
+</tbody>
+</table>
+<p>Target dicts contain as much information as we can about the object being
+operated on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>credentials_dict</strong> &#8211; dict of actor properties</td>
+</tr>
+</tbody>
+</table>
+<p>Credentials dicts contain as much information as we can about the user
+performing the action.</p>
+<p>:raises NotAuthorized if the check fails</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.policy.reset">
+<tt class="descclassname">keystone.common.policy.</tt><tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.common.policy.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the brain used by enforce().</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.policy.set_brain">
+<tt class="descclassname">keystone.common.policy.</tt><tt class="descname">set_brain</tt><big>(</big><em>brain</em><big>)</big><a class="headerlink" href="#keystone.common.policy.set_brain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the brain used by enforce().</p>
+<p>Defaults use Brain() if not set.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-keystone.common.serializer">
+<span id="serializer-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">serializer</span></tt> Module<a class="headerlink" href="#module-keystone.common.serializer" title="Permalink to this headline">¶</a></h2>
+<p>Dict &lt;&#8211;&gt; XML de/serializer.</p>
+<p>The identity API prefers attributes over elements, so we serialize that way
+by convention, with a few hardcoded exceptions.</p>
+<dl class="class">
+<dt id="keystone.common.serializer.XmlDeserializer">
+<em class="property">class </em><tt class="descclassname">keystone.common.serializer.</tt><tt class="descname">XmlDeserializer</tt><a class="headerlink" href="#keystone.common.serializer.XmlDeserializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="keystone.common.serializer.XmlDeserializer.walk_element">
+<tt class="descname">walk_element</tt><big>(</big><em>element</em><big>)</big><a class="headerlink" href="#keystone.common.serializer.XmlDeserializer.walk_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populates a dictionary by walking an etree element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.serializer.XmlSerializer">
+<em class="property">class </em><tt class="descclassname">keystone.common.serializer.</tt><tt class="descname">XmlSerializer</tt><a class="headerlink" href="#keystone.common.serializer.XmlSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="keystone.common.serializer.XmlSerializer.populate_element">
+<tt class="descname">populate_element</tt><big>(</big><em>element</em>, <em>value</em><big>)</big><a class="headerlink" href="#keystone.common.serializer.XmlSerializer.populate_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populates an etree with the given value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.serializer.from_xml">
+<tt class="descclassname">keystone.common.serializer.</tt><tt class="descname">from_xml</tt><big>(</big><em>xml</em><big>)</big><a class="headerlink" href="#keystone.common.serializer.from_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize XML to a dictionary.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.serializer.to_xml">
+<tt class="descclassname">keystone.common.serializer.</tt><tt class="descname">to_xml</tt><big>(</big><em>d</em>, <em>xmlns=None</em><big>)</big><a class="headerlink" href="#keystone.common.serializer.to_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize a dictionary to XML.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-keystone.common.utils">
+<span id="utils-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">utils</span></tt> Module<a class="headerlink" href="#module-keystone.common.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="keystone.common.utils.Ec2Signer">
+<em class="property">class </em><tt class="descclassname">keystone.common.utils.</tt><tt class="descname">Ec2Signer</tt><big>(</big><em>secret_key</em><big>)</big><a class="headerlink" href="#keystone.common.utils.Ec2Signer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Hacked up code from boto/connection.py</p>
+<dl class="method">
+<dt id="keystone.common.utils.Ec2Signer.generate">
+<tt class="descname">generate</tt><big>(</big><em>credentials</em><big>)</big><a class="headerlink" href="#keystone.common.utils.Ec2Signer.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate auth string according to what SignatureVersion is given.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.utils.SmarterEncoder">
+<em class="property">class </em><tt class="descclassname">keystone.common.utils.</tt><tt class="descname">SmarterEncoder</tt><big>(</big><em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>sort_keys=False</em>, <em>indent=None</em>, <em>separators=None</em>, <em>encoding='utf-8'</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#keystone.common.utils.SmarterEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">json.encoder.JSONEncoder</span></tt></p>
+<p>Help for JSON encoding dict-like objects.</p>
+<dl class="method">
+<dt id="keystone.common.utils.SmarterEncoder.default">
+<tt class="descname">default</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#keystone.common.utils.SmarterEncoder.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.utils.auth_str_equal">
+<tt class="descclassname">keystone.common.utils.</tt><tt class="descname">auth_str_equal</tt><big>(</big><em>provided</em>, <em>known</em><big>)</big><a class="headerlink" href="#keystone.common.utils.auth_str_equal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant-time string comparison.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Params provided:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">the first string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Params known:</th><td class="field-body">the second string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the strings are equal.</td>
+</tr>
+</tbody>
+</table>
+<p>This function takes two strings and compares them.  It is intended to be
+used when doing a comparison for authentication purposes to help guard
+against timing attacks.  When using the function for this purpose, always
+provide the user-provided password as the first argument.  The time this
+function will take is always a factor of the length of this string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.utils.check_output">
+<tt class="descclassname">keystone.common.utils.</tt><tt class="descname">check_output</tt><big>(</big><em>*popenargs</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#keystone.common.utils.check_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run command with arguments and return its output as a byte string.</p>
+<p>If the exit code was non-zero it raises a CalledProcessError.  The
+CalledProcessError object will have the return code in the returncode
+attribute and output in the output attribute.</p>
+<p>The arguments are the same as for the Popen constructor.  Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">check_output</span><span class="p">([</span><span class="s">&#39;ls&#39;</span><span class="p">,</span> <span class="s">&#39;-l&#39;</span><span class="p">,</span> <span class="s">&#39;/dev/null&#39;</span><span class="p">])</span>
+<span class="go">&#39;crw-rw-rw- 1 root root 1, 3 Oct 18  2007 /dev/null\n&#39;</span>
+</pre></div>
+</div>
+<p>The stdout argument is not allowed as it is used internally.
+To capture standard error in the result, use stderr=STDOUT.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">check_output</span><span class="p">([</span><span class="s">&#39;/bin/sh&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span>
+<span class="gp">... </span>              <span class="s">&#39;ls -l non_existent_file ; exit 0&#39;</span><span class="p">],</span>
+<span class="gp">... </span>             <span class="n">stderr</span><span class="o">=</span><span class="n">STDOUT</span><span class="p">)</span>
+<span class="go">&#39;ls: non_existent_file: No such file or directory\n&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.utils.check_password">
+<tt class="descclassname">keystone.common.utils.</tt><tt class="descname">check_password</tt><big>(</big><em>password</em>, <em>hashed</em><big>)</big><a class="headerlink" href="#keystone.common.utils.check_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that a plaintext password matches hashed.</p>
+<p>hashpw returns the salt value concatenated with the actual hash value.
+It extracts the actual salt if this value is then passed as the salt.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.utils.git">
+<tt class="descclassname">keystone.common.utils.</tt><tt class="descname">git</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#keystone.common.utils.git" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.utils.hash_password">
+<tt class="descclassname">keystone.common.utils.</tt><tt class="descname">hash_password</tt><big>(</big><em>password</em><big>)</big><a class="headerlink" href="#keystone.common.utils.hash_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hash a password. Hard.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.utils.isotime">
+<tt class="descclassname">keystone.common.utils.</tt><tt class="descname">isotime</tt><big>(</big><em>dt_obj</em><big>)</big><a class="headerlink" href="#keystone.common.utils.isotime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format datetime object as ISO compliant string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dt_obj</strong> &#8211; datetime.datetime object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string representation of datetime object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.utils.ldap_check_password">
+<tt class="descclassname">keystone.common.utils.</tt><tt class="descname">ldap_check_password</tt><big>(</big><em>password</em>, <em>hashed</em><big>)</big><a class="headerlink" href="#keystone.common.utils.ldap_check_password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.utils.ldap_hash_password">
+<tt class="descclassname">keystone.common.utils.</tt><tt class="descname">ldap_hash_password</tt><big>(</big><em>password</em><big>)</big><a class="headerlink" href="#keystone.common.utils.ldap_hash_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hash a password. Hard.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.utils.read_cached_file">
+<tt class="descclassname">keystone.common.utils.</tt><tt class="descname">read_cached_file</tt><big>(</big><em>filename</em>, <em>cache_info</em>, <em>reload_func=None</em><big>)</big><a class="headerlink" href="#keystone.common.utils.read_cached_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read from a file if it has been modified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cache_info</strong> &#8211; dictionary to hold opaque cache.</li>
+<li><strong>reload_func</strong> &#8211; optional function to be called with data when
+file is reloaded due to a modification.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">data from file</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.utils.trunc_password">
+<tt class="descclassname">keystone.common.utils.</tt><tt class="descname">trunc_password</tt><big>(</big><em>password</em><big>)</big><a class="headerlink" href="#keystone.common.utils.trunc_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Truncate passwords to the MAX_PASSWORD_LENGTH.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.utils.unixtime">
+<tt class="descclassname">keystone.common.utils.</tt><tt class="descname">unixtime</tt><big>(</big><em>dt_obj</em><big>)</big><a class="headerlink" href="#keystone.common.utils.unixtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format datetime object as unix timestamp</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dt_obj</strong> &#8211; datetime.datetime object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-keystone.common.wsgi">
+<span id="wsgi-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">wsgi</span></tt> Module<a class="headerlink" href="#module-keystone.common.wsgi" title="Permalink to this headline">¶</a></h2>
+<p>Utility methods for working with WSGI servers.</p>
+<dl class="class">
+<dt id="keystone.common.wsgi.Application">
+<em class="property">class </em><tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">Application</tt><a class="headerlink" href="#keystone.common.wsgi.Application" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#keystone.common.wsgi.BaseApplication" title="keystone.common.wsgi.BaseApplication"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.BaseApplication</span></tt></a></p>
+<dl class="method">
+<dt id="keystone.common.wsgi.Application.assert_admin">
+<tt class="descname">assert_admin</tt><big>(</big><em>context</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Application.assert_admin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.wsgi.BaseApplication">
+<em class="property">class </em><tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">BaseApplication</tt><a class="headerlink" href="#keystone.common.wsgi.BaseApplication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base WSGI application wrapper. Subclasses need to implement __call__.</p>
+<dl class="classmethod">
+<dt id="keystone.common.wsgi.BaseApplication.factory">
+<em class="property">classmethod </em><tt class="descname">factory</tt><big>(</big><em>global_config</em>, <em>**local_config</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.BaseApplication.factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for paste app factories in paste.deploy config files.</p>
+<p>Any local configuration (that is, values under the [app:APPNAME]
+section of the paste config) will be passed into the <cite>__init__</cite> method
+as kwargs.</p>
+<p>A hypothetical configuration would look like:</p>
+<blockquote>
+<div>[app:wadl]
+latest_version = 1.3
+paste.app_factory = nova.api.fancy_api:Wadl.factory</div></blockquote>
+<p>which would result in a call to the <cite>Wadl</cite> class as</p>
+<blockquote>
+<div>import nova.api.fancy_api
+fancy_api.Wadl(latest_version=&#8216;1.3&#8217;)</div></blockquote>
+<p>You could of course re-implement the <cite>factory</cite> method in subclasses,
+but using the kwarg passing it shouldn&#8217;t be necessary.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.wsgi.ComposableRouter">
+<em class="property">class </em><tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">ComposableRouter</tt><big>(</big><em>mapper=None</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.ComposableRouter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#keystone.common.wsgi.Router" title="keystone.common.wsgi.Router"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Router</span></tt></a></p>
+<p>Router that supports use by ComposingRouter.</p>
+<dl class="method">
+<dt id="keystone.common.wsgi.ComposableRouter.add_routes">
+<tt class="descname">add_routes</tt><big>(</big><em>mapper</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.ComposableRouter.add_routes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add routes to given mapper.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.wsgi.ComposingRouter">
+<em class="property">class </em><tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">ComposingRouter</tt><big>(</big><em>mapper=None</em>, <em>routers=None</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.ComposingRouter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#keystone.common.wsgi.Router" title="keystone.common.wsgi.Router"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Router</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.wsgi.Debug">
+<em class="property">class </em><tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">Debug</tt><big>(</big><em>application</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#keystone.common.wsgi.Middleware" title="keystone.common.wsgi.Middleware"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Middleware</span></tt></a></p>
+<p>Helper class for debugging a WSGI application.</p>
+<p>Can be inserted into any WSGI application chain to get information
+about the request and response.</p>
+<dl class="staticmethod">
+<dt id="keystone.common.wsgi.Debug.print_generator">
+<em class="property">static </em><tt class="descname">print_generator</tt><big>(</big><em>app_iter</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Debug.print_generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator that prints the contents of a wrapper string.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.wsgi.ExtensionRouter">
+<em class="property">class </em><tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">ExtensionRouter</tt><big>(</big><em>application</em>, <em>mapper=None</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.ExtensionRouter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#keystone.common.wsgi.Router" title="keystone.common.wsgi.Router"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Router</span></tt></a></p>
+<p>A router that allows extensions to supplement or overwrite routes.</p>
+<p>Expects to be subclassed.</p>
+<dl class="method">
+<dt id="keystone.common.wsgi.ExtensionRouter.add_routes">
+<tt class="descname">add_routes</tt><big>(</big><em>mapper</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.ExtensionRouter.add_routes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="keystone.common.wsgi.ExtensionRouter.factory">
+<em class="property">classmethod </em><tt class="descname">factory</tt><big>(</big><em>global_config</em>, <em>**local_config</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.ExtensionRouter.factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for paste app factories in paste.deploy config files.</p>
+<p>Any local configuration (that is, values under the [filter:APPNAME]
+section of the paste config) will be passed into the <cite>__init__</cite> method
+as kwargs.</p>
+<p>A hypothetical configuration would look like:</p>
+<blockquote>
+<div>[filter:analytics]
+redis_host = 127.0.0.1
+paste.filter_factory = nova.api.analytics:Analytics.factory</div></blockquote>
+<p>which would result in a call to the <cite>Analytics</cite> class as</p>
+<blockquote>
+<div>import nova.api.analytics
+analytics.Analytics(app_from_paste, redis_host=&#8216;127.0.0.1&#8217;)</div></blockquote>
+<p>You could of course re-implement the <cite>factory</cite> method in subclasses,
+but using the kwarg passing it shouldn&#8217;t be necessary.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.wsgi.Middleware">
+<em class="property">class </em><tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">Middleware</tt><big>(</big><em>application</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Middleware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#keystone.common.wsgi.Application" title="keystone.common.wsgi.Application"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Application</span></tt></a></p>
+<p>Base WSGI middleware.</p>
+<p>These classes require an application to be
+initialized that will be called next.  By default the middleware will
+simply call its wrapped app, or you can override __call__ to customize its
+behavior.</p>
+<dl class="classmethod">
+<dt id="keystone.common.wsgi.Middleware.factory">
+<em class="property">classmethod </em><tt class="descname">factory</tt><big>(</big><em>global_config</em>, <em>**local_config</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Middleware.factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for paste app factories in paste.deploy config files.</p>
+<p>Any local configuration (that is, values under the [filter:APPNAME]
+section of the paste config) will be passed into the <cite>__init__</cite> method
+as kwargs.</p>
+<p>A hypothetical configuration would look like:</p>
+<blockquote>
+<div>[filter:analytics]
+redis_host = 127.0.0.1
+paste.filter_factory = nova.api.analytics:Analytics.factory</div></blockquote>
+<p>which would result in a call to the <cite>Analytics</cite> class as</p>
+<blockquote>
+<div>import nova.api.analytics
+analytics.Analytics(app_from_paste, redis_host=&#8216;127.0.0.1&#8217;)</div></blockquote>
+<p>You could of course re-implement the <cite>factory</cite> method in subclasses,
+but using the kwarg passing it shouldn&#8217;t be necessary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.wsgi.Middleware.process_request">
+<tt class="descname">process_request</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Middleware.process_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called on each request.</p>
+<p>If this returns None, the next application down the stack will be
+executed. If it returns a response then that response will be returned
+and execution will stop here.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.wsgi.Middleware.process_response">
+<tt class="descname">process_response</tt><big>(</big><em>request</em>, <em>response</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Middleware.process_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do whatever you&#8217;d like to the response, based on the request.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.wsgi.Request">
+<em class="property">class </em><tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">Request</tt><big>(</big><em>environ</em>, <em>charset=(No Default)</em>, <em>unicode_errors=(No Default)</em>, <em>decode_param_names=(No Default)</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">webob.request.Request</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.wsgi.Router">
+<em class="property">class </em><tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">Router</tt><big>(</big><em>mapper</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Router" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>WSGI middleware that maps incoming requests to WSGI apps.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.wsgi.Server">
+<em class="property">class </em><tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">Server</tt><big>(</big><em>application</em>, <em>host=None</em>, <em>port=None</em>, <em>threads=1000</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Server class to manage multiple WSGI sockets and applications.</p>
+<dl class="method">
+<dt id="keystone.common.wsgi.Server.kill">
+<tt class="descname">kill</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Server.kill" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.wsgi.Server.set_ssl">
+<tt class="descname">set_ssl</tt><big>(</big><em>certfile</em>, <em>keyfile=None</em>, <em>ca_certs=None</em>, <em>cert_required=True</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Server.set_ssl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.wsgi.Server.start">
+<tt class="descname">start</tt><big>(</big><em>key=None</em>, <em>backlog=128</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Server.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a WSGI server with the given application.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.common.wsgi.Server.wait">
+<tt class="descname">wait</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.common.wsgi.Server.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until all servers have completed running.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.common.wsgi.WritableLogger">
+<em class="property">class </em><tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">WritableLogger</tt><big>(</big><em>logger</em>, <em>level=10</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.WritableLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A thin wrapper that responds to <cite>write</cite> and logs.</p>
+<dl class="method">
+<dt id="keystone.common.wsgi.WritableLogger.write">
+<tt class="descname">write</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.WritableLogger.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.wsgi.render_exception">
+<tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">render_exception</tt><big>(</big><em>error</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.render_exception" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forms a WSGI response based on the current error.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.common.wsgi.render_response">
+<tt class="descclassname">keystone.common.wsgi.</tt><tt class="descname">render_response</tt><big>(</big><em>body=None</em>, <em>status=(200</em>, <em>'OK')</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#keystone.common.wsgi.render_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forms a WSGI response.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="keystone.common.ldap.html">ldap Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="keystone.common.ldap.html#id1"><tt class="docutils literal"><span class="pre">ldap</span></tt> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.common.ldap.html#module-keystone.common.ldap.core"><tt class="docutils literal"><span class="pre">core</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.common.ldap.html#module-keystone.common.ldap.fakeldap"><tt class="docutils literal"><span class="pre">fakeldap</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="keystone.common.sql.html">sql Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="keystone.common.sql.html#id1"><tt class="docutils literal"><span class="pre">sql</span></tt> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.common.sql.html#module-keystone.common.sql.core"><tt class="docutils literal"><span class="pre">core</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.common.sql.html#module-keystone.common.sql.legacy"><tt class="docutils literal"><span class="pre">legacy</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.common.sql.html#module-keystone.common.sql.migration"><tt class="docutils literal"><span class="pre">migration</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.common.sql.html#module-keystone.common.sql.nova"><tt class="docutils literal"><span class="pre">nova</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.common.sql.html#module-keystone.common.sql.util"><tt class="docutils literal"><span class="pre">util</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keystone.common.sql.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="keystone.common.sql.migrate_repo.html">migrate_repo Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="keystone.common.sql.migrate_repo.html#module-keystone.common.sql.migrate_repo.manage"><tt class="docutils literal"><span class="pre">manage</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="keystone.common.sql.migrate_repo.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="keystone.common.sql.migrate_repo.versions.html">versions Package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="keystone.common.sql.migrate_repo.versions.html#module-keystone.common.sql.migrate_repo.versions.001_add_initial_tables"><tt class="docutils literal"><span class="pre">001_add_initial_tables</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.common.ldap.html" title="ldap Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keystone.catalog.backends.html" title="backends Package"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" >keystone Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

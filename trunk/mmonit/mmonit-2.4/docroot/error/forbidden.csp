@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+
+    <title>Forbidden</title>
+
+    <link href="<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>css/main.css" media="screen" rel="Stylesheet">
+
+</head>
+
+<body>
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                 <a href="<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>"></a>
+            </h1>
+            <div>    
+                <ul id="Nav">
+                    <li>
+                        <a href="<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>status/"><span>Status</span></a>
+                    </li>
+                    <li>
+                        <a href="<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>reports/"><span>Reports</span></a>
+                    </li>
+                    <li>
+                        <a href="<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>admin/"><span>Admin</span></a>
+                    </li>
+                </ul>
+            </div>      
+        </div> <!-- Header -->
+        
+        <div id="Main" class="clearfix">
+            
+            <div id="Area" class="error-page">
+                
+                <h1>Forbidden</h1>
+                <h3>You do not have permission to access the requested resource</h3>
+                
+            </div>
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+</body>
+
+</html>

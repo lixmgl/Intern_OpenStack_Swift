@@ -1,0 +1,1 @@
+link ../../../../../../share/pyshared/keystone/openstack/common/__init__.py

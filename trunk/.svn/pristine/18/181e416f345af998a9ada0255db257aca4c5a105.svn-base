@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: swiftstats
+Version: 1.0dev
+Summary: Swift statistic data collection and feeds to statsd
+Home-page: UNKNOWN
+Author: Autumn Wang
+Author-email: autumn@cisco.com
+License: UNKNOWN
+Description: UNKNOWN
+Keywords: swiftstats
+Platform: UNKNOWN

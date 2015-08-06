@@ -1,0 +1,29 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          mmonit
+# Required-Start:    $network $named $remote_fs $syslog
+# Required-Stop:     $network $named $remote_fs $syslog
+# Should-Start:      puppet
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+### END INIT INFO                                                                                                                                          
+PATH=/opt/mmonit/bin:/opt/mmonit/sbin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+case "$1" in
+    start)
+        /opt/mmonit/bin/mmonit 
+        ;;
+    stop)
+        pkill mmoint
+        ;;
+    restart)
+        pkill mmoint
+        sleep 1
+        /opt/mmonit/bin/mmonit 
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart}" >&2
+        exit 1
+        ;;
+esac

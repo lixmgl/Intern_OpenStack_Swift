@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+	
+    <link href="../../css/main.css" media="screen" rel="Stylesheet">
+    <link href="../../css/form.css" media="screen" rel="Stylesheet">
+	
+    <script src="../../js/wufoo.js"></script>  
+    <script src="../../js/mmonit.js"></script>
+    <script src="../../build/yuiloader/yuiloader-min.js"></script>
+	
+    <title>M/Monit Admin | Users</title>
+    
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="../../status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="../../status/">Overview</a></li>
+                            <li><a href="../../status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="../../reports/"><span>Reports</span></a>
+                        <ul>
+                            <li><a href="../../reports/">Overview</a></li>
+                            <li><a href="../../reports/events/">Events</a></li>
+                        </ul>
+                    </li>
+                    <li id="current">
+                        <a href="../../admin/"><span>Admin</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+        
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../../admin/">Overview</a></li>
+                    <li><a href="../../admin/hosts/">Hosts</a></li>
+                    <li><a href="../../admin/groups/">Groups</a></li>
+                    <li><a href="../../admin/users/" class="current">Users</a></li>
+                    <li><a href="../../admin/rules/">Alerts</a></li>
+                </ul>
+            </div>
+            <h1>
+                <img class="help toright" src="../../img/help.png" alt="help" id="help-button"> 
+                <?cs if:Request.Attr.update?>Edit user<?cs else ?>New user<?cs /if ?>
+            </h1>
+        </div> <!-- Title -->
+        
+        <div id="Main" class="clearfix">
+            
+            <table id="Area">
+                <tr>
+                    <td>
+                        <div class="roundedbox crud grey-gradient"> <!-- td border and gradient does not go well together in IE so use an extra div-->
+                            <form method="post" action="user" name="UserForm">
+
+                                <ul>
+                                    <?cs if:Has_Error ?>
+                                    <li class="section first error">
+                                        <h3 id="errorMsgLbl">
+                                            There was a problem with your submission.
+                                        </h3>
+                                        <p id="errorMsg">
+                                            Errors have been highlighted below.
+                                        </p>
+                                    </li>
+                                    <?cs /if?>
+
+                                    <li class="<?cs if:Request.Attr.fullname_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                        <label class="desc" for="fullname">
+                                            Name <span class="req"> * </span> 
+                                        </label>
+                                        <div>
+                                            <input
+                                            name="fullname" 
+                                            id="fullname" 
+                                            class="field text large" 
+                                            type="text" maxlength="256" value="<?cs var:Request.Param.fullname ?>"> 
+                                        </div>
+                                        <?cs if:Request.Attr.fullname_error ?>
+                                        <p class="error"><?cs var:Request.Attr.fullname_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                    <li class="section"></li>
+
+                                    <li class="<?cs if:Request.Attr.uname_error ?>error<?cs else ?>desc<?cs /if ?>">
+
+                                        <label class="desc" for="uname">User name<span class="req"> * </span></label>
+                                        <div>
+                                            <?cs if:Request.Attr.update ?> 
+                                            <input
+                                            name="uname"
+                                            id="uname"
+                                            type="hidden"
+                                            value="<?cs var:Request.Param.uname ?>"> 
+                                            <?cs var:Request.Param.uname ?>
+                                            <?cs else ?>
+                                            <input
+                                            name="uname" 
+                                            id="uname" 
+                                            class="field text medium" 
+                                            type="text" maxlength="20" value="<?cs var:Request.Param.uname ?>"> 
+                                            <?cs /if ?>
+                                        </div>
+                                        <?cs if:Request.Attr.uname_error ?>
+                                        <p class="error"><?cs var:Request.Attr.uname_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                    <li class="<?cs if:Request.Attr.password_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                        <label class="desc" for="password">Password<span class="req"> * </span></label>
+                                        <div>
+                                            <input
+                                            name="password" 
+                                            id="password" 
+                                            class="field text medium" 
+                                            type="password" maxlength="56" value="<?cs var:Request.Param.password ?>"> 
+                                            <input name="oldpassword" type="hidden" value="<?cs alt:Request.Param.oldpassword ?><?cs alt:Request.Param.password ?>.<?cs /alt ?><?cs /alt ?>"> 
+                                        </div>
+                                        <?cs if:Request.Attr.password_error ?>
+                                        <p class="error"><?cs var:Request.Attr.password_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                    <li class="section"><h3>Contact information</h3></li>
+
+                                    <li class="<?cs if:Request.Attr.title_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                        <label class="desc" for="title">Title</label>
+                                        <div>
+                                            <input
+                                            name="title" 
+                                            id="title" 
+                                            class="field text large" 
+                                            type="text"
+                                            maxlength="256"
+                                            value="<?cs var:Request.Param.title ?>"> 
+                                        </div>
+                                        <?cs if:Request.Attr.title_error ?>
+                                        <p class="error"><?cs var:Request.Attr.title_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                    <li class="<?cs if:Request.Attr.email_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                        <label class="desc" for="email">Email</label>
+                                        <div>
+                                            <input
+                                            name="email" 
+                                            id="email" 
+                                            class="field text large" 
+                                            type="text"
+                                            maxlength="256"
+                                            value="<?cs var:Request.Param.email ?>"> 
+                                        </div>
+                                        <?cs if:Request.Attr.email_error ?>
+                                        <p class="error"><?cs var:Request.Attr.email_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                    <li class="<?cs if:Request.Attr.phone_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                        <label class="desc" for="phone">Phone#</label>
+                                        <div>
+                                            <input
+                                            name="phone" 
+                                            id="phone" 
+                                            class="field text large" 
+                                            type="text"
+                                            maxlength="40" value="<?cs var:Request.Param.phone ?>"> 
+                                        </div>
+                                        <?cs if:Request.Attr.phone_error ?>
+                                        <p class="error"><?cs var:Request.Attr.phone_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                    <li class="<?cs if:Request.Attr.mobile_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                        <label class="desc" for="mobile">Mobile#</label>
+                                        <div>
+                                            <input
+                                            name="mobile" 
+                                            id="mobile" 
+                                            class="field text large" 
+                                            type="text"
+                                            maxlength="40"
+                                            value="<?cs var:Request.Param.mobile ?>"> 
+                                        </div>
+                                        <?cs if:Request.Attr.mobile_error ?>
+                                        <p class="error"><?cs var:Request.Attr.mobile_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                    <li class="<?cs if:Request.Attr.im_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                        <label class="desc" for="imname">IM name</label>
+                                        <div>
+                                            <input
+                                            name="imname" 
+                                            id="imname" 
+                                            class="field text medium" 
+                                            type="text"
+                                            style="margin-right:20px;"
+                                            maxlength="256"
+                                            value="<?cs var:Request.Param.imname ?>"> 
+                                            Type:
+                                            <!-- Add new IM types as needed -->
+                                            <select class="field select small" name="imtype">
+                                                <option value="AIM" <?cs if:Request.Param.imtype == "AIM" ?>selected<?cs /if ?>>AIM</option>            
+                                                <option value="GTalk" <?cs if:Request.Param.imtype == "GTalk" ?>selected<?cs /if ?>>GTalk</option>
+                                                <option value="ICQ" <?cs if:Request.Param.imtype == "ICQ" ?>selected<?cs /if ?>>ICQ</option>     
+                                                <option value="Jabber" <?cs if:Request.Param.imtype == "Jabber" ?>selected<?cs /if ?>>Jabber</option>
+                                                <option value="iChat" <?cs if:Request.Param.imtype == "iChat" ?>selected<?cs /if ?>>iChat</option>
+                                                <option value="MSN" <?cs if:Request.Param.imtype == "MSN" ?>selected<?cs /if ?>>MSN</option>
+                                                <option value="Skype" <?cs if:Request.Param.imtype == "Skype" ?>selected<?cs /if ?>>Skype</option>       	        	          	      
+                                            </select> 
+                                        </div>
+                                        <?cs if:Request.Attr.im_error ?>
+                                        <p class="error"><?cs var:Request.Attr.im_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                    <li class="section"><h3>Settings</h3></li>
+
+                                    <li class="<?cs if:Request.Attr.refresh_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                        <div style="font-size: 11px">
+                                            Automatic refresh content: &nbsp;
+                                            <!-- Just add or change refresh values as needed here. 
+                                            Just make sure that the actual value is in milliseconds -->
+                                            <?cs if:!Request.Attr.update?><?cs set:Request.Param.refresh=5000 ?><?cs /if ?>
+                                            <select class="field select medium" name="refresh">
+                                                <option value="0"      <?cs if:Request.Param.refresh == "0"?>selected<?cs /if ?>>No refresh</option>            
+                                                <option value="5000"   <?cs if:Request.Param.refresh == "5000"?>selected<?cs /if ?>>Refresh each 5 seconds</option>
+                                                <option value="10000"  <?cs if:Request.Param.refresh == "10000"?>selected<?cs /if ?>>Refresh each 10 seconds</option>     
+                                                <option value="15000"  <?cs if:Request.Param.refresh == "15000"?>selected<?cs /if ?>>Refresh each 15 seconds</option>
+                                                <option value="20000"  <?cs if:Request.Param.refresh == "20000"?>selected<?cs /if ?>>Refresh each 20 seconds</option>
+                                                <option value="30000"  <?cs if:Request.Param.refresh == "30000"?>selected<?cs /if ?>>Refresh each 30 seconds</option>
+                                                <option value="60000"  <?cs if:Request.Param.refresh == "60000"?>selected<?cs /if ?>>Refresh each minute</option>       	        	          	      
+                                                <option value="300000" <?cs if:Request.Param.refresh == "300000"?>selected<?cs /if ?>>Refresh each 5 minutes</option>       	        	          	      
+                                            </select>
+                                        </div>
+                                        <?cs if:Request.Attr.refresh_error ?>
+                                        <p class="error"><?cs var:Request.Attr.refresh_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                    <li class="<?cs if:Request.Attr.admin_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                        <div>
+                                            <input 
+                                            id="admin"
+                                            name="admin" 
+                                            <?cs if:Request.Param.admin?>checked<?cs /if ?>	
+                                            class="field checkbox" 
+                                            type="checkbox" 
+                                            value="1" />
+                                            <label class="choice" for="admin">
+                                                Should this user have administrator privileges?
+                                            </label>
+                                        </div>
+                                        <?cs if:Request.Attr.admin_error ?>
+                                        <p class="error"><?cs var:Request.Attr.admin_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                </ul>
+
+                                <div class="Buttons">						
+                                    <div class="toleft"> 
+                                        <?cs if:Request.Attr.update ?>   
+                                        <input type="submit" id="Update" name="Update" value="Save changes">
+                                        <?cs else ?>
+                                        <input type="submit" id="Save" name="Save" value="Save">
+                                        <?cs /if ?>
+                                        <input type="button" id="Cancel" name="Cancel" value="Cancel">
+                                    </div>   
+                                    <div class="toright">&nbsp;
+                                        <?cs if:Request.Attr.update ?>   
+                                        <input type="button" id="Delete" name="Delete" value="Delete">
+                                        <?cs /if ?>
+                                    </div>                
+                                </div>                        
+
+                            </form>
+                        </div>
+                    </td> <!-- Left -->
+                    <td class="story" style="display:none;" id="help">
+                        <h2>Story</h2>
+                        <p>
+                            Use this page to manage users allowed to login to
+                            the M/Monit application.
+                        </p>
+                        <p>
+                            <strong>User name</strong> must be a unique name and is
+                            limited to 20 characters. The name is immutable and
+                            once created it may not be changed. <strong>Password</strong>
+                            is stored in the database as a MD5 encrypted text
+                            string.
+                        </p>
+                        <p>
+                            <strong>Automatic refresh</strong> specify if, and how often tables and
+                            charts in the application should be automatically refreshed. For
+                            instance, selecting 5 seconds will update the dashboard page each
+                            5 seconds when viewed, as well as the Status table and Events
+                            table when viewed. If possible we use ajax to refresh content
+                            without the need for a page reload.
+                        </p>
+                        <p>
+                            Check the <strong>Access Rights</strong> checkbox if this
+                            user should have administrator privileges. That is,
+                            access to all admin pages and functions.
+                        </p>
+                    </td> <!-- Right -->
+                </tr>
+            </table> <!-- Area -->
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+
+	<script>
+    var loader = new YAHOO.util.YUILoader();
+    loader.insert({
+        require: ['button'],
+        base: '../../build/',
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+                
+                var Event = YAHOO.util.Event;
+                
+                // Toggle visibility of help text
+                Event.addListener("help-button", "click", function(e) {
+                    MMONIT.layer.toggle('help');
+                });
+                
+                <?cs if:Request.Attr.update?>   
+                var updateButton = new YAHOO.widget.Button("Update");
+                var deleteButton = new YAHOO.widget.Button("Delete");
+                deleteButton.addListener("click", function (e) {
+                    if(window.confirm("Are you sure you want to delete this user? There is no undo.")) {
+                        var f = document.UserForm;
+                        var d = document.createElement('input'); 
+                        d.setAttribute('type', 'hidden');
+                        d.setAttribute('name', 'Delete'); 
+                        d.setAttribute('value', 'Delete');
+                        f.appendChild(d);
+                        f.submit();
+                    }
+                });
+                <?cs else ?>
+                document.forms[0].elements[0].focus();
+                var saveButton = new YAHOO.widget.Button("Save");
+                <?cs /if ?>
+                var cancelButton = new YAHOO.widget.Button("Cancel")
+                cancelButton.addListener("click", function (e) {
+                    window.location = "../../admin/users/";
+                });
+
+            });
+        }
+    });
+	</script>
+</body>
+</html>

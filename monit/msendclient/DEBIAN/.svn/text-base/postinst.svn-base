@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Create link for msend.sh"
+ln -s /opt/bmc/msend.d/msend.sh /usr/bin/msend.sh
+

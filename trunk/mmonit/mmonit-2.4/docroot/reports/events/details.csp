@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+        <link href="../../css/main.css" media="screen" rel="Stylesheet">
+        <link href="../../css/form.css" media="screen" rel="Stylesheet">
+
+        <script src="../../js/wufoo.js"></script>  
+        <script src="../../build/yuiloader/yuiloader-min.js"></script>
+
+        <style media="screen">
+            .story h3 {
+                font-family:inherit;
+                padding-top: 10px!important;
+            }
+        </style>
+
+        <title>M/Monit Reports | Events | Details</title>
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="../../status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="../../status/">Overview</a></li>
+                            <li><a href="../../status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li id="current">
+                        <a href="../../reports/"><span>Reports</span></a>
+                    </li>
+                    <li>
+                        <a href="../../admin/"><span>Admin</span></a>
+                        <ul>
+                            <li><a href="../../admin/">Overview</a></li>
+                            <li><a href="../../admin/hosts/">Hosts</a></li>
+                            <li><a href="../../admin/groups/">Groups</a></li>
+                            <li><a href="../../admin/users/">Users</a></li>
+                            <li><a href="../../admin/rules/">Alerts</a></li>
+        				</ul>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../../reports/">Overview</a></li>
+                    <li><a href="../../reports/events/">Events</a></li>
+                </ul>
+            </div>
+            <h1>Event details</h1>
+        </div> <!-- Title -->
+
+        <div id="Main" class="clearfix">
+
+            <table id="Area" border="0">
+                
+                <tr>
+                    
+                    <?cs if:Monit_Error ?> <!-- If Error show error message -->
+
+                    <td>
+                        <p id="errorMsgLbl">
+                            <?cs var:Monit_Error ?>
+                        </p>
+                    </td>
+
+                    <?cs else ?>  <!-- Else Show Content -->
+                	
+                    <td style="min-width: 500px; max-width: 600px;"> <!-- Event Details -->
+
+                        <?cs if:#Request.Param.id > 1 ?>
+                        <div class="toleft">
+                            <a href="details?id=<?cs var:#Request.Param.id - 1 ?>">previous</a>
+                        </div>
+                        <?cs /if ?>
+                        <?cs if:#Request.Param.id > 0 ?>
+                        <div class="toright">
+                            <a href="details?id=<?cs var:#Request.Param.id + 1 ?>">next</a>
+                        </div>
+                        <?cs /if ?>
+
+                        <div style="margin-top: 22px;" class="roundedbox">
+                            
+                            <form method="post" action="" id="Form" name="Form">
+
+                            <ul>
+
+                                <?cs if:Has_Error ?>
+                                <li class="section first error">
+                                    <h3 id="errorMsgLbl">
+                                        There was a problem with your submission.
+                                    </h3>
+                                    <p id="errorMsg">
+                                        Errors have been highlighted below.
+                                    </p>
+                                </li>
+                                <?cs /if?>
+
+                                <li class="desc">
+                                    <label class="desc" for="date">
+                                        Date
+                                    </label>
+                                    <div>
+                                        <input type="hidden" name="date" id="date" value="<?cs var:Request.Param.date ?>">
+                                        <?cs var:Request.Param.date ?>
+                                    </div>
+                                </li>
+
+                                <li class="desc">
+                                    <label class="desc" for="host">
+                                        Host
+                                    </label>
+                                    <div>
+                                        <input type="hidden" name="hostid" value="<?cs var:Request.Param.hostid ?>">
+                                        <input type="hidden" name="host" id="host" value="<?cs var:Request.Param.host ?>">
+                                        <a href="../../status/detail?id=<?cs var:Request.Param.hostid ?>"><?cs var:Request.Param.host ?></a>
+                                    </div>
+                                </li>
+
+                                <li class="desc">
+                                    <label class="desc" for="servicename">
+                                        Service name
+                                    </label>
+                                    <div>
+                                        <input type="hidden" name="servicename" id="servicename" value="<?cs var:Request.Param.servicename ?>">
+                                        <?cs var:Request.Param.servicename ?>
+                                    </div>
+                                </li>
+
+                                <li class="desc">
+                                    <label class="desc" for="servicetype">
+                                        Service type
+                                    </label>
+                                    <div>
+                                        <input type="hidden" name="servicetype" id="servicetype" value="<?cs var:Request.Param.servicetype ?>">
+                                        <?cs var:Request.Param.servicetype ?>
+                                    </div>
+                                </li>
+
+                                <li class="desc">
+                                    <label class="desc" for="event">
+                                        Event
+                                    </label>
+                                    <div>
+                                        <input type="hidden" name="event" id="event" value="<?cs var:Request.Param.event ?>">
+                                        <?cs var:Request.Param.event ?>
+                                    </div>
+                                </li>
+
+                                <li class="desc">
+                                    <label class="desc" for="action">
+                                        Action
+                                    </label>
+                                    <div>
+                                        <input type="hidden" name="action" id="action" value="<?cs var:Request.Param.action ?>">
+                                        <?cs var:Request.Param.action ?>
+                                    </div>
+                                </li>
+
+                                <li class="desc">
+                                    <label class="desc" for="message">
+                                        Message
+                                    </label>
+                                    <div>
+                                        <input type="hidden" name="message" id="message" value="<?cs var:Request.Param.message ?>">
+                                        
+                                        <font color=
+                                        <?cs if:Request.Param.eventstate == 5 ?>
+                                            "gray"
+                                        <?cs elif:Request.Param.eventstate == 4 ?>
+                                            "gray"
+                                        <?cs elif:Request.Param.eventstate == 3 ?>
+                                             "orange"
+                                        <?cs elif:Request.Param.eventstate == 2 ?>
+                                            "orange"
+                                        <?cs elif:Request.Param.eventstate == 1 ?>
+                                            "red"
+                                        <?cs else ?>
+                                            "green"
+                                        <?cs /if ?>
+                                        >
+                                        <?cs var:Request.Param.message ?>
+                                       </font>
+                                    </div>
+                                </li>
+
+                                <li class="<?cs if:Request.Attr.notice_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                    <label class="leftLabel desc" for="notice">Comment</label>
+                                    <div>
+                                        <textarea 
+                                        id="notice"
+                                        class="field textarea small" 
+                                        name="notice" 
+                                        maxlength="1024"
+                                        rows="4"
+                                        ><?cs var:Request.Param.notice ?></textarea>
+                                    </div>
+                                    <?cs if:Request.Attr.notice_error ?>
+                                    <p class="error"><?cs var:Request.Attr.notice_error ?></p>
+                                    <?cs /if ?>
+                                </li>
+                            </ul>
+
+                            <div class="Buttons" style="border: none; margin: 0 0 5px 5px; padding: 0;">
+                                <input type="submit" id="comment" name="comment" value="Add comment">
+                            </div>
+
+                        </form>
+
+                        </div> <!-- Rounded Box -->
+                        
+                        <?cs if:#Request.Param.id > 1 ?>
+                        <div class="toleft">
+                            <a href="details?id=<?cs var:#Request.Param.id - 1 ?>">previous</a>
+                        </div>
+                        <?cs /if ?>
+                        <?cs if:#Request.Param.id > 0 ?>
+                        <div class="toright">
+                            <a href="details?id=<?cs var:#Request.Param.id + 1 ?>">next</a>
+                        </div>
+                        <?cs /if ?>
+
+                    </td>
+                    
+                    <td class="story"> 
+
+                        <?cs if:#Request.Param.hasnotice == 1 ?>
+
+                        <h2>Comments</h2>
+
+                        <?cs each:notice = Request.Param.notice ?>
+                        <h3>
+                            <?cs var:notice.date ?> by <?cs var:notice.uname ?>
+                        </h3>
+                        <p>
+                            <?cs var:notice.notice ?>
+                        </p>
+                        <?cs /each ?>
+
+                        <?cs /if ?>
+                    </td>
+                    
+                    <?cs /if ?> <!-- If Error -->
+                    
+                </tr>
+            </table>
+
+        </div> <!-- Main -->
+
+    </div> <!-- Wrapper -->
+
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+  <script>
+    var loader = new YAHOO.util.YUILoader();
+    loader.insert({
+        require: ['button'],
+        base: '../../build/',
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+                this.updateButton = new YAHOO.widget.Button("comment");
+            });
+        }
+    });
+  </script>
+
+</body>
+
+</html>

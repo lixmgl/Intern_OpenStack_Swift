@@ -1,0 +1,5 @@
+python-keystoneclient (4.0.0) precise; urgency=low
+
+  * Initial release. 
+
+ -- Autumn Wang <autumn@cisco.com>  Tue, 12 Jun 2012 17:29:23 -0700

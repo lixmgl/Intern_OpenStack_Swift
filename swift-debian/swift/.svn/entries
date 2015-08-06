@@ -1,0 +1,77 @@
+10
+
+dir
+272
+svn://engsvnserv4.corp.webex.com/openstack/trunk/swift-debian/swift
+svn://engsvnserv4.corp.webex.com/openstack
+
+
+
+2012-05-04T02:44:18.842384Z
+149
+autumnw
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+4a083582-653f-4f4c-8dd4-6b54de6a16f1
+
+__init__.py
+file
+
+
+
+
+2012-06-15T20:26:24.109000Z
+ddd9e722bdfd2802f003eb207c65173b
+2012-05-03T01:27:04.976967Z
+126
+autumnw
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+630
+
+account
+dir
+
+common
+dir
+
+container
+dir
+
+obj
+dir
+
+proxy
+dir
+

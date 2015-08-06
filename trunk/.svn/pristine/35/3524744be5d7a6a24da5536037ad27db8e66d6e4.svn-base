@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <link href="../css/main.css" media="screen" rel="Stylesheet">
+    <link href="../reports/assets/reports.css" media="screen" rel="Stylesheet">
+
+    <script src="../js/mmonit.js"></script>
+    <script src="../build/yuiloader/yuiloader-min.js"></script>
+    <script src="../reports/assets/reports.js"></script>
+
+    <title>
+        M/Monit Reports
+    </title>
+
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="../status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="../status/">Overview</a></li>
+                            <li><a href="../status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li id="current">
+                        <a href="../reports/"><span>Reports</span></a>
+                    </li>
+                    <li>
+                        <a href="../admin/"><span>Admin</span></a>
+                        <ul>
+                            <li><a href="../admin/">Overview</a></li>
+                            <li><a href="../admin/hosts/">Hosts</a></li>
+                            <li><a href="../admin/groups/">Groups</a></li>
+                            <li><a href="../admin/users/">Users</a></li>
+                            <li><a href="../admin/rules/">Alerts</a></li>
+        				</ul>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+        
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first" ><a href="../reports/" class="current">Overview</a></li>
+                    <li><a href="../reports/events/">Events</a></li>
+                </ul>
+            </div>
+            <h1>Overview<div id="range-value"></div></h1>
+        </div> <!-- Title -->
+        
+        <div id="Main" class="clearfix">
+            
+            <div id="Area" class="roundedbox">
+                
+                <!-- SLA table -->
+                <table>
+                    <tr>
+                        <td>
+                            <!-- Range selector -->
+                            <div id="range-selector">
+                                <div tabindex="-1" id="slider-background" class="yui-h-slider">
+                                    <span id="slider-background-blue"></span>
+                                    <div id="slider-thumb" class="yui-slider-thumb">
+                                        <img src="../reports/assets/slider-thumb.png" width="21" height="21" alt="Thumb">
+                                    </div>
+                                    <img src="../img/spinner.gif" id="spinner">
+                                </div>
+                            </div>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <h2>Hosts Uptime</h2>
+                                        <div id="Uptime">0%</div>
+                                        <p>Average uptime of all hosts</p>
+                                    </td>
+                                    <td>
+                                        <h2>Hosts Downtime</h2>
+                                        <div id="Downtime">0</div>
+                                        <p>Average downtime of all hosts</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width:100%">
+                                <div id="mytable"></div>
+                                <div class="caption dark-grey-text">
+                                    Host Uptime/Downtime. Click on a row to view details for a host.
+                                    <a href="#" onclick="this.innerHTML=MMONIT.layer.toggle('help') ? 'Less...' : 'More...';return false;">More...</a>
+                                    <div id="help" style="display:none;">
+                                        <p>
+                                            This table show uptime/downtime of hosts monitored by M/Monit. Hosts with downtime
+                                            include hosts that are actually down, the network from M/Monit to the host is down or
+                                            hosts where Monit was not gracefully stopped.
+                                        </p>
+                                        <p>
+                                            If Monit does not send a status message within 3 poll cycles (this can be changed in
+                                            admin/hosts as skew time) M/Monit will assume the host is down and raise a
+                                            <i>status</i> failed event. This event is associated with the "monit" service and can
+                                            be seen in the events log and in the status page as "No report from Monit. Last report
+                                            was..." When Monit start sending status messages again, M/Monit will raise a
+                                            <i>status</i> succeed event. This can be seen in the events log as "Monit status
+                                            report received successfully". The uptime in the table above is based on both
+                                            succeeded and failed <i>status</i> events. Resolution is in minutes and the combined
+                                            downtime for a host must accumulate to at least one minute to appear as downtime for
+                                            the host in the table.
+                                        </p>
+                                        <div>
+                                            <p>
+                                                How uptime/downtime is calculated:
+                                            </p>
+                                            <ol>
+                                                <li>
+                                                    If a matching failed and succeeded status event is found within the selected date range,
+                                                    the difference in time between the two events are counted as downtime.
+                                                </li>
+                                                <li>
+                                                    For open ended status failed events, that is; failed events without a matching succeed
+                                                    event, the downtime is counted as the difference between <em>now</em> and the failed
+                                                    event's timestamp.
+                                                </li>
+                                                <li>
+                                                    If a host has not reported a status message within the selected range, the host is
+                                                    assumed to be down <em>if and only if the host is active and its last updated timestamp
+                                                    is older than the selected range's to-date</em>. In this case the difference in time
+                                                    between now and the host's last updated timestamp is added to the host's downtime.
+                                                </li>
+                                                <li>
+                                                    Inactive and ignored hosts are not included in the total average numbers
+                                                    <em>unless</em> they have downtime. Their uptime/downtime is set to zero if
+                                                    they have no downtime within the range. You can see inactive and ignored hosts
+                                                    in the table with a grey name.
+                                                </li>
+                                            </ol>
+                                        </div>
+                                        <p>
+                                            The Events column show number of status events for the host <i>within</i> the selected range.
+                                            Clicking an event link brings up the events log with drill-down filters preset to only show
+                                            events for the host and within the selected range. To see service events, click the host.
+                                        </p>
+                                    </div> <!-- help -->
+                                </div> <!-- caption -->
+                        </td>
+                    </tr>
+                </table>
+                
+            </div> <!-- Area -->
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+    <script>
+    var loader = new YAHOO.util.YUILoader();
+    loader.loadOptional = true;
+    loader.base = '../build/';
+    loader.require('slider', 'animation', 'datasource', 'datatable', 'dom');
+    loader.insert({
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+                
+                /* Datatable Formatter: Add events link if we have events */
+                var myEventsFormatter = function(elCell, oRecord, oColumn, oData) {
+                    if (parseInt(oRecord.getData("events")) > 0)
+                        elCell.innerHTML = '<a href="./events/?Events_Host=' + oRecord.getData("name") + '&Events_DateFrom=' + myReportConfig.dateFrom + '&Events_ServiceNameId=' + <?cs var:Monit_ServiceNameId ?> + '&Events_Sort=date&Events_Dir=asc">' + oRecord.getData("events") + '</a>';
+                    else
+                        elCell.innerHTML = oRecord.getData("events");
+                };
+                
+                var myReportConfig = {
+                    columnLabel:"Host",
+                    searchLabel:'Find host..',
+                    homepath:"../",
+                    datasource:"../json/reports/overview",
+                    eventsLinkFormatter: myEventsFormatter,
+                    rowsclickable:true,
+                    rowsperpage:<?cs alt:session.Report_Rows ?>15<?cs /alt ?>
+                };
+                
+                Report.start(myReportConfig);
+
+            }); // onDOMReady
+        } // onSuccess
+    }); // loader.insert
+    </script>
+
+</body>
+
+</html>

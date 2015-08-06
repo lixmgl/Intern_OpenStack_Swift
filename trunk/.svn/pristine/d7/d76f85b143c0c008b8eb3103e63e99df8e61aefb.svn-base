@@ -1,0 +1,10 @@
+openstack Package
+=================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    keystone.openstack.common
+

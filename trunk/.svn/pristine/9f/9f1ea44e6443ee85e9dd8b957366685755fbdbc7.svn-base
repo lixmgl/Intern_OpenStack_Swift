@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    
+    <title>M/Monit Login</title>
+    
+    <style>
+    <?cs include:"css/login.css" ?>
+    </style>
+
+</head>
+
+<body onload="document.forms[0].elements[0].focus();">
+
+    <div class="Login">
+
+        <div class="Login_head">
+            <h2>m/monit login</h2>
+        </div>
+
+        <div class="Login_body">
+
+                <h3>Please enter your username and password to log in</h3>
+
+            <form action="z_security_check" method="post">
+                
+                <ul>
+                    <li>
+                        <label id="username" for="username">Username</label>
+                        <span>
+                            <input tabindex="1" class="field" id="username" name="z_username" value="" maxlength="255" />
+                        </span>
+                    </li>
+                    <li>
+                        <label id="password" for="password">Password</label>
+                        <span>
+                            <input tabindex="2" class="field" id="password" name="z_password" value="" type="password" maxlength="255" />
+                        </span>
+                    </li>
+                    <li>
+                        <span>
+                            <input tabindex="3" id="remember" name="z_remember_me" value="" type="checkbox" />
+                            <label class="choice" for="remember">Remember me</label>
+                        </span>
+                    </li>
+                    <li>
+                        <input type="submit" name="Login" style="display: none;" />
+                        <input tabindex="4" type="image" name="Login" class="Login_btn" src="<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>img/pixel.png" />
+                    </li>
+                </ul>
+
+            </form>
+            
+        </div>
+
+    </div>
+    
+</body>
+</html>

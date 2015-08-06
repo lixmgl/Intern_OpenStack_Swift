@@ -1,0 +1,114 @@
+
+/*-------------------------------------------------
+SETUP
+-------------------------------------------------*/
+* {
+	margin: 0;
+	padding: 0;
+}
+body{
+    text-align:left;
+    background:#fff;
+   	font: 12px/18px "Lucida Grande", Lucida, Verdana,sans-serif;	
+}
+
+/*-------------------------------------------------
+FORM
+-------------------------------------------------*/
+form ul {
+	list-style: none;
+}
+form li {
+	clear: both;
+	display: block;
+	position: relative;
+	padding: 14px 5px 2px 40px;
+}
+form label {
+	display: block;
+	padding-bottom: 5px;
+	color:#111;
+	font-size:14px;
+	font-style:normal;
+	font-weight:normal;
+}
+form span label {
+	display: inline;
+}
+form li span {
+	float: left;
+}
+form span label.choice  {
+	font-size: 13px;
+}
+input[type="checkbox"] {
+	margin-right: 5px;
+}
+form input.field {
+	width: 275px;
+	padding:4px;
+	font-size: 13px;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	resize:none;
+	border-top:1px solid #8e8e8e;
+	border-left:1px solid #8e8e8e;
+	border-bottom:1px solid #e1e1e1;
+	border-right:1px solid #e1e1e1;
+}
+form input.Login_btn {
+    width: 85px;
+    height: 85px;
+    outline: none;
+	padding-bottom: 20px;
+    background: transparent url(<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>img/login.png) no-repeat; 
+}
+form input.Login_btn:hover, form input.Login_btn.error:hover {
+    background: transparent url(<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>img/login.png) no-repeat -85px 0;
+}
+form input.Login_btn.error {
+    background: transparent url(<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>img/login.png) no-repeat -170px 0;
+}
+
+/*-------------------------------------------------
+LAYOUT
+-------------------------------------------------*/
+
+/* Based on http://www.vertexwerks.com/tests/sidebox/ */
+.Login, .Login_body, .Login_head, .Login_head h2 {
+    background: transparent url(<?cs loop:x = #Request.PathLevel, #2, "-1" ?>../<?cs /loop ?>img/login_box.png) no-repeat bottom right; 
+} 
+.Login { 
+    width: 505px !important; 
+    padding-right: 15px; 
+    margin: 6em auto; 
+} 
+.Login_head { 
+    background-position: top right; margin-right: -15px; 
+    padding-right: 40px;
+} 
+.Login_head h2 { 
+    background-position: top left; 
+    height: auto !important; height: 1%;
+    padding: 65px 0 0 86px; 
+	color:#333;
+	font-size:50px;
+	font-style:normal;
+	font-weight:normal;
+	text-shadow:2px 2px 2px #ccc;
+} 
+.Login_body { 
+    background-position: bottom left; 
+    margin-right: 25px; 
+    padding: 15px 0 25px 50px; 
+}
+.Login_body h3 {
+	color:#555;
+	font-size:14px;
+	font-style:normal;
+	font-weight:normal;
+    padding: 15px 0 5px 40px;
+}
+#Error {
+    color: #f22;    
+}

@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <link href="../../css/main.css" media="screen" rel="Stylesheet">
+    <link href="../../css/form.css" media="screen" rel="Stylesheet">
+    <link href="../assets/rule.css" media="screen" rel="Stylesheet">
+
+    <script src="../../build/yuiloader/yuiloader-min.js"></script>
+    <script src="../../js/wufoo.js"></script>  
+    <script src="../../js/mmonit.js"></script>
+
+    <title>M/Monit Admin | Rules</title>
+</head>
+
+<body class="yui-skin-sam" >
+    
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="../../status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="../../status/">Overview</a></li>
+                            <li><a href="../../status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="../../reports/"><span>Reports</span></a>
+                        <ul>
+                            <li><a href="../../reports/">Overview</a></li>
+                            <li><a href="../../reports/events/">Events</a></li>
+                        </ul>
+                    </li>
+                    <li id="current">
+                        <a href="../../admin/"><span>Admin</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+        
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../../admin/">Overview</a></li>
+                    <li><a href="../../admin/hosts/">Hosts</a></li>
+                    <li><a href="../../admin/groups/">Groups</a></li>
+                    <li><a href="../../admin/users/">Users</a></li>
+                    <li><a href="../../admin/rules/" class="current">Alerts</a></li>
+                </ul>
+            </div>
+            <h1>
+                <img class="help" src="../../img/help.png" id="help-button" alt="help"> 
+                <?cs if:Request.Attr.update?>Edit alert rule<?cs else ?>New alert rule<?cs /if ?>
+            </h1>
+        </div> <!-- Title -->
+        
+        <div id="Main" class="clearfix">
+
+            <table id="Area">
+                    <tr>
+                        <td id="donotremove">
+                            <div class="roundedbox crud grey-gradient" style="min-width:710px;">
+                                <form method="post" action="" name="RuleForm" id="RuleForm">
+                                    <ul>
+                                        <div id="errorHeader" style="display:none;">
+                                            <li class="section first error">
+                                                <h3 id="errorMsgLbl">
+                                                    There was a problem with your submission.
+                                                </h3>
+                                                <p id="errorMsg">Errors have been highlighted below.</p>
+                                            </li>
+                                        </div>
+                                        <li class="<?cs if:Request.Attr.description_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                            <label class="desc" for="description">
+                                                Description <span class="req"> * </span> 
+                                            </label>
+                                            <div>
+                                                <input
+                                                id="description"
+                                                name="description" 
+                                                class="field text large" 
+                                                type="text" maxlength="256" value="<?cs var:Request.Param.description ?>"> 
+                                            </div>
+                                            <?cs if:Request.Attr.description_error ?>
+                                            <p class="error"><?cs var:Request.Attr.description_error?></p>
+                                            <?cs /if ?>
+                                        </li>
+                                        <li class="section">
+                                            <div>
+                                                If any of the following conditions are met:
+                                                <input name="operator" type="hidden" value="0" />
+                                            </div>
+                                            <?cs if:Request.Attr.operator_error ?>
+                                            <p class="error"><?cs var:Request.Attr.operator_error?></p>
+                                            <?cs /if ?>
+                                        </li>
+                                        <!-- Rules -->
+                                        <li class="<?cs if:Request.Attr.rules_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                            <table class="inset-box" id="ruleTable"></table>
+                                            <?cs if:Request.Attr.rules_error ?>
+                                            <p class="error"><?cs var:Request.Attr.rules_error?></p>
+                                            <?cs /if ?>
+                                        </li>
+                                        <li class="desc">
+                                            <div style="margin-top:10px;">
+                                                Perform the following actions:
+                                            </div>
+                                        </li>
+                                        <!-- Actions -->
+                                        <li class="<?cs if:Request.Attr.action_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                            <table class="inset-box" id="actionTable"></table>
+                                            <?cs if:Request.Attr.action_error ?>
+                                            <p class="error"><?cs var:Request.Attr.action_error?></p>
+                                            <?cs /if ?>
+                                        </li>
+
+                                    </ul>
+                                    <div id="programPanel"></div>
+                                    <div class="Buttons">						
+                                        <div class="toleft"> 
+                                            <?cs if:Request.Attr.update ?>   
+                                            <input type="submit" id="Update" name="Update" value="Save changes">
+                                            <?cs else ?>
+                                            <input type="submit" id="Save" name="Save" value="Save">
+                                            <?cs /if ?>
+                                            <input type="button" id="Cancel" name="Cancel" value="Cancel">
+                                        </div>   
+                                        <div class="toright">&nbsp;
+                                            <?cs if:Request.Attr.update ?>   
+                                            <input type="button" id="Delete" name="Delete" value="Delete">
+                                            <?cs /if ?>
+                                        </div>    
+                                    </div>                        
+                                    <input name="id" type="hidden" value="<?cs var:Request.Param.id ?>" />
+                                </form>
+                            </div>
+                        </td>
+                        <td class="story" style="display:none;" id="help"> 
+                            <h2 style="margin-top: 0px;">Story</h2>
+                            <p>
+                                Use this page to setup notification for events received from Monit. If an incoming event match one
+                                of the conditions listed here, M/Monit will perform the specified actions.
+                            </p>
+                            <p>
+                                <b>Conditions</b>, Specify the host or host group, the service and the event state of interest.
+                                For instance, to get a notification when a service failed and one notification when the service
+                                comes back up again, create one condition row with [Host, Service, Failed] and one row with [Host,
+                                Service, Succeeded]. A row of [Any Host, Any Service, Any State] is a "catch all" condition and
+                                can obviously generate a lot of alert messages.
+                            </p>
+                            <p>
+                                <b>Actions</b>. One or more actions can be specified. M/Monit currently supports sending an email,
+                                sending a Jabber/GTalk message and executing a program as an action.
+                            </p> 
+                            <p>
+                                <b>Email</b>. The mail server M/Monit should use for sending email is specified in the admin <a
+                                href="../../admin/?tab=2">Mail servers</a> page. There are two ways to specify email notification.
+                                Either by selecting a user registered in M/Monit or by specifying an email address directly. The
+                                [Send mail to] drop-down target menu contains all <a href="../users/">users</a> in M/Monit with an
+                                email address. If the value is [nobody] then it means that M/Monit cannot find any user with an
+                                email address.
+                            </p>
+                            <p>
+                                <b>Jabber/GTalk</b>. The Jabber server M/Monit should use for sending Jabber messages is specified
+                                in the admin <a href="../../admin/?tab=3">Jabber servers</a> page. There are two ways to specify
+                                Jabber notification. Either by selecting a user registered in M/Monit or by specifying a Jabber
+                                address directly. The [Send jabber messages to] drop-down target menu contains all <a
+                                href="../users/">users</a> in M/Monit with either a GTalk address or with a Jabber address. If the
+                                value is [nobody] then it means that M/Monit cannot find any user with a Jabber or GTalk address.
+                            </p>
+                            <p>
+                                <b>Program</b>. The program M/Monit should execute is specified in the input field. The
+                                program is executed by M/Monit using <code>/bin/sh</code>. You can therefor write a shell
+                                script directly into the input field or you can simply call an external program. If you want
+                                to test the program first or if you need to set specific environment variables for the
+                                program, click the <img src="../../img/info.png" height="16px" width="16px" align="top"> icon
+                                to the right of the input field. This will pop up a panel where you can add environment
+                                variables as well as test execution and check that your program does not return any error.
+                                Once satisfied that the program work as it should, click the OK button.
+                            </p>
+                            <p>
+                                <span class="dropcap">A</span> set of environment variables are made available to the program at
+                                execution time, describing the event that occurred:
+                            </p>
+                            <ul>
+                                <li>MONIT_EVENT: A short string describing the event that occurred</li>
+                                <li>MONIT_SERVICE: The name of the service generating the event</li>
+                                <li>MONIT_DATE: The date and time the event occurred</li>
+                                <li>MONIT_HOST: The name of the Monit Host the event originated from</li>
+                                <li>MONIT_ACTION: The name of the action which was performed by Monit</li>
+                                <li>MONIT_DESCRIPTION: A description of the event condition. I.e. why the event was sent</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div> <!-- Area -->
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+    
+    <div id="programsettingspanel" style="display:none;">
+		<div class="bd">
+		    <h2>Program settings</h2>
+		    <ul>
+  		      <li>
+  		          <label for="environment">Variables to be set in the environment: (name=value;name=value;...)</label>
+  		          <input type="text" name="environment" value="" id="environment" class="input field" style="width:455px;">
+  		      </li>
+		      <li>
+		          <label for="programtarget">Program:</label>
+		          <textarea name="programtarget" rows="4" cols="60" id="programtarget" class="input field" style="width:460px;"></textarea>
+		      </li>
+		      <li>
+		          <input type="button" name="saveProgramSettings" value="OK" id="saveProgramSettings">
+		          <span class="toright"><input type="button" name="testProgramSettings" value="Test" id="testProgramSettings"></span>
+		          
+		      </li>
+		      <li id="testoutput" style="display:none;">
+		          <label for="testoutputarea">Output from program (if any):</label>
+		          <textarea name="testoutputarea" rows="4" cols="60" id="testoutputarea" class="input field" style="width:460px;"></textarea>
+		      </li>
+		    </ul>
+		</div>
+	</div>
+    
+    <script>
+
+    var loader = new YAHOO.util.YUILoader();
+    loader.filter = "DEBUG";
+    loader.loadOptional = true;
+    loader.base = '../../build/';
+    loader.addModule({
+        name: "mmonitpopout",
+        type:"css",
+        fullpath:"../../css/popout.css",
+        after:['container']
+    });
+    loader.require('button', 'datasource', 'dom', 'event', 'container', 'element', 'json', 'mmonitpopout');
+    loader.insert({
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+
+                var form = document.RuleForm;
+                var Dom = YAHOO.util.Dom;
+                var Event = YAHOO.util.Event;
+
+                var Data = {};
+                var ruleTags = 0;
+                var actionTags = 0;
+                var actionMailLabel = "Send mail to";
+                var actionInstantMessageLabel = "Send jabber message to";
+                var actionProgramLabel = "Execute program";
+                
+                // Toggle visibility of help text
+                Event.addListener("help-button", "click", function(e) {
+                    MMONIT.layer.toggle('help');
+                });
+                
+                
+                /*
+                 * Get JSON data and initialize UI
+                 */
+                (function(){
+                    var myRuleId = form.id.value.trim();
+                    document.body.style.cursor="wait";
+                    var myDataSource = new YAHOO.util.XHRDataSource("../../json/admin/rules/rule");
+                    myDataSource.connMethodPost = true;
+                    myDataSource.connTimeout = 5000;
+                    myDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                    myDataSource.responseSchema = {resultsList : "records", fields: [{key:"Data"}]};
+                    myDataSource.sendRequest((myRuleId == '') ? '' : 'id=' + myRuleId, {
+                        failure: function(oRequest,oResponse,oPayload) {
+                            document.body.style.cursor = "auto";
+                            alert("JSON error: " + oResponse.statusText);
+                        },
+                        success: function(oRequest,oResponse,oPayload) {
+                            Data = oResponse.results[0].Data;
+                            if (myRuleId != '') {
+                                addRuleRows(Data);
+                            } else {
+                                addRuleRow();
+                                addActionRow();
+                            }
+                            document.body.style.cursor = "auto";
+                        }
+                    });
+                })();
+
+
+                /*
+                 * Add existing rule and action rows
+                 */
+                var addRuleRows = function(Data) {
+                    // Set rule description and operator
+                    form.description.value = Data.rule.description;
+                    MMONIT.list.setSelected(form.operator, Data.rule.operator);
+                    // Add rule rows
+                    if (Data.rules.length == 0) {
+                        addRuleRow();
+                    } else {
+                        for (var i = 0; i < Data.rules.length; i++)
+                            addRuleRow(null, Data.rules[i][0], Data.rules[i][1], Data.rules[i][2], Data.rules[i][3], Data.rules[i][4]);
+                    }
+                    // Add action rows
+                    if (Data.actions.length == 0) {
+                        addActionRow();
+                    } else {
+                        for (var i = 0; i < Data.actions.length; i++)
+                            addActionRow(null, Data.actions[i][0], Data.actions[i][1], Data.actions[i][2]);
+                    }
+                };
+
+
+                /*
+                 * Create buttons and form actions
+                 */
+                (function(){
+                    <?cs if:Request.Attr.update?>   
+                    var updateButton = new YAHOO.widget.Button("Update");
+                    var deleteButton = new YAHOO.widget.Button("Delete");
+                    deleteButton.addListener("click", function(e) {
+                        if(window.confirm("Are you sure you want to delete this rule? There is no undo.")) {
+                            var d = document.createElement('input'); 
+                            d.setAttribute('type', 'hidden');
+                            d.setAttribute('name', 'Delete'); 
+                            d.setAttribute('value', 'Delete');
+                            form.appendChild(d);
+                            form.submit();
+                        }
+                    });
+                    <?cs else ?>
+                    document.forms[0].elements[0].focus();
+                    var saveButton = new YAHOO.widget.Button("Save");
+                    <?cs /if ?>
+                    var cancelButton = new YAHOO.widget.Button("Cancel");
+                    cancelButton.addListener("click", function(e) {
+                        window.location = "../../admin/rules/";
+                    });
+                })();
+                
+                
+                /*
+                 * Menu Button click handlers
+                 */
+                function onButtonClick(p_sType, p_aArgs, p_oItem) {
+                    var text;
+                    var container = p_oItem.get("container").substring(21, 0);
+                    if (container == "ActionButtonContainer") {
+                        switch (this.value * 1) {
+                            case 0:
+                            case 1:
+                                text = actionMailLabel;
+                                break;
+                            case 2:
+                            case 3:
+                                text = actionInstantMessageLabel;
+                                break;
+                            case 4:
+                                text = actionProgramLabel;
+                                break;
+                        }
+                        setAction(document.getElementById(p_oItem.get("container")), this.value);
+                    } else {
+                        text = p_aArgs[0].target ? p_aArgs[0].target.text : p_aArgs[0].srcElement.innerText;
+                    }
+                    p_oItem.set("label", "<em>" + text + "</em>");
+                    document.getElementById(p_oItem.get("id") + "-value").value = this.value;
+                }
+
+                function onButtonClickHost(p_sType, p_aArgs, p_oItem) {
+                    p_oItem.set("label", "<em>" + (p_aArgs[0].target ? p_aArgs[0].target.text : p_aArgs[0].srcElement.innerText) + "</em>");
+                    document.getElementById(p_oItem.get("id") + "-host-value").value = p_oItem.hostindex = this.value;
+                    document.getElementById(p_oItem.get("id") + "-hostgroup-value").value = p_oItem.hostgroupindex = "-1";
+                    p_oItem.eventReload.fire();
+                }
+
+                function onButtonClickHostGroup(p_sType, p_aArgs, p_oItem) {
+                    p_oItem.set("label", "<em>" + (p_aArgs[0].target ? p_aArgs[0].target.text : p_aArgs[0].srcElement.innerText) + "</em>");
+                    document.getElementById(p_oItem.get("id") + "-host-value").value = p_oItem.hostindex = "-1";
+                    document.getElementById(p_oItem.get("id") + "-hostgroup-value").value = p_oItem.hostgroupindex = this.value;
+                    p_oItem.eventReload.fire();
+                }
+
+                function onButtonClickService(p_sType, p_aArgs, p_oItem) {
+                    p_oItem.set("label", "<em>" + (p_aArgs[0].target ? p_aArgs[0].target.text : p_aArgs[0].srcElement.innerText) + "</em>");
+                    document.getElementById(p_oItem.get("id") + "-service-value").value = p_oItem.serviceindex = this.value;
+                    document.getElementById(p_oItem.get("id") + "-servicegroup-value").value = p_oItem.servicegroupindex = "-1";
+                }
+
+                function onButtonClickServiceGroup(p_sType, p_aArgs, p_oItem) {
+                    p_oItem.set("label", "<em>" + (p_aArgs[0].target ? p_aArgs[0].target.text : p_aArgs[0].srcElement.innerText) + "</em>");
+                    document.getElementById(p_oItem.get("id") + "-service-value").value = p_oItem.serviceindex = "-1";
+                    document.getElementById(p_oItem.get("id") + "-servicegroup-value").value = p_oItem.servicegroupindex = this.value;
+                }
+                
+                
+                /* 
+                 * Alternate table rows background color 
+                 */
+                function stripe(oTable) {
+                    for (var i = 0, myRows = oTable.getElementsByTagName('tr'); myRows[i]; i++) {
+                        YAHOO.util.Dom.setStyle(myRows[i], "background-color", (i % 2) ? "#edf5ff" : "#fff");
+                    }
+                }
+
+
+                /* 
+                 * Delete row unless it is the last 
+                 */
+                function deleteRow(oRow) {
+                    var oTable = MMONIT.dom.findParent(oRow, 'table');
+                    if (oTable.getElementsByTagName('tr').length > 1) {
+                        MMONIT.dom.remove(oRow);
+                        stripe(oTable);
+                    }
+                }
+
+
+                /*
+                 * Setup service and servicegroup submenus
+                 */
+                function setServiceSubmenus(hostbutton, servicebutton) {
+                     var hosts             = Data["hosts"];
+                     var hostgroups        = Data["hostgroups"];
+                     var services          = Data["services"];
+                     var servicegroups     = Data["servicegroups"];
+                     var menu              = servicebutton.getMenu();
+                     var menuServices      = menu.itemData[1].submenu.itemdata = [];
+                     var menuServicegroups = menu.itemData[2].submenu.itemdata = [];
+                     var hostindex         = hostbutton.hostindex * 1;
+                     var hostgroupindex    = hostbutton.hostgroupindex * 1;
+                     var serviceindex      = servicebutton.serviceindex * 1;
+                     var servicegroupindex = servicebutton.servicegroupindex * 1;
+                     var label             = "Any Service";
+                     if (hostindex >= 0) {
+                         for (var i = 0; i < hosts.length; i++) {
+                             if (hosts[i].id == hostindex) {
+                                 hostindex = i;
+                                 break;
+                             }
+                         }
+                     }
+                     if (hostgroupindex >= 0) {
+                         for (var i = 0; i < hostgroups.length; i++) {
+                             if (hostgroups[i].id == hostgroupindex) {
+                                 hostgroupindex = i;
+                                 break;
+                             }
+                         }
+                     }
+                     for (var i = 0; i < services.length; i++) {
+                         if (serviceindex >= 0 && services[i][1] == serviceindex)
+                         label = services[i][0];
+                         if ((hostindex < 0 || (hosts[hostindex].services && hosts[hostindex].services.contains(services[i][1]))) && (hostgroupindex < 0 || (hostgroups[hostgroupindex].services && hostgroups[hostgroupindex].services.contains(services[i][1])))) {
+                             var item = menuServices[i] = new Object();
+                             item.text  = services[i][0];
+                             item.value = services[i][1];
+                             item.onclick = {fn: onButtonClickService, obj: servicebutton};
+                         }
+                     }
+                     for (var i = 0; i < servicegroups.length; i++) {
+                         if (servicegroupindex >= 0 && servicegroups[i][1] == servicegroupindex)
+                         label = servicegroups[i][0];
+                         if ((hostindex < 0 || (hosts[hostindex].servicegroups && hosts[hostindex].servicegroups.contains(servicegroups[i][1]))) && (hostgroupindex < 0 || (hostgroups[hostgroupindex].servicegroups && hostgroups[hostgroupindex].servicegroups.contains(servicegroups[i][1])))) {
+                             var item = menuServicegroups[i] = new Object();
+                             item.text  = servicegroups[i][0];
+                             item.value = servicegroups[i][1];
+                             item.onclick = {fn: onButtonClickServiceGroup, obj: servicebutton};
+                         }
+                     }
+                     menu.clearContent();
+                     menu.render(servicebutton.get("container"));
+                     servicebutton.set("label", "<em>" + label + "</em>");
+                } // setServiceSubmenus
+
+
+                /*
+                 * Add a new rule row after oRow
+                 */
+                function addRuleRow(oRow, sHost, sHostGroup, sService, sServiceGroup, sState) {
+                    // Setup Hosts and Host Groups menu button
+                    var divhost = document.createElement('div');
+                    divhost.setAttribute('id', "HostButtonContainer" + ruleTags);
+                    var HostItems =
+                    [
+                        { text: "Any Host",    value: -1 },
+                        { text: "Hosts",       submenu: { id: "hosts" + ruleTags,      itemdata: [] } },
+                        { text: "Host groups", submenu: { id: "hostgroups" + ruleTags, itemdata: [] } }
+                    ];
+                    var HostsMenuButton = new YAHOO.widget.Button({
+                            type      : "menu",
+                            id        : "HostButton" + ruleTags,
+                            label     : "<em>Any Host</em>",
+                            menu      : HostItems,
+                            container : "HostButtonContainer" + ruleTags});
+                    HostsMenuButton.getMenu().cfg.setProperty("scrollincrement", 5);
+                    HostsMenuButton.hostindex = -1;
+                    HostsMenuButton.hostgroupindex = -1;
+                    var hosts = Data["hosts"];
+                    HostItems[0].onclick = {fn: onButtonClickHost, obj: HostsMenuButton};
+                    for (var i = 0; i < hosts.length; i++) {
+                        var item = HostItems[1].submenu.itemdata[i] = new Object();
+                        item.text  = hosts[i].name;
+                        item.value = hosts[i].id;
+                        item.onclick = {fn: onButtonClickHost, obj: HostsMenuButton};
+                        if (item.value == sHost) {
+                            HostsMenuButton.set("label", "<em>" + item.text + "</em>");
+                            HostsMenuButton.hostindex = item.value;
+                        }
+                    }
+                    var hostgroups = Data["hostgroups"];
+                    for (var i = 0; i < hostgroups.length; i++) {
+                        var item = HostItems[2].submenu.itemdata[i] = new Object();
+                        item.text  = hostgroups[i].name;
+                        item.value = hostgroups[i].id;
+                        item.onclick = {fn: onButtonClickHostGroup, obj: HostsMenuButton};
+                        if (item.value == sHostGroup) {
+                            HostsMenuButton.set("label", "<em>" + item.text + "</em>");
+                            HostsMenuButton.hostgroupindex = item.value;
+                        }
+                    }
+                    // Setup services menu button
+                    var divservice = document.createElement('div');
+                    divservice.setAttribute('id', "ServiceButtonContainer" + ruleTags);
+                    var ServiceItems =
+                    [
+                        { text: "Any Service",    value: -1 },
+                        { text: "Services",       submenu: { id: "services" + ruleTags,      itemdata: [] } },
+                        { text: "Service groups", submenu: { id: "servicegroups" + ruleTags, itemdata: [] } }
+                    ];
+                    var ServicesMenuButton = new YAHOO.widget.Button({
+                            type      : "menu",
+                            id        : "ServiceButton" + ruleTags,
+                            label     : "<em>Any Service</em>",
+                            menu      : ServiceItems,
+                            container : "ServiceButtonContainer" + ruleTags});
+                    ServicesMenuButton.getMenu().cfg.setProperty("scrollincrement", 5);
+                    ServicesMenuButton.serviceindex = sService;
+                    ServicesMenuButton.servicegroupindex = sServiceGroup;
+                    ServiceItems[0].onclick = {fn: onButtonClickService, obj: ServicesMenuButton};
+                    setServiceSubmenus(HostsMenuButton, ServicesMenuButton);
+                    var buttonContext = [HostsMenuButton, ServicesMenuButton];
+                    HostsMenuButton.eventReload = new YAHOO.util.CustomEvent("reload", buttonContext);
+                    HostsMenuButton.eventReload.subscribe(function(e) {
+                        setServiceSubmenus(this[0], this[1]);
+                    }, buttonContext);
+                    // Setup states menu button
+                    var divstate = document.createElement('div');
+                    divstate.setAttribute('id', "StateButtonContainer" + ruleTags);
+                    var StateItems = [];
+                    var StatesMenuButton = new YAHOO.widget.Button({
+                            type      : "menu",
+                            id        : "StateButton" + ruleTags,
+                            label     : "<em>Any State</em>",
+                            menu      : StateItems,
+                            container : "StateButtonContainer" + ruleTags});
+                    StatesMenuButton.getMenu().cfg.setProperty("scrollincrement", 5);
+                    var states = Data["states"];
+                    var item = StateItems[0] = new Object();
+                        item.text  = "Any State";
+                        item.value = -1;
+                        item.onclick = {fn: onButtonClick, obj: StatesMenuButton};
+                    for (var i = 0, j = 1; i < states.length; i++, j++) {
+                        var item = StateItems[j] = new Object();
+                        item.text  = states[i][0];
+                        item.value = states[i][1];
+                        item.onclick = {fn: onButtonClick, obj: StatesMenuButton};
+                        if (item.value == sState)
+                            StatesMenuButton.set("label", "<em>" + item.text + "</em>");
+                    };
+                    var imgdel = document.createElement('img');
+                        imgdel.setAttribute('src', "../../img/delete.png");
+                        imgdel.onclick = function(e) { deleteRow(MMONIT.dom.findParent(this, 'tr'))};
+                        imgdel.setAttribute('title', "Delete Rule");
+                        imgdel.setAttribute('alt', "Delete Rule");
+                        imgdel.setAttribute('height', "24px");
+                        imgdel.setAttribute('width', "24px");
+                    var imgadd = document.createElement('img');
+                        imgadd.setAttribute('src', "../../img/add.png");
+                        imgadd.onclick = function(e) {addRuleRow(MMONIT.dom.findParent(this, 'tr'))};
+                        imgadd.setAttribute('title', "Add Rule");
+                        imgadd.setAttribute('alt', "Add Rule");
+                        imgadd.setAttribute('height', "24px");
+                        imgadd.setAttribute('width', "24px");
+                    var divcontrol = document.createElement('div');
+                        divcontrol.setAttribute('class', "controls");
+                        divcontrol.appendChild(imgdel);
+                        divcontrol.appendChild(imgadd);
+                    var inputhost = document.createElement("input");
+                        inputhost.id = "HostButton" + ruleTags + "-host-value";
+                        inputhost.name = "host";
+                        inputhost.type = "hidden";
+                        inputhost.value = (sHost && sHost != '') ? sHost : "-1";
+                    var inputhostgroup = document.createElement("input");
+                        inputhostgroup.id = "HostButton" + ruleTags + "-hostgroup-value";
+                        inputhostgroup.name = "hostgroup";
+                        inputhostgroup.type = "hidden";
+                        inputhostgroup.value = (sHostGroup && sHostGroup != '') ? sHostGroup : "-1";
+                    var inputservice = document.createElement("input");
+                        inputservice.id = "ServiceButton" + ruleTags + "-service-value";
+                        inputservice.name = "service";
+                        inputservice.type = "hidden";
+                        inputservice.value = (sService && sService != '') ? sService : "-1";
+                    var inputservicegroup = document.createElement("input");
+                        inputservicegroup.id = "ServiceButton" + ruleTags + "-servicegroup-value";
+                        inputservicegroup.name = "servicegroup";
+                        inputservicegroup.type = "hidden";
+                        inputservicegroup.value = (sServiceGroup && sServiceGroup != '') ? sServiceGroup : "-1";
+                    var inputstate = document.createElement("input");
+                        inputstate.id = "StateButton" + ruleTags + "-value";
+                        inputstate.name = "state";
+                        inputstate.type = "hidden";
+                        inputstate.value = (sState && sState != '') ? sState : "-1";
+                    var col = document.createElement('td');
+                        col.onmouseover = function(e){MMONIT.layer.vshow(this.getElementsByTagName('div')[0])};
+                        col.onmouseout = function(e){MMONIT.layer.vhide(this.getElementsByTagName('div')[0])};
+                        col.setAttribute('nowrap', "true");
+                        col.appendChild(divcontrol);
+                        col.appendChild(inputhost);
+                        col.appendChild(inputhostgroup);
+                        col.appendChild(inputservice);
+                        col.appendChild(inputservicegroup);
+                        col.appendChild(inputstate);
+                        col.appendChild(divhost);
+                        col.appendChild(divservice);
+                        col.appendChild(divstate);
+                    var row = document.createElement('tr');
+                        row.appendChild(col);
+                    var table = document.getElementById('ruleTable');
+                    if (oRow)
+                        oRow.parentNode.insertBefore(row, oRow.nextSibling);
+                    else
+                        table.appendChild(row);
+                    stripe(table);
+                    ruleTags++;
+                } // addRuleRow
+
+
+                /*
+                 * Add a new Action row after oRow
+                 */
+                function addActionRow(oRow, sAction, sTarget, sTargetoption) {
+                    // Setup action selector menu button
+                    var divaction = document.createElement('div');
+                    divaction.setAttribute('id', "ActionButtonContainer" + actionTags);
+                    var ActionItems =
+                        [
+                            { text: actionMailLabel,           submenu: { id : "mail" + actionTags,    itemdata: [ { text : "user", value : "0" }, { text : "specify address", value : "1" } ] } },
+                            { text: actionInstantMessageLabel, submenu: { id : "IM" + actionTags,      itemdata: [ { text : "user", value : "2" }, { text : "specify address", value : "3" } ] } },
+                            { text: actionProgramLabel,        value : "4" }
+                        ];
+                    var ActionsMenuButton = new YAHOO.widget.Button({
+                            type      : "menu",
+                            id        : "ActionButton" + actionTags,
+                            label     : "<em>" + ActionItems[0].text + "</em>",
+                            menu      : ActionItems,
+                            container : "ActionButtonContainer" + actionTags});
+                    ActionsMenuButton.getMenu().cfg.setProperty("scrollincrement", 5);
+                    for (var i = 0; i < ActionItems.length; i++) {
+                        if (ActionItems[i].submenu) {
+                            for (var j = 0; j < ActionItems[i].submenu.itemdata.length; j++) {
+                                var item = ActionItems[i].submenu.itemdata[j];
+                                item.onclick = {fn: onButtonClick, obj: ActionsMenuButton};
+                                if (item.value == sAction)
+                                    ActionsMenuButton.set("label", "<em>" + ActionItems[i].text + "</em>");
+                            }
+                        } else {
+                            var item = ActionItems[i];
+                            item.onclick = {fn: onButtonClick, obj: ActionsMenuButton};
+                            if (item.value == sAction)
+                                ActionsMenuButton.set("label", "<em>" + ActionItems[i].text + "</em>");
+                        }
+                    }
+                    var imgdel = document.createElement('img');
+                        imgdel.setAttribute('src', "../../img/delete.png");
+                        imgdel.onclick = function(e){deleteRow(MMONIT.dom.findParent(this, 'tr'));};
+                        imgdel.setAttribute('title', "Delete Action");
+                        imgdel.setAttribute('alt', "Delete Action");
+                        imgdel.setAttribute('height', "24px");
+                        imgdel.setAttribute('width', "24px");
+                    var imgadd = document.createElement('img');
+                        imgadd.setAttribute('src', "../../img/add.png");
+                        imgadd.onclick = function(e){addActionRow(MMONIT.dom.findParent(this, 'tr'));};
+                        imgadd.setAttribute('title', "Add Action");
+                        imgadd.setAttribute('alt', "Add Action");
+                        imgadd.setAttribute('height', "24px");
+                        imgadd.setAttribute('width', "24px");
+                    var divcontrol = document.createElement('div');
+                        divcontrol.setAttribute('class', "controls");
+                        divcontrol.appendChild(imgdel);
+                        divcontrol.appendChild(imgadd);
+                    var inputaction = document.createElement("input");
+                        inputaction.id = "ActionButton" + actionTags + "-value";
+                        inputaction.name = "action";
+                        inputaction.type = "hidden";
+                        inputaction.value = (sAction && sAction != '') ? sAction : "0";
+                    var col = document.createElement('td');
+                        col.onmouseover = function(e){MMONIT.layer.vshow(this.getElementsByTagName('div')[0]);};
+                        col.onmouseout = function(e){MMONIT.layer.vhide(this.getElementsByTagName('div')[0]);};
+                        col.setAttribute('nowrap', "true");
+                        col.appendChild(divcontrol);
+                        col.appendChild(inputaction);
+                        col.appendChild(divaction);
+                    var row = document.createElement('tr');
+                        row.appendChild(col);
+                    var table = document.getElementById('actionTable');
+                    if (oRow)
+                        oRow.parentNode.insertBefore(row, oRow.nextSibling);
+                    else
+                        table.appendChild(row);
+                    stripe(table);
+                    setAction(divaction, (sAction && sAction != '') ? sAction : "0", sTarget, sTargetoption);
+                    actionTags++;
+                } // addActionRow
+
+
+                /*
+                 * Set action properties
+                 */
+                function setAction(oAction, sAction, sTarget, sTargetoption) {
+                    var action = sAction * 1;
+                    var removeActions = function(o) {
+                        if (o) {
+                            if (o.nextSibling)
+                                removeActions(o.nextSibling);
+                            o.parentNode.removeChild(o);
+                        }
+                    };
+                    removeActions(oAction.nextSibling);
+                    switch (action) {
+                        case 0: // Setup mail address menu button
+                            var divaddress = document.createElement('div');
+                            divaddress.setAttribute('id', "AddressButtonContainer" + actionTags);
+                            var AddressItems = [];
+                            var AddressMenuButton = new YAHOO.widget.Button({
+                                type      : "menu",
+                                id        : "AddressButton" + actionTags,
+                                label     : "",
+                                menu      : AddressItems,
+                                container : "AddressButtonContainer" + actionTags});
+                            var addresses = Data["mailaddresses"];
+                            for (var i = 0; i < addresses.length; i++) {
+                                AddressItems[i] = new Object();
+                                var item = AddressItems[i];
+                                item.text  = addresses[i][0];
+                                item.value = addresses[i][1];
+                                item.onclick = {fn: onButtonClick, obj: AddressMenuButton};
+                                if (item.value == sTarget)
+                                    AddressMenuButton.set("label", "<em>" + item.text + "</em>");
+                            };
+                            if (! sTarget)
+                                    AddressMenuButton.set("label", "<em>" + AddressItems[0].text + "</em>");
+                            AddressMenuButton.getMenu().cfg.setProperty("scrollincrement", 5);
+                            var addressinput = document.createElement("input");
+                                addressinput.id = "AddressButton" + actionTags + "-value";
+                                addressinput.name = "target";
+                                addressinput.type = "hidden";
+                                addressinput.value = sTarget ? sTarget : AddressItems[0].value;
+                            divaddress.appendChild(addressinput);
+                            oAction.parentNode.appendChild(divaddress);
+                            var addressoption = document.createElement("input");
+                                addressoption.name = "targetoption";
+                                addressoption.type = "hidden";
+                                addressoption.value = "";
+                                addressoption.maxLength = "8192";
+                            oAction.parentNode.appendChild(addressoption);
+                            break;
+                        case 1: // Setup address text field
+                        case 3: // Setup instant messaging address text field
+                            var addressinput = document.createElement("input");
+                                addressinput.id = "AddressButton" + actionTags + "-value";
+                                addressinput.name = "target";
+                                addressinput.value = sTarget ? sTarget : "";
+                                addressinput.maxLength = "255";
+                                addressinput.setAttribute("class", "actionrowmenu field text target-field");
+                            oAction.parentNode.appendChild(addressinput);
+                            var addressoption = document.createElement("input");
+                                addressoption.name = "targetoption";
+                                addressoption.type = "hidden";
+                                addressoption.value = "";
+                                addressoption.maxLength = "8192";
+                            oAction.parentNode.appendChild(addressoption);
+                            break;
+                        case 2: // Setup instant messaging address menu button
+                            var divaddress = document.createElement('div');
+                            divaddress.setAttribute('id', "AddressButtonContainer" + actionTags);
+                            var AddressItems = [];
+                            var AddressMenuButton = new YAHOO.widget.Button({
+                                type      : "menu",
+                                id        : "AddressButton" + actionTags,
+                                label     : "",
+                                menu      : AddressItems,
+                                container : "AddressButtonContainer" + actionTags});
+                            var addresses = Data["imaddresses"];
+                            for (var i = 0; i < addresses.length; i++) {
+                                var item = AddressItems[i] = new Object();
+                                item.text  = addresses[i][0];
+                                item.value = addresses[i][1];
+                                item.onclick = {fn: onButtonClick, obj: AddressMenuButton};
+                                if (item.value == sTarget)
+                                    AddressMenuButton.set("label", "<em>" + item.text + "</em>");
+                            };
+                            if (! sTarget)
+                                AddressMenuButton.set("label", "<em>" + AddressItems[0].text + "</em>");
+                            AddressMenuButton.getMenu().cfg.setProperty("scrollincrement", 5);
+                            var addressinput = document.createElement("input");
+                                addressinput.id = "AddressButton" + actionTags + "-value";
+                                addressinput.name = "target";
+                                addressinput.type = "hidden";
+                                addressinput.value = sTarget ? sTarget : AddressItems[0].value;
+                            divaddress.appendChild(addressinput);
+                            oAction.parentNode.appendChild(divaddress);
+                            var addressoption = document.createElement("input");
+                                addressoption.name = "targetoption";
+                                addressoption.type = "hidden";
+                                addressoption.value = "";
+                                addressoption.maxLength = "8192";
+                            oAction.parentNode.appendChild(addressoption);
+                            break;
+                        case 4: // Setup program execution
+                            var programinput = document.createElement("input");
+                                programinput.setAttribute("class", "actionrowmenu field text target-field");
+                                programinput.id = "ProgramButton" + actionTags + "-value";
+                                programinput.name = "target";
+                                programinput.maxLength = "8192";
+                                programinput.value = sTarget ? sTarget : "";
+                            var programoption = document.createElement("input");
+                                programoption.name = "targetoption";
+                                programoption.type = "hidden";
+                                programoption.value = sTargetoption ? sTargetoption : "<?cs var:default_path ?>";
+                                programoption.maxLength = "8192";
+                            var myimg = new Image(24,24); 
+                                myimg.src = '../../img/info.png';
+                                myimg.alt = "Program settings";
+                                myimg.title = "Program settings";
+                                myimg.onclick = function(e) { myProgramSettings.show(programinput, programoption); };
+                            oAction.parentNode.appendChild(programoption);
+                            oAction.parentNode.appendChild(programinput);
+                            oAction.parentNode.appendChild(myimg);
+                            break;
+                    }
+                    actionTags++;
+                } // setAction
+
+
+                /* 
+                 * Returns false and stop submit if we have duplicate rows or invalid fields, 
+                 * otherwise returns true 
+                 */
+                 form.onsubmit = function () {
+                    var hasErrors = 0;
+                    var form         = document.RuleForm;
+                    var host         = form.host.nodeName         ? [form.host]         : form.host;
+                    var hostgroup    = form.hostgroup.nodeName    ? [form.hostgroup]    : form.hostgroup;
+                    var action       = form.action.nodeName       ? [form.action]       : form.action;
+                    var target       = form.target.nodeName       ? [form.target]       : form.target;
+                    // Mark row as having error
+                    var setError = function(el, m) {
+                        var row = MMONIT.dom.findParent(el, 'td');
+                            if (row && row.id == '') {
+                                YAHOO.util.Dom.setStyle(row, "background-color", "#ffdfdf");
+                                YAHOO.util.Dom.setStyle(row, "border-right", "1px solid rgb(234, 203, 204)");
+                                YAHOO.util.Dom.setStyle(row, "border-bottom", "1px solid rgb(234, 203, 204)");
+                            } else {
+                                row = MMONIT.dom.findParent(el, 'li');
+                                row.className = "error";
+                            }
+                        var previousError = row.getElementsByTagName('p')[0];
+                        var errorNode = previousError ? previousError : document.createElement('p');
+                            errorNode.innerHTML = m;
+                            errorNode.className = 'error';
+                            if (! previousError)
+                                row.appendChild(errorNode);
+                            hasErrors++;  
+                    };
+                    // Clear error styling from row
+                    var clearError = function(el) {
+                        var row =  MMONIT.dom.findParent(el, 'td');
+                            if (row && row.id == '') {
+                                YAHOO.util.Dom.setStyle(row, "background-color", "");
+                                YAHOO.util.Dom.setStyle(row, "border-right", "");
+                                YAHOO.util.Dom.setStyle(row, "border-bottom", "");
+                            } else {
+                                row = MMONIT.dom.findParent(el, 'li');
+                                row.className = "desc";
+                            }
+                        var hasPreviousError = row.getElementsByTagName('p')[0];
+                            if (hasPreviousError)
+                                hasPreviousError.innerHTML = '';
+                    };
+                    // Check for duplicate rule rows
+                    if (host.length > 1) {
+                        var isNotUniqueRuleRow = {};
+                        var service      = form.service;
+                        var servicegroup = form.servicegroup;
+                        var state        = form.state;
+                        for (var i = 0; host[i]; i++) {
+                            var t = host[i].value + hostgroup[i].value + service[i].value + servicegroup[i].value + state[i].value + "";
+                            if (isNotUniqueRuleRow[t]) {
+                                setError(host[i], "Duplicate row");
+                            } else {
+                                clearError(host[i]);
+                                isNotUniqueRuleRow[t] = true;
+                            }
+                        }
+                    }
+                    // Check for duplicate action rows and target fields validity
+                    var isNotUniqueActionRow = {};
+                    for (var i = 0; action[i]; i++) {
+                        var t = action[i].value + target[i].value;
+                        if (isNotUniqueActionRow[t]) {
+                            setError(action[i], "Duplicate row");
+                        } else {
+                            // Check target field
+                            var option = action[i].value * 1;
+                            switch (option) {
+                                case 0:
+                                case 2:
+                                    if (target[i].value.trim() == '') {
+                                        setError(action[i], "Cannot send " + (option == 0 ? "mail" : "instant message") + " to nobody");
+                                    } else {
+                                        clearError(action[i]);
+                                    }
+                                    break;
+                                case 1:
+                                case 3:
+                                    if (! target[i].value.trim().match(/^([^@ ]+@)?([-a-zA-Z0-9]+(\.)?)+([a-zA-Z]{2,})?$/)) {
+                                        setError(action[i], "Invalid " + (option == 1 ? "mail" : "instant messaging") + " address");
+                                    } else {
+                                        clearError(action[i]);
+                                    }
+                                    break;
+                                case 4:
+                                    if (target[i].value.trim() == '') {
+                                        setError(action[i], "Please specify the program to execute");
+                                    } else {
+                                        clearError(action[i]);
+                                    }
+                                    break;
+                            }
+                            isNotUniqueActionRow[t] = true;
+                        }
+                    }
+                    // The description field is required
+                    if (form.description.value.trim() == '') {
+                        setError(form.description, "Field is required");
+                    } else {
+                        clearError(form.description);
+                    }
+                    if (hasErrors) {
+                        MMONIT.layer.show('errorHeader');
+                    } else {
+                        MMONIT.layer.hide('errorHeader');
+                    }
+                    return (hasErrors == 0);
+                }; // doCheck
+                              
+  
+                /* Programs Settings panel module  */
+                var myProgramSettings = function() {
+                    /* Create the Panel closure */
+                    var myPanel = new YAHOO.widget.Panel("programsettingspanel", {
+                        draggable:false, visible:false, close:true, width:"500px", constraintoviewport:true
+                    });
+                    var myPanelSaveButton = new YAHOO.widget.Button("saveProgramSettings");
+                    var myPanelTestButton = new YAHOO.widget.Button("testProgramSettings");
+                    // References to panel fields
+                    myPanel.panel = {target:Dom.get('programtarget'), targetOption:Dom.get('environment')};
+                    myPanel.current = {target:null, targetoption:null}; // Panel reference to form target fields
+                    myPanel.panel.output = Dom.get('testoutputarea');
+                    // On hide, zero panel fields
+                    myPanel.subscribe("hide", function(e) {
+                        myPanel.panel.target.value = null;
+                        myPanel.panel.targetOption.value = null;
+                        myPanel.panel.output.value = null;
+                        MMONIT.layer.hide('testoutput');
+                    });
+                    // On save, copy field values back to form and hide panel
+                    myPanelSaveButton.addListener("click", function(e) {
+                        myPanel.current.target.value = myPanel.panel.target.value;
+                        myPanel.current.targetOption.value = myPanel.panel.targetOption.value;
+                        myPanel.hide();
+                    });
+                    // On test, execute program and show output in the output area
+                    myPanelTestButton.addListener("click", function(e) {
+                        myPanel.panel.output.value = '';
+                        MMONIT.layer.show('testoutput');
+                        // Show a wait text if execution takes more than 0.5 sec
+                        var t = setTimeout("MMONIT.dom.get('testoutputarea').value = 'Please wait...'", 500);
+                        var myPostData = "program=" + myPanel.panel.target.value + "&environment=" + myPanel.panel.targetOption.value;
+                        var myCallback = {
+                            success: function(o) { clearTimeout(t); myPanel.panel.output.value = o.responseText; },
+                            failure: function(o) { clearTimeout(t); myPanel.panel.output.value = "communication failure"; },
+                            timeout: 20000,
+                        };
+                        YAHOO.util.Connect.asyncRequest('POST', 'test-program', myCallback, myPostData);
+                    });
+                    myPanel.render();
+                    return {
+                        /*
+                        * Display the panel for the given target and target option
+                        * @param Object | elTarget : The target input field
+                        * @param Object | elTargetOption : The target option (hidden) input field 
+                        */
+                        show: function(elTarget, elTargetOption) {
+                            MMONIT.layer.show('programsettingspanel');
+                            myPanel.cfg.setProperty("context", [elTarget,"tl","tl", null, [15,-18]]);
+                            myPanel.panel.target.value = elTarget.value;
+                            myPanel.panel.targetOption.value = elTargetOption.value;
+                            // Set references to current form target fields to be used by myPanelSaveButton click handler
+                            myPanel.current.target = elTarget; 
+                            myPanel.current.targetOption = elTargetOption;
+                            myPanel.show();
+                        }
+                    }
+                }(); // myProgramSettings
+                
+                
+            }); // onDOMReady
+        } // onSuccess
+
+    }); // loader.insert
+
+
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,8 @@
+[PDT Apr 23 15:06:50] info     : Reinitializing monit daemon
+[PDT Apr 23 15:06:51] info     : Starting monit HTTP server at [10.100.18.125:2812]
+[PDT Apr 23 15:06:51] info     : monit HTTP server started
+[PDT Apr 23 15:06:51] info     : 'system_swft001.webex.com' Monit reloaded
+[PDT Apr 23 15:06:51] info     : M/Monit heartbeat started
+[PDT Apr 23 15:07:51] error    : 'apache2.conf' timestamp was changed for /etc/apache2/sites-available/default-ssl
+[PDT Apr 23 15:07:51] info     : 'apache2.conf' exec: /etc/init.d/apache2
+[PDT Apr 23 15:08:51] info     : 'apache2.conf' timestamp was not changed for /etc/apache2/sites-available/default-ssl

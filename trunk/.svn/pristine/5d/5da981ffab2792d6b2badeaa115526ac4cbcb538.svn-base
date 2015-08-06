@@ -1,0 +1,1 @@
+link ../../../../../../share/pyshared/keystone/contrib/s3/__init__.py

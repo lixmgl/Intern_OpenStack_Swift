@@ -1,0 +1,333 @@
+/*
+ * MYSQL DATABASE SCHEMA FOR THE M/MONIT DATABASE. 
+ *
+ * To create the database: 
+ * 1) Create the mmonit database: mysqladmin create mmonit -u root -p
+ * 2) Create the mmonit user and grant access to the mmonit database:
+ *    GRANT ALL ON mmonit.* to mmonit@localhost identified by '<password>'
+ * 3) Create the schema: mysql -u mmonit mmonit -p < mmonit-schema.mysql
+ */
+
+
+/* ---------------------------------------------------- M/Monit system table */
+
+
+CREATE TABLE mmonit (
+  schemaversion INTEGER NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/* -------------------------------------------------------------- Name table */
+
+
+CREATE TABLE name (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) UNIQUE NOT NULL,
+  INDEX name_index (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+/* ------------------------------------------------------------- User tables */
+
+
+CREATE TABLE users (
+  uname VARCHAR(20) PRIMARY KEY, 
+  password VARCHAR(56) NOT NULL,
+  fullname VARCHAR(255),
+  title VARCHAR(255),
+  email VARCHAR(255),
+  phone VARCHAR(40),
+  mobile VARCHAR(40),
+  imname VARCHAR(255),
+  imtype VARCHAR(20),
+  refresh INTEGER DEFAULT 5000
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE roles (
+  role VARCHAR(20) PRIMARY KEY,
+  description VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE userroles (
+  uname VARCHAR(20) NOT NULL, 
+  role VARCHAR(20)  NOT NULL,
+  PRIMARY KEY(role, uname),
+  FOREIGN KEY role_fk (role) REFERENCES roles (role) ON DELETE CASCADE,
+  FOREIGN KEY uname_fk (uname) REFERENCES users (uname) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/* ------------------------------------------------------------- Host tables */
+
+
+CREATE TABLE host (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  status CHAR(1) NOT NULL,
+  nameid INTEGER NOT NULL,
+  monitid VARCHAR(255) UNIQUE NOT NULL,
+  ipaddrin VARCHAR(255) NOT NULL,
+  ipaddrout VARCHAR(255),
+  portin INTEGER,
+  portout INTEGER DEFAULT -1,
+  uname VARCHAR(255),
+  password VARCHAR(255),
+  usessl CHAR(1),
+  description TEXT,
+  poll INTEGER DEFAULT 0,
+  statusmodified INTEGER,
+  servicemodified INTEGER DEFAULT 0,
+  serviceskew INTEGER DEFAULT 3,
+  serviceup INTEGER DEFAULT 0,
+  servicedown INTEGER DEFAULT 0,
+  serviceunmonitorauto INTEGER,
+  serviceunmonitormanual INTEGER,
+  version VARCHAR(20),
+  platformname VARCHAR(255),
+  platformrelease VARCHAR(255),
+  platformversion VARCHAR(255),
+  platformmachine VARCHAR(255),
+  platformcpu INTEGER DEFAULT 0,
+  platformmemory INTEGER DEFAULT 0,
+  platformswap INTEGER DEFAULT 0,
+  cpuuser REAL DEFAULT 0,
+  cpusystem REAL DEFAULT 0,
+  cpuwait REAL DEFAULT 0,
+  cputotal REAL DEFAULT 0,
+  memory REAL DEFAULT 0,
+  swap REAL DEFAULT 0,
+  statusheartbeat INTEGER DEFAULT 1,
+  eventscount INTEGER DEFAULT 0,
+  FOREIGN KEY nameid_fk (nameid) REFERENCES name (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE hostgroup (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  nameid INTEGER UNIQUE NOT NULL,
+  description TEXT,
+  FOREIGN KEY nameid_fk (nameid) REFERENCES name (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE groupedhost (
+  groupid INTEGER NOT NULL,
+  hostid  INTEGER NOT NULL,
+  PRIMARY KEY(groupid, hostid),
+  FOREIGN KEY groupid_fk (groupid) REFERENCES hostgroup (id) ON DELETE CASCADE,
+  FOREIGN KEY hostid_fk (hostid) REFERENCES host (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/* ---------------------------------------------------------- Service tables */
+
+
+CREATE TABLE service (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  nameid INTEGER NOT NULL,
+  hostid INTEGER NOT NULL,
+  type INTEGER NOT NULL,
+  status INTEGER NOT NULL,
+  monitoringstate INTEGER NOT NULL,
+  monitoringmode INTEGER NOT NULL,
+  statusmodified INTEGER DEFAULT 0,
+  eventscount INTEGER DEFAULT 0,
+  FOREIGN KEY nameid_fk (nameid) REFERENCES name (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE servicegroup (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  nameid INTEGER NOT NULL,
+  hostid INTEGER NOT NULL,
+  FOREIGN KEY nameid_fk (nameid) REFERENCES name (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE groupedservices (
+  servicegroupid INTEGER NOT NULL,
+  service_nameid INTEGER NOT NULL,
+  PRIMARY KEY(servicegroupid, service_nameid),
+  FOREIGN KEY servicegroupid_fk (servicegroupid) REFERENCES servicegroup (id) ON DELETE CASCADE,
+  FOREIGN KEY service_nameid_fk (service_nameid) REFERENCES name (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/* ------------------------------------------------------------ Event tables */
+
+
+CREATE TABLE event (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  hostid INTEGER NOT NULL,
+  collectedsec INTEGER NOT NULL,
+  collectedusec INTEGER NOT NULL,
+  service_nameid INTEGER NOT NULL,
+  servicetype INTEGER NOT NULL,
+  event INTEGER NOT NULL,
+  state INTEGER NOT NULL,
+  action INTEGER NOT NULL,
+  message TEXT NOT NULL,
+  hasnotice INTEGER,
+  INDEX hostid_index (hostid),
+  INDEX collectedsec_index (collectedsec),
+  INDEX service_nameid_index (service_nameid),
+  INDEX servicetype_index (servicetype),
+  INDEX state_index (state),
+  FOREIGN KEY hostid_fk (hostid) REFERENCES host (id) ON DELETE CASCADE,
+  FOREIGN KEY service_nameid_fk (service_nameid) REFERENCES name (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE eventnotice (
+  eventid INTEGER NOT NULL,
+  date INTEGER NOT NULL,
+  uname VARCHAR(20) NOT NULL,
+  notice TEXT NOT NULL,
+  INDEX eventid_index (eventid),
+  FOREIGN KEY eventid_fk (eventid) REFERENCES event (id) ON DELETE CASCADE,
+  FOREIGN KEY uname_fk (uname) REFERENCES users (uname) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/* ------------------------------------------------------------- Rule tables */
+
+
+CREATE TABLE rule (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  description VARCHAR(255),
+  active CHAR(1),
+  operator CHAR(1) DEFAULT 0,
+  INDEX active_index (active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE rulerow (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  ruleid INTEGER NOT NULL,
+  hostid INTEGER DEFAULT -1,
+  hostgroupid INTEGER DEFAULT -1,
+  service_nameid INTEGER DEFAULT -1,
+  servicegroup_nameid INTEGER DEFAULT -1,
+  eventstate INTEGER DEFAULT -1,
+  FOREIGN KEY ruleid_fk (ruleid) REFERENCES rule (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE actionrow (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  ruleid INTEGER NOT NULL, 
+  selectedtarget INTEGER NOT NULL,
+  target TEXT NOT NULL,
+  targetoption TEXT,
+  FOREIGN KEY ruleid_fk (ruleid) REFERENCES rule (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/* ----------------------------------------------------- Notification tables */
+
+
+CREATE TABLE mailserver (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  hostname VARCHAR(255) NOT NULL,
+  port INTEGER NOT NULL,
+  uname VARCHAR(255), 
+  password VARCHAR(255),
+  usessl CHAR(1),
+  isdefault CHAR(1)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE jabberserver (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  hostname VARCHAR(255) NOT NULL,
+  port INTEGER NOT NULL,
+  uname VARCHAR(255),
+  password VARCHAR(255),
+  isdefault CHAR(1)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE messageformat (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  description VARCHAR(255),
+  sender VARCHAR(255),
+  subject VARCHAR(255), 
+  message TEXT,
+  isdefault CHAR(1)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE messagequeue (
+  deferredsize INTEGER,
+  retry INTEGER,
+  minbackoff INTEGER,
+  maxbackoff INTEGER,
+  flush INTEGER
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/* ----------------------------------- Persistent Alert message queue tables */
+
+
+CREATE TABLE message (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  type INTEGER, 
+  sender VARCHAR(255),
+  subject VARCHAR(255),
+  body TEXT,
+  created INTEGER,
+  retry INTEGER
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE messagerecipients (
+  messageid INTEGER NOT NULL,
+  recipient VARCHAR(255) NOT NULL,
+  FOREIGN KEY message_fk (messageid) REFERENCES message (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/* ----------------------------------------------- Persistent SESSION tables */
+
+
+CREATE TABLE session (      
+  id VARCHAR(65) PRIMARY KEY, 
+  context VARCHAR(255) NOT NULL,
+  ctime INTEGER NOT NULL,     
+  atime INTEGER NOT NULL,     
+  itime INTEGER NOT NULL,     
+  authtype VARCHAR(20),
+  principal VARCHAR(255),
+  data BLOB
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;                 
+
+
+/* ------------------------------------------------------------ Initial Data */
+
+
+/*
+ * Populating with standard values 
+ */
+
+INSERT INTO mmonit (schemaversion) VALUES (6);
+
+INSERT INTO roles VALUES ("admin", "The administrator role");
+INSERT INTO roles VALUES ("monit", "The standard user role");
+INSERT INTO users (uname, password, fullname) VALUES ("admin", "15B29FFDCE66E10527A65BC6D71AD94D", "The Administrator User");
+INSERT INTO users (uname, password, fullname) VALUES ("monit", "D9CFD4AF77E33817DE2160E0C1C7607C", "Default user");
+INSERT INTO userroles VALUES ("admin", "admin");
+INSERT INTO userroles VALUES ("admin", "monit");
+INSERT INTO userroles VALUES ("monit", "monit");
+INSERT INTO messageformat (description, sender, subject, message, isdefault) VALUES("Default", "mmonit@$HOST", "$HOST: $EVENT $SERVICE ($DATE)", "$EVENT Service $SERVICE
+
+Date:        $DATE
+Action:      $ACTION
+Host:        $HOST
+Description: $DESCRIPTION
+
+Your faithful employee,
+M/Monit", 1);
+INSERT INTO messagequeue (deferredsize, retry, minbackoff, maxbackoff, flush) VALUES(100, 10, 60, 3600, 30);
+
+

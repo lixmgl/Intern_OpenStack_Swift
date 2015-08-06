@@ -1,0 +1,1 @@
+link ../../../../../share/pyshared/keystone/middleware/ec2_token.py

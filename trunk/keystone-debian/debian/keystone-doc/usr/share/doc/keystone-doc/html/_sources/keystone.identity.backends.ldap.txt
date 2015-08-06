@@ -1,0 +1,19 @@
+ldap Package
+============
+
+:mod:`ldap` Package
+-------------------
+
+.. automodule:: keystone.identity.backends.ldap
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`core` Module
+------------------
+
+.. automodule:: keystone.identity.backends.ldap.core
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

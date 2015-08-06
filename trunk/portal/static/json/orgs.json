@@ -1,0 +1,30 @@
+{
+	"totalCount":4,
+	"identifier": "ProjectID",
+	"items":[
+		{
+			"ProjectID":5,
+			"Name":"Infrastructure",
+			"Description":"Tenant to hold Cloud Services infrastructure components",
+			"Enabled":true
+		},
+		{
+			"ProjectID":3,
+			"Name":"pilot-tenant",
+			"Description":"this is a pilot tenant for swift",
+			"Enabled":true
+		},
+		{
+			"ProjectID":2,
+			"Name":"test-tenant",
+			"Description":"this is test tenant",
+			"Enabled":true
+		}, 
+		{
+			"ProjectID":1,
+			"Name":"admin",
+			"Description":"",
+			"Enabled":true
+		} 
+	]
+}

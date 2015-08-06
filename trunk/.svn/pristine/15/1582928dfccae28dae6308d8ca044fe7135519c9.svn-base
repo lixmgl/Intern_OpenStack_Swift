@@ -1,0 +1,8 @@
+Package: cisco-whisper
+Version: 0.9.10 
+Section: base
+Priority: optional
+Architecture: all
+Depends: python
+Maintainer: Chad Malfait cmalfait@cisco.com
+Description: cisco-whisper

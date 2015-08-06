@@ -1,0 +1,19 @@
+#
+# BMC Impact Manager
+# Directory
+#
+# One line per component :
+# <Type> <Name> <EncryptionKey> <IpAddress/Port>
+#	<Type> = cell | gateway.portal | gateway.<GWType> | admin
+#
+
+#cell	local	0	127.0.0.1/1828
+#gateway.portal	bip.myserver.domain.com	mc	myserver.domain.com/3783
+#gateway.reportengine	bpre.myserver.domain.com	mc	myserver.domain.com/3783
+#admin	ias1	iasuid/iaspwd	iashost/3084
+#admin	ias2	0	iashost/3084
+
+#cell	bmbtpna004	mc	bmbtpna004.webex.com:1828
+cell pncell_BMBTPRO mc BMBTPRO-CL.webex.com:1828
+cell pncell_BMSJ1PRO mc BMSJ1PRO-CL:1828
+

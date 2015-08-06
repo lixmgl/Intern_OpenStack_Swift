@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: swiftconsole
+Version: 1.0.0dev
+Summary: Swift distributed console
+Home-page: UNKNOWN
+Author: Autumn Wang
+Author-email: autumn@cisco.com
+License: CISCO
+Description: Automation distributed console for swift cluster management
+Platform: UNKNOWN

@@ -1,0 +1,9 @@
+Package: msendclient
+Version: 1.0-1
+Section: base
+Priority: optional
+Architecture: all
+Depends: perl (>= 5.0.0)
+Maintainer: Autumn Wang <autumn@cisco.com>
+Description: Wrapper for msend perl version client.
+

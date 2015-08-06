@@ -1,0 +1,10 @@
+check process glance-registry matching "glance-registry"
+	start program = "/etc/init.d/glance-registry start" with timeout 90 seconds
+	stop program = "/etc/init.d/glance-registry stop"
+	if 3 restarts within 3 cycles then timeout
+
+check process glance-api matching "glance-api"
+	start program = "/etc/init.d/glance-api start" with timeout 90 seconds
+	stop program = "/etc/init.d/glance-api stop"
+	if failed port 9292 then restart
+	if 5 restarts within 5 cycles then timeout

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    
+    <link href="../../css/main.css" media="screen" rel="Stylesheet">
+    <link href="../../css/form.css" media="screen" rel="Stylesheet">
+    
+    <script src="../../js/wufoo.js"></script>  
+    <script src="../../js/mmonit.js"></script>
+    <script src="../../build/yuiloader/yuiloader-min.js"></script>
+    
+    <title>M/Monit Admin | Hosts</title>
+</head>
+
+<body class="yui-skin-sam">
+    
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="../../status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="../../status/">Overview</a></li>
+                            <li><a href="../../status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="../../reports/"><span>Reports</span></a>
+                        <ul>
+                            <li><a href="../../reports/">Overview</a></li>
+                            <li><a href="../../reports/events/">Events</a></li>
+                        </ul>
+                    </li>
+                    <li id="current">
+                        <a href="../../admin/"><span>Admin</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+        
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../../admin/">Overview</a></li>
+                    <li><a href="../../admin/hosts/" class="current">Hosts</a></li>
+                    <li><a href="../../admin/groups/">Groups</a></li>
+                    <li><a href="../../admin/users/">Users</a></li>
+                    <li><a href="../../admin/rules/">Alerts</a></li>
+                </ul>
+            </div>
+            <h1>
+                <img class="help" src="../../img/help.png" id="help-button" alt="help">
+                Edit host
+            </h1>
+        </div> <!-- Title -->
+        
+        <div id="Main" class="clearfix">
+            
+            <table id="Area">
+                <tr>
+                    <td>
+                        <div class="roundedbox crud grey-gradient"> <!-- td border and gradient does not go well together in IE so use an extra div-->
+                            <form method="post" action="../../admin/hosts/" name="HostForm">
+                                <ul>
+
+                                    <?cs if:Has_Error ?>
+                                    <li class="section first error">
+                                        <h3 id="errorMsgLbl">
+                                            There was a problem with your submission.
+                                        </h3>
+                                        <p id="errorMsg">
+                                            Errors have been highlighted below.
+                                        </p>
+                                    </li>
+                                    <?cs /if?>
+
+                                    <li class="<?cs if:Request.Attr.hostname_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                        <label class="desc" for="hostname">
+                                            Host Name <span class="req"> * </span> 
+                                        </label>
+                                        <div>
+                                            <input
+                                            name="hostname" 
+                                            id="hostname" 
+                                            class="field text full" 
+                                            type="text" maxlength="256" value="<?cs var:Request.Param.hostname ?>" /> 
+                                        </div>
+                                        <?cs if:Request.Attr.hostname_error ?>
+                                        <p class="error"><?cs var:Request.Attr.hostname_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                    <li class="<?cs if:Request.Attr.ipaddrout_error 
+                                    || Request.Attr.ipaddrin_error 
+                                    || Request.Attr.portout_error 
+                                    || Request.Attr.portin_error 
+                                    || Request.Attr.user_error 
+                                    || Request.Attr.password_error?>error<?cs else ?>section<?cs /if ?>">
+                                    <a id="firewall" href="#" style="float:right;font-size:11px;">Override IP-address and port</a>
+                                    
+                                    <label class="desc" for="ipaddrout">
+                                        Monit Host specification <span class="req"> * </span> 
+                                    </label>
+                                    <div class="left" style="clear: both">
+                                        <label for="ipaddrin">
+                                            IP-address
+                                        </label>
+                                        <input
+                                        id="ipaddrin"
+                                        name="ipaddrin" 
+                                        class="field text large"
+                                        type="hidden" maxlength="256" value="<?cs var:Request.Param.ipaddrin ?>"/>
+                                        <span style="margin:0;padding:0"><?cs var:Request.Param.ipaddrin ?></span>
+                                        <?cs if:Request.Attr.ipaddrin_error ?>
+                                        <p class="error" style="margin-top:5px"><?cs var:Request.Attr.ipaddrin_error ?></p>
+                                        <?cs /if ?>
+                                    </div>
+                                    <div class="right">
+                                        <label for="portin">
+                                            Monit Port
+                                        </label>
+                                        <input
+                                        id="portin"
+                                        name="portin" 
+                                        class="field text"
+                                        type="hidden" maxlength="6" size="6" value="<?cs var:Request.Param.portin ?>"/>
+                                        <span style="margin:0;padding:0"><?cs var:Request.Param.portin ?></span>
+                                        <?cs if:Request.Attr.portin_error ?>
+                                        <p class="error" style="margin-top:5px"><?cs var:Request.Attr.portin_error ?></p>
+                                        <?cs /if ?>
+                                    </div>
+                                    <div class="left" style="clear: both; <?cs if:!((Request.Attr.ipaddrout_error || Request.Attr.portout_error) || (Request.Attr.ipaddrout || Request.Param.portout)) ?>display:none;<?cs /if ?>" id="outbound_addr">
+                                        <label for="ipaddrout">
+                                            Outbound IP-address for Monit
+                                        </label>
+                                        <input
+                                        id="ipaddrout"
+                                        name="ipaddrout" 
+                                        class="field text large"
+                                        type="text" maxlength="256" value="<?cs var:Request.Param.ipaddrout ?>" />
+                                        <?cs if:Request.Attr.ipaddrout_error ?>
+                                        <p class="error" style="margin-top:5px"><?cs var:Request.Attr.ipaddrout_error ?></p>
+                                        <?cs /if ?>
+                                    </div>
+                                    <div class="right" id="outbound_port" style="<?cs if:!((Request.Attr.ipaddrout_error || Request.Attr.portout_error) || (Request.Attr.ipaddrout || Request.Param.portout)) ?>display:none;<?cs /if ?>">
+                                        <label for="portout">
+                                            Outbound Port for Monit
+                                        </label>
+                                        <input
+                                        id="portout"
+                                        name="portout" 
+                                        class="field text"
+                                        type="text" maxlength="6" size="6" value="<?cs var:Request.Param.portout ?>" />
+                                        <?cs if:Request.Attr.portout_error ?>
+                                        <p class="error" style="margin-top:5px"><?cs var:Request.Attr.portout_error ?></p>
+                                        <?cs /if ?>
+                                    </div>
+                                    <div class="left" style="clear: both">
+                                        <label>Monit user name</label>
+                                        <input
+                                        id="user"
+                                        name="user" 
+                                        class="field text full" 
+                                        type="text" maxlength="256" value="<?cs var:Request.Param.user ?>" /> 
+                                        <?cs if:Request.Attr.user_error ?>
+                                        <p class="error" style="margin-top:5px"><?cs var:Request.Attr.user_error?></p>
+                                        <?cs /if ?>
+                                    </div>
+                                    <div class="right">
+                                        <label>Monit password</label>
+                                        <input
+                                        id="password"
+                                        name="password" 
+                                        class="field text full" 
+                                        type="password" maxlength="256" value="<?cs var:Request.Param.password ?>" /> 
+                                        <?cs if:Request.Attr.password_error ?>
+                                        <p class="error" style="margin-top:5px"><?cs var:Request.Attr.password_error ?></p>
+                                        <?cs /if ?>
+                                    </div>
+                                    <span>
+                                        <input 
+                                        id="usessl"
+                                        name="usessl" 
+                                        <?cs if:Request.Param.usessl?>checked<?cs /if ?>   
+                                        class="field checkbox" 
+                                        type="checkbox" 
+                                        value="1" />
+                                        <label class="choice" for="usessl">
+                                            Is Monit using SSL?
+                                        </label>
+                                    </span>
+                                </li>
+
+                                <!-- Monit Connection -->
+                                <li class="desc">
+                                    <div class="left" style="clear: both">
+                                        <a  href="#" id="test-monit" >
+                                            Test connection to Monit
+                                        </a>
+                                    </div>
+                                    <div id="result" class="right"></div> 
+                                </li>
+
+                                <?cs if:Request.Param.monitid ?>
+                                <li class="section">
+                                    <label class="desc" for="status">Monit ID</label> <?cs var:Request.Param.monitid ?>
+                                </li>
+                                <?cs /if ?>
+                                <li class="section"></li>
+                                <li class="<?cs if:Request.Attr.description_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                    <label class="leftLabel desc" for="description">Host Description</label>
+                                    <div>
+                                        <textarea 
+                                        id="description"
+                                        class="field textarea small" 
+                                        name="description" 
+                                        maxlength="1024"
+                                        rows="4"
+                                        ><?cs var:Request.Param.description ?></textarea>
+                                    </div>
+                                    <?cs if:Request.Attr.description_error ?>
+                                    <p class="error"><?cs var:Request.Attr.description_error?></p>
+                                    <?cs /if ?>
+                                </li>
+
+                                <li class="<?cs if:Request.Attr.status_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                    <label class="desc" for="status">
+                                        Host Status
+                                    </label>
+                                    <div>
+                                        <select class="field select medium" name="status" id="status">
+                                            <option value="0" <?cs if:Request.Param.status == "0"?>selected<?cs /if ?>>Active</option>            
+                                            <option value="1" <?cs if:Request.Param.status == "1"?>selected<?cs /if ?>>Inactive</option>
+                                            <option value="2" <?cs if:Request.Param.status == "2"?>selected<?cs /if ?>>Ignored</option>     
+                                        </select> 
+                                    </div>
+                                    <?cs if:Request.Attr.status_error ?>
+                                    <p class="error"><?cs var:Request.Attr.status_error?></p>
+                                    <?cs /if ?>
+                                </li>
+                                <?cs if:Request.Host.servicemodified?>
+                                <li class="desc">
+                                    <label class="desc">
+                                        Last status report received on
+                                    </label>
+                                    <?cs var:Request.Host.servicemodified?>
+                                </li>
+                                <?cs /if ?>
+                                <li class="section"> 
+                                    A Monit agent has to send status update within a certain timeframe. Acceptable report
+                                    skew gives the number of Monit cycles M/Monit will wait before reporting the host as
+                                    down. Default value is 3. <?cs if:Request.Attr.update?> You may want to correlate this
+                                    with this host's poll cycle length which is <em><?cs var:Request.Host.poll?>
+                                    seconds</em>. <?cs /if ?>
+                                    </li>
+
+                                    <li class="<?cs if:Request.Attr.cycles_error ?>error<?cs else ?>desc<?cs /if ?>">
+                                        <div>
+                                            Acceptable report skew
+                                            <input
+                                            id="cycles"
+                                            class="field text" 
+                                            name="cycles" 
+                                            type="text" maxlength="2" size="2" value="<?cs alt:Request.Param.cycles ?>3<?cs /alt ?>" />
+                                            cycles
+                                        </div>
+                                        <?cs if:Request.Attr.cycles_error ?>
+                                        <p class="error"><?cs var:Request.Attr.cycles_error?></p>
+                                        <?cs /if ?>
+                                    </li>
+
+                                </ul>
+
+                                <div class="Buttons">                     
+                                    <div class="toleft"> 
+                                        <input type="submit" id="Update" name="Update" value="Save changes">
+                                        <input type="button" id="Cancel" name="Cancel" value="Cancel">
+                                    </div>   
+                                    <div class="toright">&nbsp;
+                                        <?cs if:Request.Attr.update ?>   
+                                        <input type="button" id="Delete" name="Delete" value="Delete">
+                                        <?cs /if ?>
+                                    </div>                
+                                </div>                        
+                                <input name="id" type="hidden" value="<?cs var:Request.Param.id ?>" />
+                            </form>
+                        </div>
+                    </td><!-- Left -->
+                    <td class="story">
+                            <div style="display:none;" id="help"> 
+
+                                <h2>Story</h2>
+                                <p>
+                                    Use this page to edit a Host running a Monit agent. The <strong>Host Name</strong> is a
+                                    descriptive name for the Host. Such as <i>mysql-server 1</i> or <i>www#1</i>. This name is used
+                                    in various places in M/Monit to refer to the Host.
+                                </p>
+                                <p>
+                                    The fields <b>Monit Host specification</b>, are used to uniquely specify connection from and to
+                                    Monit.
+                                </p>
+                                <p>
+                                    The address is the address of the host Monit is running on and the address M/Monit will use to
+                                    connect to Monit. The IP-address is automatically updated by Monit and you cannot change the
+                                    value. Monit report this address at connection time. That is; if the host dynamically change
+                                    its IP-address via e.g. DHCP, Monit will report the address in current use by the Monit host.
+                                    The address is the interface Monit is using to make the connection to M/Monit. If you use a
+                                    proxy in front of M/Monit and need to specify another address to reach Monit, see below for how
+                                    to set the outbound IP-address and port number to Monit manually.
+                                </p>
+                                <p>
+                                    Monit port number is the HTTP port the Monit agent is setup with on the host. The port number
+                                    is also automatically updated by Monit and you cannot change the value.
+                                </p>  
+                                <p> 
+                                    Monit user name and password are the username and password used for HTTP Basic Authentication
+                                    by the Monit agent. If the Monit agent is using SSL, check the SSL-checkbox.
+                                </p>
+                                <p>
+                                    <b>Note:</b> If the Monit host is behind a firewall/NAT or a Proxy and M/Monit must use a
+                                    different IP-address and port number to reach Monit, click <a href="#" id="firewall2">Override
+                                    IP-address and port</a> and specify the outbound IP-address and port number M/Monit should use
+                                    to reach Monit
+                                </p>
+                                <h3>
+                                    Monit ID
+                                </h3>
+                                <p>
+                                    Each Monit instance is identified by a unique id, stored in the file, $HOME/.monit.id on the host
+                                    running Monit. This file is automatically created at startup by Monit if it does not exist. Care
+                                    should be taken not to delete or change this file as the id is used to pair messages from Monit
+                                    with a host entry in M/Monit.
+                                </p>
+                                <p>
+                                    A new host is automatically created in M/Monit by a message from Monit if and only if the id
+                                    embedded in the message is new and unique, otherwise M/Monit will use the id to find the host in
+                                    its database and update the host status.
+                                </p>
+                                <h3>
+                                    Host Status
+                                </h3>
+                                <p>
+                                    The <b>Active</b> and <b>Inactive</b> state are automatically set by events generated by Monit.
+                                    At startup, Monit send a "startup" event which change the Host state in M/Monit to active.
+                                    Likewise, at shutdown, Monit send a "shutdown" event which sets the host state back to inactive
+                                    in M/Monit.
+                                </p>
+                                <p>
+                                    The <b>Ignored</b> state can be used to temporarily suppress all events from a Monit agent. For
+                                    example, if you are going to perform maintenance work on a host, and you expect Monit to issue
+                                    lots of alerts, set the Host in <b>Ignored</b> state to ignore events sent by Monit for the
+                                    duration of the work.
+                                </p>
+                            </div> <!-- help -->
+                    </td><!-- Right -->
+                </tr>
+            </table> <!-- Area -->
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+    
+    <script>
+    var loader = new YAHOO.util.YUILoader();
+    loader.insert({
+        require: ['connection', 'container', 'button'],
+        base: '../../build/',
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+                
+                var Event = YAHOO.util.Event;
+                
+                // ------------------------------------------------------------------ Link handlers
+                
+                // Toggle visibility of help text
+                Event.addListener("help-button", "click", function(e) {
+                    MMONIT.layer.toggle('help');
+                });
+                var myOutboundHanlder = function(e) {
+                    MMONIT.layer.toggle('outbound_addr','outbound_port');
+                };
+                // Show hidden Outbound field for IP-address and port
+                Event.addListener("firewall", "click", myOutboundHanlder);
+                Event.addListener("firewall2", "click", myOutboundHanlder);
+                /* Test connection to Monit */
+                Event.addListener("test-monit", "click", function(e) {
+                    var f = document.HostForm;
+                    var result = document.getElementById("result");
+                    result.innerHTML = "";
+                    if (! (f.ipaddrin.value && f.portin.value && f.user.value && f.password.value)) {
+                        result.innerHTML = "<span style='color:red'>All Monit fields are required!</span>";
+                    } else if (isNaN(f.portin.value)) {
+                        result.innerHTML = "<span style='color:red'>Monit Port is not a number!</span>";
+                    } else {
+                        result.innerHTML = "<img src='../../img/spinner_small.gif' height='12' width='12' />";
+                        var oCallback = {
+                            success : function(o) {
+                                result.innerHTML = "<span style='color:green'>" + o.responseText +"</span>";
+                            },
+                            failure : function(o) {
+                                result.innerHTML = "<span style='color:red'>" + o.responseText +"</span>";
+                            },
+                            timeout: 5000
+                        };
+                        var d = document.createElement('input'); 
+                        d.setAttribute('type', 'hidden');
+                        d.setAttribute('name', 'testMonit'); 
+                        d.setAttribute('value', 'test');
+                        f.appendChild(d);
+                        YAHOO.util.Connect.setForm(f);
+                        YAHOO.util.Connect.asyncRequest('POST', '.', oCallback);
+                    }
+                });
+                
+                
+                // ------------------------------------------------------------------ Form Action
+
+                function doCancel() {
+                    window.location = "../../admin/hosts/";
+                }
+
+                function doDelete() {
+                    if(window.confirm("Are you sure you want to delete this host? Stored events for the host will be remove as well. There is no undo.")) {
+                        var f = document.HostForm;
+                        var d = document.createElement('input'); 
+                        d.setAttribute('type', 'hidden');
+                        d.setAttribute('name', 'Delete'); 
+                        d.setAttribute('value', 'Delete');
+                        f.appendChild(d);
+                        f.submit();
+                    }
+                }
+
+                this.updateButton = new YAHOO.widget.Button("Update");
+                this.deleteButton = new YAHOO.widget.Button("Delete");
+                this.deleteButton.addListener("click", doDelete);
+                this.cancelButton = new YAHOO.widget.Button("Cancel");
+                this.cancelButton.addListener("click", doCancel);
+
+            }); // onDOMReady
+        } // onSuccess
+    }); // loader.insert
+
+    </script>
+</body>
+</html>

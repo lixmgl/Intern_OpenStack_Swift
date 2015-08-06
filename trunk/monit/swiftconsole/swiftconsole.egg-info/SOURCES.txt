@@ -1,0 +1,9 @@
+setup.cfg
+setup.py
+swiftconsole/__init__.py
+swiftconsole.egg-info/PKG-INFO
+swiftconsole.egg-info/SOURCES.txt
+swiftconsole.egg-info/dependency_links.txt
+swiftconsole.egg-info/entry_points.txt
+swiftconsole.egg-info/not-zip-safe
+swiftconsole.egg-info/top_level.txt

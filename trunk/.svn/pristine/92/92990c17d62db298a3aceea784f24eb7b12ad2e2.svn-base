@@ -1,0 +1,100 @@
+#!/usr/bin/python -u
+import sys
+from random import Random
+from swift.swiftnodetest.nodetest import NodeTest
+
+if __name__ == '__main__':
+
+    if len(sys.argv) != 5:
+        print "Usage: %s need five arguments\n" % sys.argv[0]
+        sys.exit(1)
+
+    server = str(sys.argv[1])     #'10.100.18.128'
+    account_port = sys.argv[2]    #6002
+    container_port = sys.argv[3]  #6001
+    object_port = sys.argv[4]     #6000
+    print """server:%s\n
+          account_port:%d\n
+          container_port:%d\n
+          object_port:%d\n""" % (server, int(account_port), int(container_port), int(object_port))
+    
+    r = Random()
+    account = 'AUTH_7e59458700a447fdb7adbd%d' % r.randint(1000000000, 9000000000)
+    container = 'my_container_01'
+    object = 'my_object_02'
+    the_content = "This is the test object 02!"
+    
+    t1 = NodeTest('storage', server, account_port)
+    status, headers, content  = t1.put_account(account)
+    print "put account response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content
+    
+    status, headers, content  = t1.get_account(account)
+    print "\nget account response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content
+    
+    t2 = NodeTest('storage', server, container_port)
+    status, headers, content  = t2.put_container(account, container)
+    print "\nput container response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content
+    
+    status, headers, content  = t2.get_container(account, container)
+    print "\nget container response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content
+    
+    t3 = NodeTest('storage', server, object_port)
+    status, headers, content  = t3.put_object(account, container, object, the_content)
+    print "\nput object response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content
+    
+    status, headers, content  = t3.get_object(account, container, object)
+    print "\nget object response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content
+    
+    status, headers, content  = t3.delete_object(account, container, object)
+    print "\ndelete object response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content
+    
+    status, headers, content  = t2.delete_container(account, container)
+    print "\ndelete container response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content
+    
+    status, headers, content  = t1.delete_account(account)
+    print "\ndelete account response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content
+
+    status, headers, content  = t3.get_object(account, container, object)
+    print "\nget object response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content
+
+    status, headers, content  = t2.get_container(account, container)
+    print "\nget container response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content
+
+    status, headers, content  = t1.get_account(account)
+    print "\nget account response:\n================================================="
+    print "status\t: %d" % status
+    print "headers\t: %s" % str(headers)
+    print "content\t:\n%s" % content

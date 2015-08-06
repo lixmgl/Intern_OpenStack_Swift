@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+
+    <link rel="stylesheet" href="../../css/main.css" media="screen">
+
+    <script src="../../build/yuiloader/yuiloader-min.js"></script>
+    <script src="../../js/mmonit.js"></script>
+
+    <title>
+        M/Monit Reports | Events
+    </title>
+
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="../../status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="../../status/">Overview</a></li>
+                            <li><a href="../../status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li id="current">
+                        <a href="../../reports/"><span>Reports</span></a>
+                    </li>
+                    <li>
+                        <a href="../../admin/"><span>Admin</span></a>
+                        <ul>
+                            <li><a href="../../admin/">Overview</a></li>
+                            <li><a href="../../admin/hosts/">Hosts</a></li>
+                            <li><a href="../../admin/groups/">Groups</a></li>
+                            <li><a href="../../admin/users/">Users</a></li>
+                            <li><a href="../../admin/rules/">Alerts</a></li>
+        				</ul>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../../reports/">Overview</a></li>
+                    <li><a class="current" href="../../reports/events/">Events</a></li>
+                </ul>
+            </div>
+            <h1>Events</h1>
+        </div> <!-- Title -->
+
+        <div id="Main" class="clearfix">
+
+            <table id="Area" border="0">
+                <tr>
+                    <td class="main-content">
+
+                        <?cs if:Events_Filter_error ?>
+                        <p class="error-text">
+                            <?cs var:Events_Filter_error ?>
+                        </p>
+                        <?cs /if ?>
+
+                        <div id="pagingTop"></div> 
+                        <div id="events"></div>
+                        <div id="pagingBottom"></div> 
+
+                    </td>
+                    <td>
+                        <div class="drilldown">
+
+                            <div class="reset">
+                                <a href="../../reports/events/?Reset=1">Reset</a>
+                            </div>
+
+                            <div class="menuitem"></div>
+
+                            <form id="formHost" name="formHost" action="../../reports/events/" method="GET">
+                                <input class="search-field" type="text" id="Events_Host" size="15" value="<?cs var:Events_Host ?>">
+                            </form>        
+
+                            <div class="menuitem"></div>
+
+                            <form id="formHostGroup" name="formHostGroup" action="../../reports/events/" method="GET" class="drill">
+                                <label class="desc" for="Events_HostGroup">
+                                    Host Group
+                                </label>
+                                <div id="HostGroupContainer"></div>
+                                <input type="hidden" id="Events_HostGroup" name="Events_HostGroup" value="<?cs var:Events_HostGroup ?>">
+                            </form>        
+
+                            <div class="menudivision"></div>
+
+                            <form id="formServiceName" name="formServiceName" action="../../reports/events/" method="GET" class="drill">
+                                <label class="desc" for="Events_ServiceNameId">
+                                    Service Name
+                                </label>
+                                <div id="ServiceNameContainer"></div>
+                                <input type="hidden" id="Events_ServiceNameId" name="Events_ServiceNameId" value="<?cs var:Events_ServiceNameId ?>">
+                            </form>        
+
+                            <div class="menuitem"></div>
+
+                            <form id="formServiceGroup" name="formServiceGroup" action="../../reports/events/" method="GET" class="drill">
+                                <label class="desc" for="Events_ServiceGroup">
+                                    Service Group
+                                </label>
+                                <div id="ServiceGroupContainer"></div>
+                                <input type="hidden" id="Events_ServiceGroup" name="Events_ServiceGroup" value="<?cs var:Events_ServiceGroup ?>">
+                            </form>        
+
+                            <div class="menuitem"></div>
+
+                            <form id="formServiceType" name="formServiceType" action="../../reports/events/" method="GET" class="drill">
+                                <label class="desc" for="Events_ServiceType">
+                                    Service Type
+                                </label>
+                                <div id="ServiceTypeContainer"></div>
+                                <input type="hidden" id="Events_ServiceType" name="Events_ServiceType" value="<?cs var:Events_ServiceType ?>">
+                            </form>        
+
+                            <div class="menudivision"></div>
+
+                            <form id="formEventState" name="formEventState" action="../../reports/events/" method="GET" class="drill">
+                                <label class="desc" for="Events_State">
+                                    Event State
+                                </label>
+                                <div id="EventStateContainer"></div>
+                                <input type="hidden" id="Events_State" name="Events_State" value="<?cs var:Events_State ?>">
+                            </form>        
+
+                            <div class="menudivision"></div>
+
+                            <form id="formDateFrom" name="formDateFrom" action="../../reports/events/" method="GET" class="drill">
+                                <label class="desc" for="Events_DateFrom">
+                                    Date From
+                                </label>
+                                <div id="calFromContainer"></div>
+                                <input type="hidden" name="Events_DateFrom" id="Events_DateFrom" />
+                            </form>        
+
+                            <div class="menuitem"></div>
+
+                            <form id="formDateTo" name="formDateTo" action="../../reports/events/" method="GET" class="drill">
+                                <label class="desc" for="Events_DateTo">
+                                    Date Until
+                                </label>
+                                <div id="calToContainer"></div>
+                                <input type="hidden" name="Events_DateTo" id="Events_DateTo" />
+                            </form>        
+
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+  
+  <script>
+
+    var ServicesMenuButton;
+    var ServiceGroupButton;
+    var ServiceNameMenu = [];
+    var ServiceGroupMenu = [];
+
+    var loader = new YAHOO.util.YUILoader();
+    loader.loadOptional = true;
+    loader.base = '../../build/';
+    loader.require('dom','event','element','connection','datasource','datatable','button','calendar','json');
+    loader.insert({
+      onSuccess: function() {
+
+        // Define a custom formatter for the column labeled "host"
+        myHostFormatter = function(elCell, oRecord, oColumn, oData) {
+                YAHOO.util.Dom.addClass(elCell, "Events_Host");
+                elCell.innerHTML = '<a href="../../status/detail?id=' + oRecord.getData("hostid") + '">' + oRecord.getData("host") + '</a>';
+        };
+        // Define a custom formatter for the column labeled "note"
+        myNoteFormatter = function(elCell, oRecord, oColumn, oData) {
+                YAHOO.util.Dom.addClass(elCell, "Note");
+                if(oRecord.getData("note") == 1) {
+                        elCell.innerHTML = '&nbsp;<img src="../../img/note.png" alt="note">';
+                } else {
+                        elCell.innerHTML = '&nbsp;';
+                }
+        };
+        // Define a custom formatter for the column labeled "event"
+        myEventFormatter = function(elCell, oRecord, oColumn, oData) {
+                YAHOO.util.Dom.addClass(elCell, "Event");
+                var etype = oRecord.getData("etype");
+                if(etype == 1) {
+                        elCell.style.color = 'red';
+                } else if(etype == 2 || etype == 3) {
+                        elCell.style.color = 'orange';
+                } else if(etype == 4 || etype == 5) {
+                        elCell.style.color = 'gray';
+                } else {
+                        elCell.style.color = 'green';
+                }
+                elCell.innerHTML = oRecord.getData("event");
+        };
+        // Instantiate DataSource
+        var myDataSource = new YAHOO.util.XHRDataSource("../../json/events/list");
+        myDataSource.connMethodPost = true;
+        myDataSource.connTimeout = 5000;
+        myDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+        myDataSource.responseSchema = {
+                resultsList : "records",
+                fields      : ["id","date","host","hostid","service","event","etype","note"],
+                metaFields  : {
+                        sort            : 'sort',
+                        dir             : 'dir',
+                        recordsReturned : 'recordsReturned',
+                        pageSize        : 'pageSize',
+                        startIndex      : 'startIndex',
+                        totalRecords    : 'totalRecords'
+                }
+        };
+        // Column definitions
+        var myColumnDefs = [
+                {key:"date",    label:"Date",    sortable:true},
+                {key:"host",    label:"Host",    sortable:true, formatter:myHostFormatter},
+                {key:"service", label:"Service", sortable:true},
+                {key:"event",   label:"Event",   sortable:true, formatter:myEventFormatter},
+                {key:"note",    label:"Note",    sortable:true, formatter:myNoteFormatter}
+        ];
+        // Instantiate DataTable
+        <?cs if:!Events_Sort ?><?cs set:Events_Sort = 'date' ?><?cs /if ?>
+        <?cs if:!Events_Rows ?><?cs set:Events_Rows = 15 ?><?cs /if ?>
+        <?cs if:!Events_Dir ?><?cs set:Events_Dir = 'yui-dt-desc' ?><?cs /if ?>
+        <?cs if:!Events_Results ?><?cs set:Events_Results = '15' ?><?cs /if ?>
+        var myPaginator = new YAHOO.widget.Paginator({
+                alwaysVisible         : false,
+                containers            : ['pagingTop','pagingBottom'],
+                pageLinks             : 5,
+                rowsPerPage           : <?cs var:Events_Results ?>,
+                rowsPerPageOptions    : [5, 15, 30, 60,100],
+                template              : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+        });
+        var myConfig = {
+                initialRequest: 'Events_StartIndex=0',
+                dynamicData: true,
+                sortedBy : {key: "<?cs var:Events_Sort ?>", dir:'<?cs var:Events_Dir ?>'},
+                paginator: myPaginator,
+                generateRequest: function (oData, oDataTable) {
+                        var newRequest = 'Events_StartIndex=' + oData.pagination.recordOffset + '&Events_Results=' + oData.pagination.rowsPerPage;
+                        var sortedBy = oDataTable.get('sortedBy');
+                        if (sortedBy) {
+                                newRequest += '&Events_Sort=' + sortedBy.key + '&Events_Dir=' + sortedBy.dir.replace('yui-dt-','');
+                        }
+                        return newRequest;
+                }
+        };
+        var myDataTable = new YAHOO.widget.DataTable('events', myColumnDefs, myDataSource, myConfig);
+        myDataTable.doBeforeLoadData = function(oRequest, oResponse, oPayload) {
+            if (oResponse.error)
+               myDataTable.showTableMessage("Load error: " + oResponse.statusText);
+            oPayload.sortedBy.key = oResponse.meta.sort;
+            oPayload.sortedBy.dir = 'yui-dt-' + oResponse.meta.dir;
+            oPayload.pagination.rowsPerPage = parseInt(oResponse.meta.pageSize);
+            oPayload.pagination.recordOffset = parseInt(oResponse.meta.startIndex);
+            oPayload.totalRecords = parseInt(oResponse.meta.totalRecords);
+            return oPayload;
+        }
+        myDataTable.sortColumn = function(oColumn, sDir) {
+                if(oColumn && (oColumn instanceof YAHOO.widget.Column)) {
+                        if(!oColumn.sortable) {
+                                YAHOO.util.Dom.addClass(this.getThEl(oColumn), YAHOO.widget.DataTable.CLASS_SORTABLE);
+                        }
+                        if(sDir && (sDir !== YAHOO.widget.DataTable.CLASS_ASC) && (sDir !== YAHOO.widget.DataTable.CLASS_DESC)) {
+                                    sDir = null;
+                        }
+                        var sortDir = sDir || this.getColumnSortDir(oColumn);
+                        var oSortedBy = this.get("sortedBy") || {};
+                        // We first check to see if there is anything to do
+                        if (!(oSortedBy.key === oColumn.key && oSortedBy.dir === sortDir)) {
+                                // Clear the recordset which is acting as a cache of loaded pages.  
+                                // Sort will scramble the records so they will no longer match the row positions.
+                                // Recordset cannot be sorted since many positions will be empty and cannot be compared against existing ones.
+                                this.initializeTable();
+                                // Update sortedBy tracker
+                                this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});
+                                // Cannot use setPage since it will refuse to trigger the changeRequest event 
+                                // when the page requested is the same as the current one.  
+                                // So, when you clicked the column header a second time to reverse the sort order
+                                // since the page requested was the same (though in a different order) 
+                                // the paginationEventHandler is not called.
+                                var oPaginator = this.get('paginator');
+                                oPaginator.fireEvent('changeRequest',oPaginator.getState({'page':1}));
+                                // show what we have and fire the event as the original method does.
+                                this.render();
+                                this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
+                        }
+                }
+        };
+        myDataTable.subscribe("rowMouseoverEvent", myDataTable.onEventHighlightRow);
+        myDataTable.subscribe("rowMouseoutEvent", myDataTable.onEventUnhighlightRow);
+        myDataTable.subscribe("rowClickEvent", function(e) {
+                window.location = MMONIT.location('details?id=' + myDataTable.getRecord(e.target).getData("id"));
+        });
+        <?cs if:(#Request.Param.refresh > 1) ?>
+        myDataTable.getDataSource().setInterval(<?cs var:Request.Param.refresh ?>, "" , {
+            success  : myDataTable.onDataReturnReplaceRows,
+            scope    : myDataTable,
+            argument : myDataTable.getState()
+        });
+        <?cs /if ?>
+
+        //
+        // Calendars
+        //
+        MMONIT_calendar = function() {
+            // From
+            function handleSelectDateFrom(type, args, obj) {
+                var selected = args[0]; 
+                var selectedDate = this.toDate(selected[0])
+                var txtDate = document.getElementById("Events_DateFrom");
+                txtDate.value = parseInt(selectedDate.valueOf() / 1000, 10); // 00:00:00
+                document.formDateFrom.submit();
+            }
+            function onCalFromButtonClick() {
+                calFromMenu.setBody("&#32;");
+                calFromMenu.body.id = "calendarcontainerFrom";
+                calFromMenu.render(this.get("container"));
+                calFromMenu.align();
+                var calFrom = new YAHOO.widget.Calendar("buttoncalendarFrom", calFromMenu.body.id, {
+                    navigator:true,
+                    START_WEEKDAY: 1 <?cs if:DateFromSelected ?>, PAGEDATE: "<?cs var:DateFromMonthSelected ?>", SELECTED: "<?cs var:DateFromSelected ?>"<?cs /if ?>
+                } );
+                calFrom.render();
+                calFrom.changePageEvent.subscribe(function () {
+                    window.setTimeout(function () {calFromMenu.show();}, 0);
+                });
+                calFrom.selectEvent.subscribe(handleSelectDateFrom, calFrom, true);
+                this.unsubscribe("click", onCalFromButtonClick);
+            }
+            var calFromMenu = new YAHOO.widget.Overlay("calendarmenuFrom", { visible: false });
+            var calFromButton = new YAHOO.widget.Button({ 
+                  type      : "menu", 
+                  id        : "CalendarFromButton", 
+                  label     : "<em><?cs if:DateFromLabelSelected?><?cs var:DateFromLabelSelected?><?cs else?>Choose A Date<?cs /if?></em>",
+                  menu      : calFromMenu, 
+                  container : "calFromContainer" });
+            calFromButton.on("click", onCalFromButtonClick);
+
+            // To
+            function handleSelectDateTo(type, args, obj) {
+                var selected = args[0]; 
+                var selectedDate = this.toDate(selected[0])
+                var txtDate = document.getElementById("Events_DateTo");
+                txtDate.value = parseInt(selectedDate.valueOf() / 1000, 10) + 86399; // 23:59:59
+                document.formDateTo.submit();
+            }
+            function onCalToButtonClick() {
+                calToMenu.setBody("&#32;");
+                calToMenu.body.id = "calendarcontainerTo";
+                calToMenu.render(this.get("container"));
+                calToMenu.align();
+                var calTo = new YAHOO.widget.Calendar("buttoncalendarTo", calToMenu.body.id, {
+                    navigator:true,
+                    START_WEEKDAY: 1<?cs if:DateToSelected ?>, PAGEDATE: "<?cs var:DateToMonthSelected ?>", SELECTED: "<?cs var:DateToSelected ?>"<?cs /if ?>
+                } );
+                calTo.render();
+                calTo.changePageEvent.subscribe(function () {
+                    window.setTimeout(function () {calToMenu.show();}, 0);
+                });
+                calTo.selectEvent.subscribe(handleSelectDateTo, calTo, true);
+                this.unsubscribe("click", onCalToButtonClick);
+            }
+            var calToMenu = new YAHOO.widget.Overlay("calendarmenuTo");
+            var calToButton = new YAHOO.widget.Button({ 
+                  type      : "menu", 
+                  id        : "CalendarToButton", 
+                  label     : "<em><?cs if:DateToLabelSelected?><?cs var:DateToLabelSelected?><?cs else?>Choose A Date<?cs /if?></em>",
+                  menu      : calToMenu, 
+                  container : "calToContainer" });
+            calToButton.on("click", onCalToButtonClick);
+        } 
+        YAHOO.util.Event.onDOMReady(MMONIT_calendar);
+  
+
+        //
+        // Drill-down Menu
+        //
+
+        // Setup a Host search field on the DataTable
+        MMONIT.datatable.search.server(myDataTable, 'host', 'Events_Host', 'Find host..');
+
+
+        /// Host Group
+        function onHostGroupClick(p_sType, p_aArgs, p_oItem) {
+            var txt = document.getElementById("Events_HostGroup");
+            txt.value = p_oItem.value;
+            document.formHostGroup.submit();
+        }
+        var HostGroupMenu = [ 
+            <?cs each:list = ListHostGroup ?>
+                { text: "<?cs var:list.name ?>", value: "<?cs var:list.value ?>", onclick: {fn: onHostGroupClick} },
+            <?cs /each ?>
+        ];
+        var HostGroupButton = new YAHOO.widget.Button({  
+            type         : "menu",  
+            id           : "HostGroupButton",  
+            label        : "<em><?cs each:list = ListHostGroup ?><?cs if:list.value == Events_HostGroup ?><?cs var:list.name ?><?cs /if ?><?cs /each ?></em>",
+            menu         : HostGroupMenu,  
+            container    : "HostGroupContainer",
+            lazyloadmenu : true });
+        HostGroupButton.getMenu().cfg.setProperty("scrollincrement", 5);
+
+
+        /// Service Name
+        function onServiceNameClick(p_sType, p_aArgs, p_oItem) {
+            var txt = document.getElementById("Events_ServiceNameId");
+            txt.value = p_oItem.value;
+            document.formServiceName.submit();
+        }
+        var myServiceNameDataSource = new YAHOO.util.XHRDataSource("../../json/filter/service");
+        myServiceNameDataSource.connMethodPost = true;
+        myServiceNameDataSource.connTimeout = 5000;
+        myServiceNameDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+        myServiceNameDataSource.responseSchema = {
+            resultsList : "records",
+            fields: [ {key:"name"}, {key:"value"} ]
+        };
+        ServicesMenuButton = new YAHOO.widget.Button({
+            type      : "menu",
+            id        : "ServiceNameButton",
+            label     : "<em>ALL</em>",
+            menu      : ServiceNameMenu,
+            container : "ServiceNameContainer",
+            lazyloadmenu : true });
+        ServicesMenuButton.getMenu().cfg.setProperty("scrollincrement", 5);
+        var oServiceCallback = {
+            success: function(oRequest, oResponse, oPayload) {
+                var menu = ServicesMenuButton.getMenu();
+                if (menu) {
+                    menu.clearContent();
+                    ServiceNameMenu = [];
+                    var services = oResponse.results
+                    for (var i = 0; i < services.length; i++) {
+                        var item = ServiceNameMenu[i] = new Object();
+                        item.text  = services[i].name;
+                        item.value = services[i].value;
+                        item.onclick = {fn: onServiceNameClick};
+                        if (item.value == "<?cs var:Events_ServiceNameId ?>")
+                            ServicesMenuButton.set("label", "<em>" + item.text + "</em>");
+                    };
+                    menu.addItems(ServiceNameMenu);
+                    menu.render('ServiceNameContainer');
+                } else
+                    alert("Service menu error -- NULL");
+            },
+            failure: function(oRequest, oResponse, oPayload) {
+                alert("Service JSON error: " + oResponse.statusText);
+            }
+        }
+        myServiceNameDataSource.sendRequest('', oServiceCallback);
+        MMONIT.dom.get('Events_Host').eventReload.subscribe(function(e) {
+            myServiceNameDataSource.sendRequest('', oServiceCallback);
+        });
+
+
+        /// Service Group
+        function onServiceGroupClick(p_sType, p_aArgs, p_oItem) {
+            var txt = document.getElementById("Events_ServiceGroup");
+            txt.value = p_oItem.value;
+            document.formServiceGroup.submit();
+        }
+        var myServiceGroupDataSource = new YAHOO.util.XHRDataSource("../../json/filter/servicegroup");
+        myServiceGroupDataSource.connMethodPost = true;
+        myServiceGroupDataSource.connTimeout = 5000;
+        myServiceGroupDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+        myServiceGroupDataSource.responseSchema = {
+            resultsList : "records",
+            fields: [ {key:"name"}, {key:"value"} ]
+        };
+        ServiceGroupButton = new YAHOO.widget.Button({  
+            type         : "menu",  
+            id           : "ServiceGroupButton",  
+            label        : "<em>ALL</em>",
+            menu         : ServiceGroupMenu,  
+            container    : "ServiceGroupContainer",
+            lazyloadmenu : true });
+        ServiceGroupButton.getMenu().cfg.setProperty("scrollincrement", 5);
+        var oServiceGroupCallback = {
+            success: function(oRequest, oResponse, oPayload) {
+                var menu = ServiceGroupButton.getMenu();
+                if (menu) {
+                    menu.clearContent();
+                    ServiceGroupMenu = [];
+                    var servicegroups = oResponse.results
+                    for (var i = 0; i < servicegroups.length; i++) {
+                        var item = ServiceGroupMenu[i] = new Object();
+                        item.text  = servicegroups[i].name;
+                        item.value = servicegroups[i].value;
+                        item.onclick = {fn: onServiceGroupClick};
+                        if (item.value == "<?cs var:Events_ServiceGroup ?>")
+                            ServiceGroupButton.set("label", "<em>" + item.text + "</em>");
+                    };
+                    menu.addItems(ServiceGroupMenu);
+                    menu.render('ServiceGroupContainer');
+                } else
+                    alert("ServiceGroup menu error -- NULL");
+            },
+            failure: function(oRequest,oResponse,oPayload) {
+                alert("ServiceGroup JSON error: " + oResponse.statusText);
+            }
+        }
+        myServiceGroupDataSource.sendRequest('', oServiceGroupCallback);
+        MMONIT.dom.get('Events_Host').eventReload.subscribe(function(e) {
+            myServiceGroupDataSource.sendRequest('', oServiceGroupCallback);
+        });
+
+
+        /// Service Type
+        function onServiceTypeClick(p_sType, p_aArgs, p_oItem) {
+            var txt = document.getElementById("Events_ServiceType");
+            txt.value = p_oItem.value;
+            document.formServiceType.submit();
+        }
+        var ServiceTypeMenu = [ 
+            <?cs each:list = ListServiceType ?>
+                { text: "<?cs var:list.name ?>", value: "<?cs var:list.value ?>", onclick: {fn: onServiceTypeClick} },
+            <?cs /each ?>
+        ];
+        var ServiceTypeButton = new YAHOO.widget.Button({  
+            type         : "menu",  
+            id           : "ServiceTypeButton",  
+            label        : "<em><?cs each:list = ListServiceType ?><?cs if:list.value == Events_ServiceType ?><?cs var:list.name ?><?cs /if ?><?cs /each ?></em>",
+            menu         : ServiceTypeMenu,  
+            container    : "ServiceTypeContainer",
+            lazyloadmenu : true });
+        ServiceTypeButton.getMenu().cfg.setProperty("scrollincrement", 5);
+
+
+        /// Event State
+        function onEventStateClick(p_sType, p_aArgs, p_oItem) {
+            var txt = document.getElementById("Events_State");
+            txt.value = p_oItem.value;
+            document.formEventState.submit();
+        }
+        var EventStateMenu = [ 
+            <?cs each:list = ListEventState ?>
+                { text: "<?cs var:list.name ?>", value: "<?cs var:list.value ?>", onclick: {fn: onEventStateClick} },
+            <?cs /each ?>
+        ];
+        var EventStateButton = new YAHOO.widget.Button({  
+            type         : "menu",  
+            id           : "EventStateButton",  
+            label        : "<em><?cs each:list = ListEventState ?><?cs if:list.value == Events_State ?><?cs var:list.name ?><?cs /if ?><?cs /each ?></em>",
+            menu         : EventStateMenu,  
+            container    : "EventStateContainer",
+            lazyloadmenu : true });
+        EventStateButton.getMenu().cfg.setProperty("scrollincrement", 5);
+
+      } 
+    });
+
+  </script>
+  
+</body>
+  
+</html>

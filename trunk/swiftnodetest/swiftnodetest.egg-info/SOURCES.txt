@@ -1,0 +1,9 @@
+setup.cfg
+setup.py
+swiftnodetest/__init__.py
+swiftnodetest.egg-info/PKG-INFO
+swiftnodetest.egg-info/SOURCES.txt
+swiftnodetest.egg-info/dependency_links.txt
+swiftnodetest.egg-info/entry_points.txt
+swiftnodetest.egg-info/not-zip-safe
+swiftnodetest.egg-info/top_level.txt

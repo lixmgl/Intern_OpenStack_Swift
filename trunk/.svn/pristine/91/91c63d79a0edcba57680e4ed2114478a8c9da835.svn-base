@@ -1,0 +1,509 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>middleware Package &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="up" title="keystone Package" href="keystone.html" />
+    <link rel="next" title="openstack Package" href="keystone.openstack.html" />
+    <link rel="prev" title="ldap Package" href="keystone.identity.backends.ldap.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.openstack.html" title="openstack Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keystone.identity.backends.ldap.html" title="ldap Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" accesskey="U">keystone Package</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">middleware Package</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">middleware</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-keystone.middleware.auth_token"><tt class="docutils literal"><span class="pre">auth_token</span></tt> Module</a><ul>
+<li><a class="reference internal" href="#headers">HEADERS</a><ul>
+<li><a class="reference internal" href="#coming-in-from-initial-call-from-client-or-customer">Coming in from initial call from client or customer</a></li>
+<li><a class="reference internal" href="#used-for-communication-between-components">Used for communication between components</a></li>
+<li><a class="reference internal" href="#what-we-add-to-the-request-for-use-by-the-openstack-service">What we add to the request for use by the OpenStack service</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-keystone.middleware.cisco_token"><tt class="docutils literal"><span class="pre">cisco_token</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-keystone.middleware.core"><tt class="docutils literal"><span class="pre">core</span></tt> Module</a></li>
+<li><a class="reference internal" href="#ec2-token-module"><tt class="docutils literal"><span class="pre">ec2_token</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-keystone.middleware.s3_token"><tt class="docutils literal"><span class="pre">s3_token</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-keystone.middleware.swift_auth"><tt class="docutils literal"><span class="pre">swift_auth</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="keystone.identity.backends.ldap.html"
+                                  title="previous chapter">ldap Package</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="keystone.openstack.html"
+                                  title="next chapter">openstack Package</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/keystone.middleware.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="middleware-package">
+<h1>middleware Package<a class="headerlink" href="#middleware-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">middleware</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-keystone.middleware"></span></div>
+<div class="section" id="module-keystone.middleware.auth_token">
+<span id="auth-token-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">auth_token</span></tt> Module<a class="headerlink" href="#module-keystone.middleware.auth_token" title="Permalink to this headline">¶</a></h2>
+<p>TOKEN-BASED AUTH MIDDLEWARE</p>
+<p>This WSGI component:</p>
+<ul class="simple">
+<li>Verifies that incoming client requests have valid tokens by validating
+tokens with the auth service.</li>
+<li>Rejects unauthenticated requests UNLESS it is in &#8216;delay_auth_decision&#8217;
+mode, which means the final decision is delegated to the downstream WSGI
+component (usually the OpenStack service)</li>
+<li>Collects and forwards identity information based on a valid token
+such as user name, tenant, etc</li>
+</ul>
+<p>Refer to: <a class="reference external" href="http://keystone.openstack.org/middlewarearchitecture.html">http://keystone.openstack.org/middlewarearchitecture.html</a></p>
+<div class="section" id="headers">
+<h3>HEADERS<a class="headerlink" href="#headers" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Headers starting with HTTP_ is a standard http header</li>
+<li>Headers starting with HTTP_X is an extended http header</li>
+</ul>
+<div class="section" id="coming-in-from-initial-call-from-client-or-customer">
+<h4>Coming in from initial call from client or customer<a class="headerlink" href="#coming-in-from-initial-call-from-client-or-customer" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt>HTTP_X_AUTH_TOKEN</dt>
+<dd>The client token being passed in.</dd>
+<dt>HTTP_X_STORAGE_TOKEN</dt>
+<dd>The client token being passed in (legacy Rackspace use) to support
+swift/cloud files</dd>
+</dl>
+</div>
+<div class="section" id="used-for-communication-between-components">
+<h4>Used for communication between components<a class="headerlink" href="#used-for-communication-between-components" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt>WWW-Authenticate</dt>
+<dd>HTTP header returned to a user indicating which endpoint to use
+to retrieve a new token</dd>
+</dl>
+</div>
+<div class="section" id="what-we-add-to-the-request-for-use-by-the-openstack-service">
+<h4>What we add to the request for use by the OpenStack service<a class="headerlink" href="#what-we-add-to-the-request-for-use-by-the-openstack-service" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt>HTTP_X_IDENTITY_STATUS</dt>
+<dd>&#8216;Confirmed&#8217; or &#8216;Invalid&#8217;
+The underlying service will only see a value of &#8216;Invalid&#8217; if the Middleware
+is configured to run in &#8216;delay_auth_decision&#8217; mode</dd>
+<dt>HTTP_X_TENANT_ID</dt>
+<dd>Identity service managed unique identifier, string</dd>
+<dt>HTTP_X_TENANT_NAME</dt>
+<dd>Unique tenant identifier, string</dd>
+<dt>HTTP_X_USER_ID</dt>
+<dd>Identity-service managed unique identifier, string</dd>
+<dt>HTTP_X_USER_NAME</dt>
+<dd>Unique user identifier, string</dd>
+<dt>HTTP_X_ROLES</dt>
+<dd>Comma delimited list of case-sensitive Roles</dd>
+<dt>HTTP_X_TENANT</dt>
+<dd><em>Deprecated</em> in favor of HTTP_X_TENANT_ID and HTTP_X_TENANT_NAME
+Keystone-assigned unique identifier, deprecated</dd>
+<dt>HTTP_X_USER</dt>
+<dd><em>Deprecated</em> in favor of HTTP_X_USER_ID and HTTP_X_USER_NAME
+Unique user name, string</dd>
+<dt>HTTP_X_ROLE</dt>
+<dd><em>Deprecated</em> in favor of HTTP_X_ROLES
+This is being renamed, and the new header contains the same data.</dd>
+</dl>
+<dl class="class">
+<dt id="keystone.middleware.auth_token.AuthProtocol">
+<em class="property">class </em><tt class="descclassname">keystone.middleware.auth_token.</tt><tt class="descname">AuthProtocol</tt><big>(</big><em>app</em>, <em>conf</em><big>)</big><a class="headerlink" href="#keystone.middleware.auth_token.AuthProtocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Auth Middleware that handles authenticating client calls.</p>
+<dl class="method">
+<dt id="keystone.middleware.auth_token.AuthProtocol.get_admin_token">
+<tt class="descname">get_admin_token</tt><big>(</big><big>)</big><a class="headerlink" href="#keystone.middleware.auth_token.AuthProtocol.get_admin_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return admin token, possibly fetching a new one.</p>
+<p>:return admin token id
+:raise ServiceError when unable to retrieve token from keystone</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="keystone.middleware.auth_token.InvalidUserToken">
+<em class="property">exception </em><tt class="descclassname">keystone.middleware.auth_token.</tt><tt class="descname">InvalidUserToken</tt><a class="headerlink" href="#keystone.middleware.auth_token.InvalidUserToken" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="keystone.middleware.auth_token.ServiceError">
+<em class="property">exception </em><tt class="descclassname">keystone.middleware.auth_token.</tt><tt class="descname">ServiceError</tt><a class="headerlink" href="#keystone.middleware.auth_token.ServiceError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.middleware.auth_token.app_factory">
+<tt class="descclassname">keystone.middleware.auth_token.</tt><tt class="descname">app_factory</tt><big>(</big><em>global_conf</em>, <em>**local_conf</em><big>)</big><a class="headerlink" href="#keystone.middleware.auth_token.app_factory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="keystone.middleware.auth_token.filter_factory">
+<tt class="descclassname">keystone.middleware.auth_token.</tt><tt class="descname">filter_factory</tt><big>(</big><em>global_conf</em>, <em>**local_conf</em><big>)</big><a class="headerlink" href="#keystone.middleware.auth_token.filter_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a WSGI filter app for use with paste.deploy.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="module-keystone.middleware.cisco_token">
+<span id="cisco-token-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">cisco_token</span></tt> Module<a class="headerlink" href="#module-keystone.middleware.cisco_token" title="Permalink to this headline">¶</a></h2>
+<p>Starting point for routing Cisco Token requests.</p>
+<dl class="class">
+<dt id="keystone.middleware.cisco_token.CiscoToken">
+<em class="property">class </em><tt class="descclassname">keystone.middleware.cisco_token.</tt><tt class="descname">CiscoToken</tt><big>(</big><em>app</em>, <em>conf</em><big>)</big><a class="headerlink" href="#keystone.middleware.cisco_token.CiscoToken" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Auth Middleware that handles S3 authenticating client calls</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.middleware.cisco_token.filter_factory">
+<tt class="descclassname">keystone.middleware.cisco_token.</tt><tt class="descname">filter_factory</tt><big>(</big><em>global_conf</em>, <em>**local_conf</em><big>)</big><a class="headerlink" href="#keystone.middleware.cisco_token.filter_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a WSGI filter app for use with paste.deploy.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-keystone.middleware.core">
+<span id="core-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">core</span></tt> Module<a class="headerlink" href="#module-keystone.middleware.core" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="keystone.middleware.core.AdminTokenAuthMiddleware">
+<em class="property">class </em><tt class="descclassname">keystone.middleware.core.</tt><tt class="descname">AdminTokenAuthMiddleware</tt><big>(</big><em>application</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.AdminTokenAuthMiddleware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.html#keystone.common.wsgi.Middleware" title="keystone.common.wsgi.Middleware"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Middleware</span></tt></a></p>
+<p>A trivial filter that checks for a pre-defined admin token.</p>
+<p>Sets &#8216;is_admin&#8217; to true in the context, expected to be checked by
+methods that are admin-only.</p>
+<dl class="method">
+<dt id="keystone.middleware.core.AdminTokenAuthMiddleware.process_request">
+<tt class="descname">process_request</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.AdminTokenAuthMiddleware.process_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.middleware.core.JsonBodyMiddleware">
+<em class="property">class </em><tt class="descclassname">keystone.middleware.core.</tt><tt class="descname">JsonBodyMiddleware</tt><big>(</big><em>application</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.JsonBodyMiddleware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.html#keystone.common.wsgi.Middleware" title="keystone.common.wsgi.Middleware"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Middleware</span></tt></a></p>
+<p>Middleware to allow method arguments to be passed as serialized JSON.</p>
+<p>Accepting arguments as JSON is useful for accepting data that may be more
+complex than simple primitives.</p>
+<p>In this case we accept it as urlencoded data under the key &#8216;json&#8217; as in
+json=&lt;urlencoded_json&gt; but this could be extended to accept raw JSON
+in the POST body.</p>
+<p>Filters out the parameters <cite>self</cite>, <cite>context</cite> and anything beginning with
+an underscore.</p>
+<dl class="method">
+<dt id="keystone.middleware.core.JsonBodyMiddleware.process_request">
+<tt class="descname">process_request</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.JsonBodyMiddleware.process_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.middleware.core.NormalizingFilter">
+<em class="property">class </em><tt class="descclassname">keystone.middleware.core.</tt><tt class="descname">NormalizingFilter</tt><big>(</big><em>application</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.NormalizingFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.html#keystone.common.wsgi.Middleware" title="keystone.common.wsgi.Middleware"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Middleware</span></tt></a></p>
+<p>Middleware filter to handle URL normalization.</p>
+<dl class="method">
+<dt id="keystone.middleware.core.NormalizingFilter.process_request">
+<tt class="descname">process_request</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.NormalizingFilter.process_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalizes URLs.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.middleware.core.PostParamsMiddleware">
+<em class="property">class </em><tt class="descclassname">keystone.middleware.core.</tt><tt class="descname">PostParamsMiddleware</tt><big>(</big><em>application</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.PostParamsMiddleware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.html#keystone.common.wsgi.Middleware" title="keystone.common.wsgi.Middleware"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Middleware</span></tt></a></p>
+<p>Middleware to allow method arguments to be passed as POST parameters.</p>
+<p>Filters out the parameters <cite>self</cite>, <cite>context</cite> and anything beginning with
+an underscore.</p>
+<dl class="method">
+<dt id="keystone.middleware.core.PostParamsMiddleware.process_request">
+<tt class="descname">process_request</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.PostParamsMiddleware.process_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.middleware.core.TokenAuthMiddleware">
+<em class="property">class </em><tt class="descclassname">keystone.middleware.core.</tt><tt class="descname">TokenAuthMiddleware</tt><big>(</big><em>application</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.TokenAuthMiddleware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.html#keystone.common.wsgi.Middleware" title="keystone.common.wsgi.Middleware"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Middleware</span></tt></a></p>
+<dl class="method">
+<dt id="keystone.middleware.core.TokenAuthMiddleware.process_request">
+<tt class="descname">process_request</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.TokenAuthMiddleware.process_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.middleware.core.XmlBodyMiddleware">
+<em class="property">class </em><tt class="descclassname">keystone.middleware.core.</tt><tt class="descname">XmlBodyMiddleware</tt><big>(</big><em>application</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.XmlBodyMiddleware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.html#keystone.common.wsgi.Middleware" title="keystone.common.wsgi.Middleware"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.wsgi.Middleware</span></tt></a></p>
+<p>De/serializes XML to/from JSON.</p>
+<dl class="method">
+<dt id="keystone.middleware.core.XmlBodyMiddleware.process_request">
+<tt class="descname">process_request</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.XmlBodyMiddleware.process_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform the request from XML to JSON.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.middleware.core.XmlBodyMiddleware.process_response">
+<tt class="descname">process_response</tt><big>(</big><em>request</em>, <em>response</em><big>)</big><a class="headerlink" href="#keystone.middleware.core.XmlBodyMiddleware.process_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform the response from JSON to XML.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ec2-token-module">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">ec2_token</span></tt> Module<a class="headerlink" href="#ec2-token-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-keystone.middleware.s3_token">
+<span id="s3-token-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">s3_token</span></tt> Module<a class="headerlink" href="#module-keystone.middleware.s3_token" title="Permalink to this headline">¶</a></h2>
+<p>S3 TOKEN MIDDLEWARE</p>
+<p>This WSGI component:</p>
+<ul class="simple">
+<li>Get a request from the swift3 middleware with an S3 Authorization
+access key.</li>
+<li>Validate s3 token in Keystone.</li>
+<li>Transform the account name to AUTH_%(tenant_name).</li>
+</ul>
+<dl class="class">
+<dt id="keystone.middleware.s3_token.S3Token">
+<em class="property">class </em><tt class="descclassname">keystone.middleware.s3_token.</tt><tt class="descname">S3Token</tt><big>(</big><em>app</em>, <em>conf</em><big>)</big><a class="headerlink" href="#keystone.middleware.s3_token.S3Token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Auth Middleware that handles S3 authenticating client calls.</p>
+<dl class="method">
+<dt id="keystone.middleware.s3_token.S3Token.deny_request">
+<tt class="descname">deny_request</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#keystone.middleware.s3_token.S3Token.deny_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="keystone.middleware.s3_token.ServiceError">
+<em class="property">exception </em><tt class="descclassname">keystone.middleware.s3_token.</tt><tt class="descname">ServiceError</tt><a class="headerlink" href="#keystone.middleware.s3_token.ServiceError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.middleware.s3_token.filter_factory">
+<tt class="descclassname">keystone.middleware.s3_token.</tt><tt class="descname">filter_factory</tt><big>(</big><em>global_conf</em>, <em>**local_conf</em><big>)</big><a class="headerlink" href="#keystone.middleware.s3_token.filter_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a WSGI filter app for use with paste.deploy.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-keystone.middleware.swift_auth">
+<span id="swift-auth-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">swift_auth</span></tt> Module<a class="headerlink" href="#module-keystone.middleware.swift_auth" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="keystone.middleware.swift_auth.SwiftAuth">
+<em class="property">class </em><tt class="descclassname">keystone.middleware.swift_auth.</tt><tt class="descname">SwiftAuth</tt><big>(</big><em>app</em>, <em>conf</em><big>)</big><a class="headerlink" href="#keystone.middleware.swift_auth.SwiftAuth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Swift middleware to Keystone authorization system.</p>
+<p>In Swift&#8217;s proxy-server.conf add this middleware to your pipeline:</p>
+<div class="highlight-python"><pre>[pipeline:main]
+pipeline = catch_errors cache authtoken keystone proxy-server</pre>
+</div>
+<p>Make sure you have the authtoken middleware before the swiftauth
+middleware.  authtoken will take care of validating the user and
+swiftauth will authorize access.  If support is required for
+unvalidated users (as with anonymous access) or for
+tempurl/formpost middleware, authtoken will need to be configured with
+delay_auth_decision set to 1.  See the documentation for more
+detail on how to configure the authtoken middleware.</p>
+<p>Set account auto creation to true:</p>
+<div class="highlight-python"><pre>[app:proxy-server]
+account_autocreate = true</pre>
+</div>
+<p>And add a swift authorization filter section, such as:</p>
+<div class="highlight-python"><pre>[filter:keystone]
+paste.filter_factory = keystone.middleware.auth_token:filter_factory
+operator_roles = admin, swiftoperator</pre>
+</div>
+<p>This maps tenants to account in Swift.</p>
+<p>The user whose able to give ACL / create Containers permissions
+will be the one that are inside the operator_roles
+setting which by default includes the admin and the swiftoperator
+roles.</p>
+<p>The option is_admin if set to true will allow the
+username that has the same name as the account name to be the owner.</p>
+<p>Example: If we have the account called hellocorp with a user
+hellocorp that user will be admin on that account and can give ACL
+to all other users for hellocorp.</p>
+<p>If you need to have a different reseller_prefix to be able to
+mix different auth servers you can configure the option
+reseller_prefix in your swiftauth entry like this :</p>
+<blockquote>
+<div>reseller_prefix = <a href="#id2"><span class="problematic" id="id3">NEWAUTH_</span></a></div></blockquote>
+<p>Make sure you have a underscore at the end of your new
+reseller_prefix option.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>app</strong> &#8211; The next WSGI app in the pipeline</li>
+<li><strong>conf</strong> &#8211; The dict of configuration values</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="keystone.middleware.swift_auth.SwiftAuth.authorize">
+<tt class="descname">authorize</tt><big>(</big><em>req</em><big>)</big><a class="headerlink" href="#keystone.middleware.swift_auth.SwiftAuth.authorize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.middleware.swift_auth.SwiftAuth.authorize_anonymous">
+<tt class="descname">authorize_anonymous</tt><big>(</big><em>req</em><big>)</big><a class="headerlink" href="#keystone.middleware.swift_auth.SwiftAuth.authorize_anonymous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authorize an anonymous request.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None if authorization is granted, an error page otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.middleware.swift_auth.SwiftAuth.denied_response">
+<tt class="descname">denied_response</tt><big>(</big><em>req</em><big>)</big><a class="headerlink" href="#keystone.middleware.swift_auth.SwiftAuth.denied_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deny WSGI Response.</p>
+<p>Returns a standard WSGI response callable with the status of 403 or 401
+depending on whether the REMOTE_USER is set or not.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="keystone.middleware.swift_auth.filter_factory">
+<tt class="descclassname">keystone.middleware.swift_auth.</tt><tt class="descname">filter_factory</tt><big>(</big><em>global_conf</em>, <em>**local_conf</em><big>)</big><a class="headerlink" href="#keystone.middleware.swift_auth.filter_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a WSGI filter app for use with paste.deploy.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.openstack.html" title="openstack Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keystone.identity.backends.ldap.html" title="ldap Package"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" >keystone Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

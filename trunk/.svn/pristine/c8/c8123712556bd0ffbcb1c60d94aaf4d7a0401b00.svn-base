@@ -1,0 +1,184 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Services &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="../index.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Services</a><ul>
+<li><a class="reference internal" href="#what-are-services">What are services?</a></li>
+<li><a class="reference internal" href="#who-can-create-services">Who can create services?</a></li>
+<li><a class="reference internal" href="#how-are-services-created">How are services created?</a></li>
+<li><a class="reference internal" href="#how-is-service-ownership-determined">How is service ownership determined?</a></li>
+<li><a class="reference internal" href="#listing-services">Listing services</a></li>
+</ul>
+</li>
+</ul>
+
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/old/services.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="services">
+<h1>Services<a class="headerlink" href="#services" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<div class="section" id="what-are-services">
+<h2>What are services?<a class="headerlink" href="#what-are-services" title="Permalink to this headline">¶</a></h2>
+<p>Keystone includes service registry and service catalog functionality which it
+uses to respond to client authentication requests with information useful to
+clients in locating the list of available services they can access.</p>
+<p>The Service entity in Keystone represents an OpenStack service that is integrated
+with Keystone. The Service entity is also used as a reference from roles, endpoints,
+and endpoint templates.</p>
+<p>Keystone also includes an authorization mechanism to allow a service to own
+its own roles and endpoints and prevent other services from changing or
+modifying them.</p>
+</div>
+<div class="section" id="who-can-create-services">
+<h2>Who can create services?<a class="headerlink" href="#who-can-create-services" title="Permalink to this headline">¶</a></h2>
+<p>Any user with the Admin or Service Admin roles in Keystone may create services.</p>
+</div>
+<div class="section" id="how-are-services-created">
+<h2>How are services created?<a class="headerlink" href="#how-are-services-created" title="Permalink to this headline">¶</a></h2>
+<p>Services can be created using <tt class="docutils literal"><span class="pre">keystone-manage</span></tt> or through the REST API using
+the OS-KSADM extension calls.</p>
+<p>Using <tt class="docutils literal"><span class="pre">keystone-manage</span></tt> (see <tt class="xref doc docutils literal"><span class="pre">man/keystone-manage</span></tt> for details):</p>
+<div class="highlight-python"><pre>$ keystone-manage add service compute nova 'This is a sample compute service'</pre>
+</div>
+<p>Using the REST API (see <a class="reference external" href="https://github.com/openstack/keystone/blob/master/keystone/content/admin/OS-KSADM-admin-devguide.pdf?raw=true">extensions dev guide</a> for details):</p>
+<div class="highlight-python"><pre>$ curl -H "Content-type: application/json" -X POST -d '{
+            "OS-KSADM:service": {
+                "name": "nova",
+                "type": "compute",
+                "description": "This is a sample compute service"
+            }
+        }' -H "X-Auth-Token: 999888777666" http://localhost:35357/v2.0/OS-KSADM/services/</pre>
+</div>
+</div>
+<div class="section" id="how-is-service-ownership-determined">
+<h2>How is service ownership determined?<a class="headerlink" href="#how-is-service-ownership-determined" title="Permalink to this headline">¶</a></h2>
+<p>Currently, the way to assign ownership to a service is to provide the owner&#8217;s
+user id in the keystone-manage add command:</p>
+<div class="highlight-python"><pre>$ keystone-manage add service nova compute 'This is a sample compute service' joeuser</pre>
+</div>
+<p>This will assign ownership to the new service to joeuser.</p>
+<p>When a service has an owner, then only that owner (or a global Admin) can create and manage
+roles that start with that service name (ex: &#8220;nova:admin&#8221;) and manage endpoints
+and endpoint templates associated with that service.</p>
+</div>
+<div class="section" id="listing-services">
+<h2>Listing services<a class="headerlink" href="#listing-services" title="Permalink to this headline">¶</a></h2>
+<p>Using <tt class="docutils literal"><span class="pre">keystone-manage</span></tt>, the list of services and their owners can be listed:</p>
+<div class="highlight-python"><pre>$ keystone-manage service list
+
+id  name    type     owner_id      description
+-------------------------------------------------------------------------------
+1   compute nova     joeuser       This is a sample compute service</pre>
+</div>
+<p>Using the REST API, call <tt class="docutils literal"><span class="pre">GET</span> <span class="pre">/v2.0/OS-KSADM/services</span></tt></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

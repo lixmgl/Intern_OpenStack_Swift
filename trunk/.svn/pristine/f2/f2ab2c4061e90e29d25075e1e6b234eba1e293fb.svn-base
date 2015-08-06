@@ -1,0 +1,4 @@
+python:Versions=2.7
+python:Provides=python2.7-keystone
+python:Depends=python2.7, python (>= 2.7), python (<< 2.8), python (>= 2.7.1-0ubuntu2), python-pam, python-webob, python-eventlet, python-greenlet, python-pastedeploy, python-paste, python-routes, python-sqlalchemy (>= 0.7~), python-sqlalchemy (<< 0.8), python-migrate, python-passlib, python-lxml
+misc:Depends=

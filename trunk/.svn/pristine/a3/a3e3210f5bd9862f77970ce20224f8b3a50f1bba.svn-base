@@ -1,0 +1,1 @@
+link ../../../../../share/pyshared/keystone/token/__init__.py

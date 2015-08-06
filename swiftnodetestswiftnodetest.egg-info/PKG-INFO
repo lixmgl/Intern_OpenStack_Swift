@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: swiftnodetest
+Version: 1.0.0dev
+Summary: The pre/post test tool for swift node
+Home-page: UNKNOWN
+Author: Autumn Wang
+Author-email: autumn@cisco.com
+License: CISCO SYSTEMS INC.
+Description: The pre/post test tool for swift node
+Keywords: v1.0
+Platform: UNKNOWN

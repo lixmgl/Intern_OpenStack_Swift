@@ -1,0 +1,218 @@
+nose.config: INFO: Ignoring files matching ['^\\.', '^_', '^setup\\.py$']
+nose.plugins.manager: DEBUG: Configuring plugins
+nose.plugins.manager: DEBUG: Plugins enabled: [<nose.plugins.capture.Capture object at 0x1fe7690>, <nose.plugins.logcapture.LogCapture object at 0x1fe76d0>, <nose.plugins.deprecated.Deprecated object at 0x1fe7ad0>, <nose.plugins.skip.Skip object at 0x2211290>]
+nose.core: DEBUG: configured Config(addPaths=True, args=(), configSection='nosetests', debug=None, debugLog=None, env={}, exclude=None, firstPackageWins=False, getTestCaseNamesCompat=False, ignoreFiles=[<_sre.SRE_Pattern object at 0x1c0c5b0>, <_sre.SRE_Pattern object at 0x1c0c530>, <_sre.SRE_Pattern object at 0x7f98c9ec74b0>], ignoreFilesDefaultStrings=['^\\.', '^_', '^setup\\.py$'], include=None, includeExe=False, logStream=<open file '<stderr>', mode 'w' at 0x7f98c9fce270>, loggingConfig=None, options=<Values at 0x223f9e0: {'cover_tests': None, 'enable_plugin_allmodules': None, 'multiprocess_restartworker': False, 'openstack_show_elapsed': None, 'loggingConfig': None, 'doctestExtension': None, 'doctest_tests': None, 'enable_plugin_openstack': None, 'xunit_file': 'nosetests.xml', 'logcapture_clear': False, 'stopOnError': False, 'enable_plugin_id': None, 'testNames': None, 'openstack_yellow': 0.25, 'exclude': [], 'ignoreFiles': [], 'xcoverage_file': 'coverage.xml', 'addPaths': True, 'capture': True, 'py3where': None, 'noSkip': False, 'enable_plugin_isolation': None, 'multiprocess_workers': 0, 'logcapture_filters': None, 'collect_only': None, 'failed': False, 'version': False, 'eval_attr': None, 'include': [], 'enable_plugin_profile': None, 'debugErrors': False, 'files': None, 'openstack_num_slow': 5, 'multiprocess_timeout': 10, 'testMatch': '(?:^|[\\b_\\./-])[Tt]est', 'traverseNamespace': False, 'openstack_stdout': None, 'firstPackageWins': False, 'cover_html_dir': 'cover', 'logcapture_datefmt': None, 'enable_plugin_xunit': None, 'noDeprecated': False, 'showPlugins': False, 'cover_erase': None, 'logcapture': True, 'openstack_color': None, 'testIdFile': '.noseids', 'openstack_red': 1.0, 'enable_plugin_coverage': None, 'attr': None, 'profile_sort': 'cumulative', 'doctestFixtures': None, 'cover_packages': None, 'verbosity': 4, 'enable_plugin_doctest': None, 'profile_stats_file': None, 'cover_inclusive': None, 'includeExe': False, 'logcapture_format': '%(name)s: %(levelname)s: %(message)s', 'debugFailures': False, 'detailedErrors': None, 'debugLog': None, 'doctest_result_var': None, 'cover_html': None, 'debug': None, 'where': None, 'profile_restrict': None, 'enable_plugin_xcoverage': None}>, parser=<optparse.OptionParser instance at 0x1fe6ab8>, parserClass=<class optparse.OptionParser at 0x1cda808>, plugins=<nose.plugins.manager.DefaultPluginManager object at 0x1fe71d0>, py3where=(), runOnInit=True, srcDirs=('lib', 'src'), stopOnError=False, stream=<open file '<stdout>', mode 'w' at 0x7f98c9fce1e0>, testMatch=<_sre.SRE_Pattern object at 0x1f6d730>, testMatchPat='(?:^|[\\b_\\./-])[Tt]est', testNames=['test_cisco_token'], traverseNamespace=False, verbosity=4, where=(), worker=False, workingDir='/tmp/keystone/build/keystone_1.0.0/tests')
+nose.importer: DEBUG: Add path /tmp/keystone/build/keystone_1.0.0/tests
+nose.importer: DEBUG: insert /tmp/keystone/build/keystone_1.0.0/tests into sys.path
+nose.core: DEBUG: test loader is <nose.loader.TestLoader object at 0x223a550>
+nose.core: DEBUG: defaultTest .
+nose.core: DEBUG: Test names are ['test_cisco_token']
+nose.core: DEBUG: createTests called with None
+nose.loader: DEBUG: load from test_cisco_token (None)
+nose.selector: DEBUG: Test name test_cisco_token resolved to file None, module test_cisco_token, call None
+nose.selector: DEBUG: Final resolution of test name test_cisco_token: file /tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py module test_cisco_token call None
+nose.importer: DEBUG: Import test_cisco_token from /tmp/keystone/build/keystone_1.0.0/tests
+nose.importer: DEBUG: Add path /tmp/keystone/build/keystone_1.0.0/tests
+nose.importer: DEBUG: find module part test_cisco_token (test_cisco_token) in ['/tmp/keystone/build/keystone_1.0.0/tests']
+nose.loader: DEBUG: Load from module <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>
+nose.selector: DEBUG: wantClass <class 'test_cisco_token.CiscoTokenMiddlewareTest'>? True
+nose.selector: DEBUG: wantClass <class 'test_cisco_token.FakeApp'>? None
+nose.selector: DEBUG: wantClass <class 'test_cisco_token.FakeMemcache'>? None
+nose.selector: DEBUG: wantClass <class 'webob.request.Request'>? None
+nose.selector: DEBUG: wantClass <class 'webob.response.Response'>? None
+nose.selector: DEBUG: wantFunction <function contextmanager at 0x23c6f50>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.addCleanup>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.addTypeEqualityFunc>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertAlmostEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertAlmostEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertDictContainsSubset>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertDictEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertFalse>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertGreater>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertGreaterEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertIn>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertIs>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertIsInstance>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertIsNone>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertIsNot>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertIsNotNone>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertItemsEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertLess>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertLessEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertListEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertMultiLineEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertNotAlmostEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertNotAlmostEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertNotEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertNotEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertNotIn>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertNotIsInstance>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertNotRegexpMatches>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertRaises>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertRaisesRegexp>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertRegexpMatches>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertSequenceEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertSetEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertTrue>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertTupleEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.assertTrue>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.countTestCases>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.debug>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.defaultTestResult>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.doCleanups>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.fail>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.id>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.run>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.setUp>? None
+nose.selector: DEBUG: wantMethod <bound method type.setUpClass of <class 'test_cisco_token.CiscoTokenMiddlewareTest'>>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.shortDescription>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.skipTest>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.tearDown>? None
+nose.selector: DEBUG: wantMethod <bound method type.tearDownClass of <class 'test_cisco_token.CiscoTokenMiddlewareTest'>>? None
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.test_X_Auth_Token_path_request>? True
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.test_get_valid_with_header>? True
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.test_get_valid_with_querystring>? True
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.test_invalid_key>? True
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.test_passthrough>? True
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.test_put_not_allowed_by_get>? True
+nose.selector: DEBUG: wantMethod <unbound method CiscoTokenMiddlewareTest.test_put_valid>? True
+nose.selector: DEBUG: wantMethod <unbound method TestCase.addCleanup>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.addTypeEqualityFunc>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertAlmostEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertAlmostEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertDictContainsSubset>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertDictEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertFalse>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertGreater>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertGreaterEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertIn>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertIs>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertIsInstance>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertIsNone>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertIsNot>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertIsNotNone>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertItemsEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertLess>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertLessEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertListEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertMultiLineEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertNotAlmostEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertNotAlmostEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertNotEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertNotEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertNotIn>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertNotIsInstance>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertNotRegexpMatches>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertRaises>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertRaisesRegexp>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertRegexpMatches>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertSequenceEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertSetEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertTrue>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertTupleEqual>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.assertTrue>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.countTestCases>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.debug>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.defaultTestResult>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.doCleanups>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.fail>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.deprecated_func>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.id>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.run>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.setUp>? None
+nose.selector: DEBUG: wantMethod <bound method type.setUpClass of <class 'unittest.case.TestCase'>>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.shortDescription>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.skipTest>? None
+nose.selector: DEBUG: wantMethod <unbound method TestCase.tearDown>? None
+nose.selector: DEBUG: wantMethod <bound method type.tearDownClass of <class 'unittest.case.TestCase'>>? None
+nose.suite: DEBUG: Create suite for [<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_X_Auth_Token_path_request>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_get_valid_with_header>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_get_valid_with_querystring>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_invalid_key>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_passthrough>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_put_not_allowed_by_get>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_put_valid>]
+nose.suite: DEBUG: tests [<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_X_Auth_Token_path_request>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_get_valid_with_header>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_get_valid_with_querystring>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_invalid_key>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_passthrough>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_put_not_allowed_by_get>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_put_valid>] context None
+nose.suite: DEBUG: wrap [<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_X_Auth_Token_path_request>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_get_valid_with_header>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_get_valid_with_querystring>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_invalid_key>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_passthrough>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_put_not_allowed_by_get>, <test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_put_valid>]
+nose.suite: DEBUG: wrapping test_X_Auth_Token_path_request (test_cisco_token.CiscoTokenMiddlewareTest)
+nose.suite: DEBUG: wrapping test_get_valid_with_header (test_cisco_token.CiscoTokenMiddlewareTest)
+nose.suite: DEBUG: wrapping test_get_valid_with_querystring (test_cisco_token.CiscoTokenMiddlewareTest)
+nose.suite: DEBUG: wrapping test_invalid_key (test_cisco_token.CiscoTokenMiddlewareTest)
+nose.suite: DEBUG: wrapping test_passthrough (test_cisco_token.CiscoTokenMiddlewareTest)
+nose.suite: DEBUG: wrapping test_put_not_allowed_by_get (test_cisco_token.CiscoTokenMiddlewareTest)
+nose.suite: DEBUG: wrapping test_put_valid (test_cisco_token.CiscoTokenMiddlewareTest)
+nose.suite: DEBUG: Context suite for [Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_X_Auth_Token_path_request>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_get_valid_with_header>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_get_valid_with_querystring>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_invalid_key>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_passthrough>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_put_not_allowed_by_get>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_put_valid>)] (<class 'test_cisco_token.CiscoTokenMiddlewareTest'>) (42662672)
+nose.suite: DEBUG: suite <nose.suite.ContextSuite context=CiscoTokenMiddlewareTest> has context CiscoTokenMiddlewareTest
+nose.suite: DEBUG: get ancestry <class 'test_cisco_token.CiscoTokenMiddlewareTest'>
+nose.suite: DEBUG:  <class 'test_cisco_token.CiscoTokenMiddlewareTest'> ancestors ['test_cisco_token']
+nose: DEBUG: __import__ test_cisco_token
+nose: DEBUG: resolve: [], test_cisco_token, <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>, <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>
+nose.suite: DEBUG: suite <nose.suite.ContextSuite context=CiscoTokenMiddlewareTest> has ancestor test_cisco_token
+nose.suite: DEBUG: Create suite for <nose.suite.ContextList object at 0x28afd50>
+nose.suite: DEBUG: tests <nose.suite.ContextList object at 0x28afd50> context <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>
+nose.suite: DEBUG: Context suite for <nose.suite.ContextList object at 0x28afd50> (<module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>) (42663376)
+nose.suite: DEBUG: suite <nose.suite.ContextSuite context=test_cisco_token> has context test_cisco_token
+nose.suite: DEBUG: get ancestry <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>
+nose.suite: DEBUG: Create suite for [<nose.suite.ContextSuite context=test_cisco_token>]
+nose.suite: DEBUG: tests [<nose.suite.ContextSuite context=test_cisco_token>] context None
+nose.suite: DEBUG: wrap [<nose.suite.ContextSuite context=test_cisco_token>]
+nose.suite: DEBUG: wrapping <nose.suite.ContextSuite context=test_cisco_token>
+nose.suite: DEBUG: Context suite for [<nose.suite.ContextSuite context=test_cisco_token>] (<module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>) (35891216)
+nose.suite: DEBUG: suite <nose.suite.ContextSuite context=test_cisco_token> has context test_cisco_token
+nose.suite: DEBUG: get ancestry <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>
+nose.core: DEBUG: runTests called
+nose.suite: DEBUG: suite 35891216 (<nose.suite.ContextSuite context=test_cisco_token>) run called, tests: <generator object _get_wrapped_tests at 0x2236a00>
+nose.suite: DEBUG: suite 35891216 setUp called, tests: <generator object _get_wrapped_tests at 0x2236a00>
+nose.suite: DEBUG: tests in 35891216?
+nose.suite: DEBUG: ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'> may need setup
+nose.suite: DEBUG: ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'> does need setup
+nose.suite: DEBUG: <nose.suite.ContextSuite context=test_cisco_token> setup context <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>
+nose.suite: DEBUG: completed suite setup
+nose.suite: DEBUG: precache is [<nose.suite.ContextSuite context=test_cisco_token>]
+nose.suite: DEBUG: suite 42663376 (<nose.suite.ContextSuite context=test_cisco_token>) run called, tests: <generator object _get_wrapped_tests at 0x2848b40>
+nose.suite: DEBUG: suite 42663376 setUp called, tests: <generator object _get_wrapped_tests at 0x2848b40>
+nose.suite: DEBUG: tests in 42663376?
+nose.suite: DEBUG: ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'> may need setup
+nose.suite: DEBUG: completed suite setup
+nose.suite: DEBUG: precache is [<nose.suite.ContextSuite context=CiscoTokenMiddlewareTest>]
+nose.suite: DEBUG: suite 42662672 (<nose.suite.ContextSuite context=CiscoTokenMiddlewareTest>) run called, tests: <generator object _get_wrapped_tests at 0x2848be0>
+nose.suite: DEBUG: suite 42662672 setUp called, tests: <generator object _get_wrapped_tests at 0x2848be0>
+nose.suite: DEBUG: tests in 42662672?
+nose.suite: DEBUG: ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'> may need setup
+nose.suite: DEBUG: ancestor <class 'test_cisco_token.CiscoTokenMiddlewareTest'> may need setup
+nose.suite: DEBUG: ancestor <class 'test_cisco_token.CiscoTokenMiddlewareTest'> does need setup
+nose.suite: DEBUG: <nose.suite.ContextSuite context=CiscoTokenMiddlewareTest> setup context <class 'test_cisco_token.CiscoTokenMiddlewareTest'>
+nose: DEBUG: call fixture <class 'test_cisco_token.CiscoTokenMiddlewareTest'>.setUpClass
+nose.suite: DEBUG: completed suite setup
+nose.suite: DEBUG: precache is [Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_X_Auth_Token_path_request>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_get_valid_with_header>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_get_valid_with_querystring>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_invalid_key>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_passthrough>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_put_not_allowed_by_get>), Test(<test_cisco_token.CiscoTokenMiddlewareTest testMethod=test_put_valid>)]
+nose.suite: DEBUG: context teardown
+nose.suite: DEBUG: ancestor <class 'test_cisco_token.CiscoTokenMiddlewareTest'> may need teardown
+nose.suite: DEBUG: <nose.suite.ContextSuite context=CiscoTokenMiddlewareTest> setup ancestor <class 'test_cisco_token.CiscoTokenMiddlewareTest'>
+nose.suite: DEBUG: <nose.suite.ContextSuite context=CiscoTokenMiddlewareTest> teardown context <class 'test_cisco_token.CiscoTokenMiddlewareTest'>
+nose: DEBUG: call fixture <class 'test_cisco_token.CiscoTokenMiddlewareTest'>.tearDownClass
+nose.suite: DEBUG: ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'> may need teardown
+nose.suite: DEBUG: <nose.suite.ContextSuite context=test_cisco_token> setup ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>
+nose.suite: DEBUG: ancestor <class 'test_cisco_token.CiscoTokenMiddlewareTest'> may need teardown
+nose.suite: DEBUG: ancestor <class 'test_cisco_token.CiscoTokenMiddlewareTest'> already torn down
+nose.suite: DEBUG: context teardown
+nose.suite: DEBUG: ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'> may need teardown
+nose.suite: DEBUG: <nose.suite.ContextSuite context=test_cisco_token> setup ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>
+nose.suite: DEBUG: ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'> may need teardown
+nose.suite: DEBUG: <nose.suite.ContextSuite context=test_cisco_token> setup ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>
+nose.suite: DEBUG: context teardown
+nose.suite: DEBUG: ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'> may need teardown
+nose.suite: DEBUG: <nose.suite.ContextSuite context=test_cisco_token> setup ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>
+nose.suite: DEBUG: <nose.suite.ContextSuite context=test_cisco_token> teardown context <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'>
+nose.suite: DEBUG: ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'> may need teardown
+nose.suite: DEBUG: ancestor <module 'test_cisco_token' from '/tmp/keystone/build/keystone_1.0.0/tests/test_cisco_token.py'> already torn down

@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<!-- *******************************************************************   
+ *        Copyright (c) 2009-2012 Cisco Systems, Inc.   
+ *        All rights reserved.   
+ ******************************************************************** -->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Cloud Metrics</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=8,chrome=1" />
+		
+		<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-base.css">
+		<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-xwt.css">	
+		<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-explorer.css">
+		
+		<style type="text/css">
+			.rightchart
+			{
+				float:right;
+				width:400px;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 20px;
+				
+				-moz-box-shadow: 0 0 2px 1px #aaa;
+				-webkit-box-shadow: 0 0 2px 1px #aaa;
+				box-shadow: 0 0 2px 1px #aaa;
+				
+				-moz-border-radius: 5px;
+				-webkit-border-radius: 5px;
+				-khtml-border-radius: 5px;
+				border-radius: 5px;			
+			}
+		</style>
+		
+    	<script type="text/javascript" djConfig="isDebug: false, parseOnLoad: true" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			dojo.require("xwt.widget.table.Table");
+			dojo.require("xwt.widget.layout.TitlePane");
+		</script>
+	</head>
+
+<body class="reboot2">
+   	<center>
+    	<div style="float: center; width:900px">
+			<table class="Table" cellpadding="20" cellspacing="20">
+				<tr>
+					<td>
+						<div dojoType="xwt.widget.layout.TitlePane" class="rightchart" title="nova004 CPU Utilization" jsId="pane2" needTitleBar="true">			
+							<img src="http://10.100.18.140:8081/render/?template=plain&width=380&height=230&_salt=1336111346.415&target=averageSeries(sumSeries(nova004_webex_com.cpu.1.cpu.user.value%2Cnova004_webex_com.cpu.1.cpu.system.value)%2CsumSeries(nova004_webex_com.cpu.2.cpu.user.value%2Cnova004_webex_com.cpu.2.cpu.system.value)%2CsumSeries(nova004_webex_com.cpu.3.cpu.user.value%2Cnova004_webex_com.cpu.3.cpu.system.value)%2CsumSeries(nova004_webex_com.cpu.4.cpu.user.value%2Cnova004_webex_com.cpu.4.cpu.system.value)%2CsumSeries(nova004_webex_com.cpu.5.cpu.user.value%2Cnova004_webex_com.cpu.5.cpu.system.value)%2CsumSeries(nova004_webex_com.cpu.6.cpu.user.value%2Cnova004_webex_com.cpu.6.cpu.system.value)%2CsumSeries(nova004_webex_com.cpu.7.cpu.user.value%2Cnova004_webex_com.cpu.7.cpu.system.value)%2CsumSeries(nova004_webex_com.cpu.0.cpu.user.value%2Cnova004_webex_com.cpu.0.cpu.system.value))&hideLegend=true"></img>
+						</div>
+					</td>
+					<td>
+						<div dojoType="xwt.widget.layout.TitlePane" class="rightchart" title="nova004 Memory Utilization" jsId="pane3" needTitleBar="true">
+							<img src="http://10.100.18.140:8081/render/?template=plain&width=380&height=230&_salt=1336112287.79&target=nova004_webex_com.memory.memory.used.value&hideLegend=true&yMin=0&yMax="></img>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div dojoType="xwt.widget.layout.TitlePane" class="rightchart" title="nova005 CPU Utilization" jsId="pane4" needTitleBar="true">
+							<img src="http://10.100.18.140:8081/render/?template=plain&width=380&height=230&_salt=1336111346.415&target=averageSeries(sumSeries(nova005_webex_com.cpu.1.cpu.user.value%2Cnova005_webex_com.cpu.1.cpu.system.value)%2CsumSeries(nova005_webex_com.cpu.2.cpu.user.value%2Cnova005_webex_com.cpu.2.cpu.system.value)%2CsumSeries(nova005_webex_com.cpu.3.cpu.user.value%2Cnova005_webex_com.cpu.3.cpu.system.value)%2CsumSeries(nova005_webex_com.cpu.4.cpu.user.value%2Cnova005_webex_com.cpu.4.cpu.system.value)%2CsumSeries(nova005_webex_com.cpu.5.cpu.user.value%2Cnova005_webex_com.cpu.5.cpu.system.value)%2CsumSeries(nova005_webex_com.cpu.6.cpu.user.value%2Cnova005_webex_com.cpu.6.cpu.system.value)%2CsumSeries(nova005_webex_com.cpu.7.cpu.user.value%2Cnova005_webex_com.cpu.7.cpu.system.value)%2CsumSeries(nova005_webex_com.cpu.0.cpu.user.value%2Cnova005_webex_com.cpu.0.cpu.system.value))&hideLegend=true"></img>
+						</div>
+					</td>
+					<td>
+						<div dojoType="xwt.widget.layout.TitlePane" class="rightchart" title="nova005 Memory Utilization" jsId="pane4" needTitleBar="true">
+							<img src="http://10.100.18.140:8081/render/?template=plain&width=380&height=230&_salt=1336112287.79&target=nova005_webex_com.memory.memory.used.value&hideLegend=true&yMin=0&yMax="></img>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+</body>
+</html>

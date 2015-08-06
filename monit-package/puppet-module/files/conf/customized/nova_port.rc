@@ -1,0 +1,37 @@
+check process nova-compute matching "nova-compute"
+       start program = "/usr/sbin/service nova-compute start" with timeout 90 seconds
+       stop program  = "/usr/sbin/service nova-compute stop"
+       if 3 restarts within 3 cycles then timeout
+       
+check process nova-scheduler matching "nova-scheduler"
+       start program = "/usr/sbin/service nova-scheduler start" with timeout 90 seconds
+       stop program  = "/usr/sbin/service nova-scheduler stop"
+       if 3 restarts within 3 cycles then timeout
+       
+check process nova-volume matching "nova-volume"
+       start program = "/usr/sbin/service nova-volume start" with timeout 90 seconds
+       stop program  = "/usr/sbin/service nova-volume stop"
+       if 3 restarts within 3 cycles then timeout
+
+check process nova-api matching "nova-api"
+       start program = "/usr/sbin/service nova-api start" with timeout 90 seconds
+       stop program  = "/usr/sbin/service nova-api stop"
+       if failed port 8773 then restart
+       if failed port 8774 then restart
+       if failed port 8775 then restart
+       if failed port 8776 then restart
+       if 5 restarts within 5 cycles then timeout   
+       
+## Check system volume
+check filesystem os-sda1 with path /dev/sda1
+       if failed permission 0660 then unmonitor
+       if failed uid root then unmonitor
+       if failed gid disk then unmonitor
+       if space usage > 90 % then alert
+       if inode usage > 90 % then alert
+       alert autumn@cisco.com
+
+## Check the changing of configuration file and restart/reload the processes
+check file nova.conf path /etc/nova/nova.conf
+     if changed timestamp then alert
+     alert autumn@cisco.com

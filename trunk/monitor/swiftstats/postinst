@@ -1,0 +1,17 @@
+#!/bin/sh
+
+PYTHON_DIST="/usr/lib/python2.7/dist-packages"
+TMP_SOURCE="/usr/share/pyshared"
+PROGRAM=swiftstats
+VERSION=0.0.1
+
+if [ -d "$PYTHON_DIST" ];
+then
+	rm -fr $PYTHON_DIST/${PROGRAM}*
+	ln -s $TMP_SOURCE/${PROGRAM} $PYTHON_DIST/${PROGRAM} 
+	ln -s $TMP_SOURCE/${PROGRAM}-${VERSION}.egg-info $PYTHON_DIST/${PROGRAM}-${VERSION}.egg-info 
+fi
+
+echo "Creating auto restart script....."
+cp -f /usr/bin/${PROGRAM} /etc/init.d
+ln -s /etc/init.d/${PROGRAM} /etc/rc5.d/S99${PROGRAM}

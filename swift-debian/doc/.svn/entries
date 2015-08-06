@@ -1,0 +1,68 @@
+10
+
+dir
+272
+svn://engsvnserv4.corp.webex.com/openstack/trunk/swift-debian/doc
+svn://engsvnserv4.corp.webex.com/openstack
+
+
+
+2012-06-13T20:55:54.921945Z
+263
+autumnw
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+4a083582-653f-4f4c-8dd4-6b54de6a16f1
+
+Release notes_Swift_6.0.0.docx
+file
+
+
+
+
+2012-06-15T20:26:29.399000Z
+60f85cad0db3d89bdff75ac3d51701ed
+2012-06-13T20:55:54.921945Z
+263
+autumnw
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+19864
+
+manpages
+dir
+
+source
+dir
+

@@ -1,0 +1,27 @@
+backends Package
+================
+
+:mod:`kvs` Module
+-----------------
+
+.. automodule:: keystone.token.backends.kvs
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`memcache` Module
+----------------------
+
+.. automodule:: keystone.token.backends.memcache
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`sql` Module
+-----------------
+
+.. automodule:: keystone.token.backends.sql
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

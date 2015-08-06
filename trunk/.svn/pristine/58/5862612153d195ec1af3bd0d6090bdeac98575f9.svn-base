@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <meta http-equiv="expires" content=0>
+    <meta http-equiv="pragma"  content="no-cache">
+
+    <link href="../css/main.css" media="screen" rel="Stylesheet">
+
+    <script src="../build/yuiloader/yuiloader-min.js"></script>
+    <script src="../js/mmonit.js"></script>
+
+    <title>M/Monit Status | Host Status</title>
+
+    <style>
+    #cpu, 
+    #memory,
+    #swap
+    {           
+        height: 100px;
+    }       
+
+    <?cs set:ProcessCPU = 0 ?>
+    <?cs each:service = Service ?>
+        <?cs if:(service.type == "Process" && service.monitor == "1" && #service.PrivateDetail.1.value > 0) ?>
+            <?cs set:ProcessCPU = ProcessCPU + 1 ?>
+        <?cs /if ?>
+    <?cs /each ?>
+    #processcpu
+    {
+        height: <?cs var:(#ProcessCPU * 40 + 30) ?>px;
+    }
+
+    <?cs set:ProcessMemory = 0 ?>
+    <?cs each:service = Service ?>
+        <?cs if:(service.type == "Process" && service.monitor == "1" && #service.PrivateDetail.0.value > 0) ?>
+            <?cs set:ProcessMemory = ProcessMemory + 1 ?>
+        <?cs /if ?>
+    <?cs /each ?>
+    #processmemory
+    {
+        height: <?cs var:(#ProcessMemory * 40 + 30) ?>px;
+    }
+
+    <?cs set:Filesystem = 0 ?>
+    <?cs each:service = Service ?>
+        <?cs if:(service.type == "Filesystem" && service.monitor == "1") ?>
+            <?cs set:Filesystem = Filesystem + 1 ?>
+        <?cs /if ?>
+    <?cs /each ?>
+    #filesystem
+    {           
+        height: <?cs var:(#Filesystem * 70) ?>px;
+    }       
+
+    <?cs set:ports = 0 ?>
+    <?cs each:service = Service ?>
+        <?cs each:detail = service.Detail ?>
+            <?cs if:(detail.name == "Port" && service.monitor == "1") ?>
+                <?cs set:ports = ports + 1 ?>
+            <?cs /if ?>
+        <?cs /each ?>
+    <?cs /each ?>
+    #portresponse
+    {           
+        height: <?cs var:(#ports * 40 + 30) ?>px;
+    }       
+
+    table.monitinfo {margin-bottom:14px;border:none;}
+    .monitinfo td {padding:0 40px 0 0;}
+    .monitinfo tr.platform td {padding-top:10px;}
+    
+    .charts
+    {
+        float: right; 
+        text-align: center; 
+        border: 1px solid #ddd;
+        border-collapse: collapse; 
+        width: 190px;
+    }
+    .charts th 
+    {
+        font-weight: normal;
+    }
+    </style>
+
+</head>
+
+<body class="yui-skin-sam">
+    
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li  id="current">
+                        <a href="../status/"><span>Status</span></a>
+                    </li>
+                    <li>
+                        <a href="../reports/"><span>Reports</span></a>
+                        <ul>
+                            <li><a href="../reports/">Overview</a></li>
+                                    <li><a href="../reports/events/">Events</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="../admin/"><span>Admin</span></a>
+                        <ul>
+                            <li><a href="../admin/">Overview</a></li>
+                            <li><a href="../admin/hosts/">Hosts</a></li>
+                            <li><a href="../admin/groups/">Groups</a></li>
+                            <li><a href="../admin/users/">Users</a></li>
+                            <li><a href="../admin/rules/">Alerts</a></li>
+        				</ul>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first"><a href="../status/">Overview</a></li>
+                    <li><a href="../status/topography">Topography</a></li>
+                </ul>
+            </div>
+            <img class="help" style="padding-right: 2em;" onclick="MMONIT_help.show();" src="../img/help.png" alt="help">
+            <h1>
+                Status <a class="title-link" href="../admin/hosts/edit?id=<?cs var:Request.Param.id ?>"><?cs var:HostName ?></a>
+                <a href="detail?id=<?cs var:Request.Param.id ?>">Reload page</a>
+            </h1>      
+        </div> <!-- Title -->
+
+        <div id="Main" class="clearfix">
+
+            <table id="Area" border="0">
+                <tr>
+
+                    <?cs if:Monit_Error ?> <!-- If Error show error message -->
+
+                    <td class="main-content"> 
+                        <p class="error-text">
+                            <?cs var:Monit_Error ?> 
+                        </p>
+                        <?cs if:Monit_IOError ?>
+                        <p>
+                            Please check <a href="../reports/events/?Events_Host=<?cs var:HostName ?>">latest events</a> for
+                            the host and <a href="../admin/hosts/edit?id=<?cs var:Request.Param.id ?>">host configuration</a>.
+                        </p>
+                        <?cs /if ?> <!-- If Monit_IOError -->
+                    </td>
+
+                    <?cs else ?>  <!-- Else Show Content -->
+
+                    <td class="main-content"> <!-- Service Table -->
+                        <table class="monitinfo">
+                            <tr>
+                                <td>
+                                    Monit ID
+                                </td>
+                                <td colspan=2>
+                                    <?cs alt:MonitId ?>undefined<?cs /alt ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Monit version
+                                </td>
+                                <td>
+                                    <?cs var:MonitVersion ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Monit control file
+                                </td>
+                                <td>
+                                    <?cs var:MonitControlFile ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Monit poll cycle length
+                                </td>
+                                <td>
+                                    <?cs var:MonitPoll ?> seconds
+                                </td>
+                            </tr>
+                            <?cs if:MonitStartDelay ?>
+                            <tr>
+                                <td>
+                                    Monit start delay
+                                </td>
+                                <td>
+                                    <?cs var:MonitStartDelay ?> seconds
+                                </td>
+                            </tr>
+                            <?cs /if ?>
+                            <tr>
+                                <td>
+                                    Monit uptime
+                                </td>
+                                <td>
+                                    <?cs var:MonitUptime ?>
+                                </td>
+                            </tr>
+                            <?cs if:PlatformName ?>
+                            <tr class="platform">
+                                <td>
+                                    Platform
+                                </td>
+                                <td>
+                                    <?cs var:PlatformName ?> <?cs var:PlatformRelease ?> [<?cs var:PlatformMachine ?>]
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Number of CPUs
+                                </td>
+                                <td>
+                                    <?cs var:PlatformCpu ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Physical memory
+                                </td>
+                                <td>
+                                    <?cs var:#PlatformMemory/1024 ?>MB of which <?cs var:System.memory ?>% is used
+                                </td>
+                            </tr>
+                            <?cs if:#PlatformSwap ?>
+                            <tr>
+                                <td>
+                                    Swap
+                                </td>
+                                <td>
+                                    <?cs var:#PlatformSwap/1024 ?>MB of which <?cs var:System.swap ?>% is used
+                                </td>
+                            </tr>
+                            <?cs /if ?> <!-- PlatformSwap -->
+                            <?cs /if ?> <!-- PlatformName -->
+                        </table>
+
+                        <form method="post" action="detail" name="actionForm">
+                            <input type="hidden" name="id" value="<?cs var:Request.Param.id ?>">
+                            <a href="javascript:toggleRowSelection();" id="rowselectmode">Select All</a>
+
+                            <div id="statusTable"></div>
+
+                            <div class="Buttons" style="border: none; padding:0;">                     
+                                <input type="button" id="Start" name="Start" value="Start">
+                                <input type="button" id="Stop" name="Stop" value="Stop">
+                                <input type="button" id="Restart" name="Restart" value="Restart">
+                                <input type="button" id="Monitor" name="Monitor" value="Monitor">
+                                <input type="button" id="Unmonitor" name="Unmonitor" value="Unmonitor">
+                            </div>                        
+
+                        </form>
+
+                    </td> <!-- Service Table -->
+
+                    <td> <!-- Charts -->
+                        <table border="1" class="charts">
+                            <?cs if:System ?>
+                            <tr>
+                                <th>
+                                    CPU usage
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="cpu"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Memory usage
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="memory"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Swap usage
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="swap"></div>
+                                </td>
+                            </tr>
+                            <?cs /if ?>
+                            <?cs if:ProcessCPU ?>
+                            <tr>
+                                <th>
+                                    Process CPU usage, top <?cs var:ProcessCPU ?>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="processcpu"></div>
+                                </td>
+                            </tr>
+                            <?cs /if ?>
+                            <?cs if:ProcessMemory ?>
+                            <tr>
+                                <th>
+                                    Process MEM usage, top <?cs var:ProcessMemory ?>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="processmemory"></div>
+                                </td>
+                            </tr>
+                            <?cs /if ?>
+                            <?cs if:Filesystem ?>
+                            <tr>
+                                <th>
+                                    Filesystem usage
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="filesystem"></div>
+                                </td>
+                            </tr>
+                            <?cs /if ?>
+                            <?cs if:ports ?>
+                            <tr>
+                                <th>Port response time</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="portresponse"></div>
+                                </td>
+                            </tr>
+                            <?cs /if ?>
+                        </table>
+                    </td> <!-- Charts -->
+
+                    <?cs /if ?> <!-- If Error -->
+                </tr> 
+            </table> <!-- Area -->
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+    <div id="help-dialog" class="help-dialog" style="display:none;">
+        <div class="bd opaque">
+            <p>
+                This page show the status <i>in real time</i> for all registered services running on
+                <i><?cs var:HostName ?></i>.
+            </p>
+            <p>
+                To perform an action on a service, select the service from the table and click one
+                of the action buttons. It is possible to select more than one service by holding down
+                the modifier key when selecting a row. Note that <i>only</i> services registered with
+                a start and stop method in Monit can be (re)started and stopped, but all services can
+                be monitored or unmonitored.
+            </p>
+            <p>
+                When a service request is sent to Monit, M/Monit will wait up to 30 seconds for
+                confirmation from Monit before timing out, in which case it may be useful to reload
+                this page to see if the request was executed by Monit later. Also check the
+                <a href="../reports/events/">events log</a>.
+            </p>
+            <p>
+                To see details for a service, hover the mouse cursor over a table row. If details are
+                empty, it means that Monit is either not monitoring the service or Monit is initializing
+                the service. In the later case, wait one Monit poll cycle, reload the page and try again.
+            </p>
+        </div>
+    </div> <!-- help -->
+    
+    <!-- The pop-out panel must be a child of body for IE to render correct z-index -->
+    <div id="myServiceDetailsPanel"></div>
+
+    <?cs if:!Monit_IOError ?> <!-- If Error do not include script -->
+
+    <script>
+
+    function formatCategoryLabel(value) {
+        return value.trunc(10).toString();
+    }
+
+    var Service_table = {};
+    var loader = new YAHOO.util.YUILoader();
+    loader.loadOptional = true;
+    loader.base = '../build/';
+    loader.addModule({
+        name: "mmonitpopout",
+        type:"css",
+        fullpath:"../css/popout.css",
+        after:['container']
+    });
+    loader.require('charts', 'element', 'datatable', 'datasource', 'button', 'container', 'dom', 'mmonitpopout');
+    loader.insert({
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+                
+                YAHOO.widget.Chart.SWFURL = "../build/charts/assets/charts.swf";
+
+                // Setup dialog for help
+                MMONIT.layer.show('help-dialog');
+                MMONIT_help = new YAHOO.widget.Dialog("help-dialog", {
+                    width               : "640px",
+                    fixedcenter         : true,
+                    visible             : false,
+                    constraintoviewport : true,
+                    modal               : false,
+                    underlay            : "none"
+                });
+                MMONIT_help.render();
+
+                function percentTip( item, index, series ) {
+                    var toolTipText = item.rate + '%' + item.type;
+                    return toolTipText;
+                }
+                
+                Service_table = new function() {
+                    this.data = [<?cs set:i = 0 ?><?cs each:service = Service ?><?cs if:i != 0 ?>,<?cs /if ?>{led:"<?cs var:service.led ?>", status:"<?cs var:service.status ?>",  type:"<?cs var:service.type ?>", name:"<?cs var:service.name ?>", servicename:"<?cs var:service.servicename ?>", servicenameid:"<?cs var:service.servicenameid ?>", events:"<?cs var:service.events ?>"}<?cs set:i = 1 ?><?cs /each ?>];
+                    this.data.sort(function(a, b) {return (a.type > b.type) ? -1 : (a.type < b.type) ? 1 : 0;});
+                    this.myEventsFormatter = function(elCell, oRecord, oColumn, oData) {
+                        YAHOO.util.Dom.addClass(elCell, "Events");
+                        if (parseInt(oRecord.getData("events"), 10) > 0)
+                        // servicename is our internal lowercased Service name, lowercased in the C locale so we cannot use Javascript toLowerCase
+                        elCell.innerHTML = '<a href="../reports/events/?Events_Host=' + "<?cs var:HostName ?>" + "&Events_ServiceNameId=" + oRecord.getData("servicenameid") + '">' + oRecord.getData("events") + '</a>';
+                        else
+                        elCell.innerHTML = oRecord.getData("events");
+                    };
+                    this.myLedFormatter = function(elCell, oRecord, oColumn, oData) {
+                        YAHOO.util.Dom.addClass(elCell, "Led");
+                        elCell.innerHTML = '<img src="../img/led' + oRecord.getData("led") + '.png">';
+                    };
+                    this.myColumnDefs = [
+                        {key:"led",     label:"&nbsp;&nbsp;*",  sortable:true,  formatter:this.myLedFormatter},
+                        {key:"type",    label:"Service Type",   sortable:true},
+                        {key:"name",    label:"Service Name",   sortable:true},
+                        {key:"status",  label:"Status",         sortable:false},
+                        {key:"events",  label:"Events",         sortable:true, formatter:this.myEventsFormatter}
+                    ];
+                    this.myDataSource = new YAHOO.util.LocalDataSource(this.data);
+                    this.myDataSource.responseType = YAHOO.util.LocalDataSource.TYPE_JSARRAY;
+                    this.myDataSource.responseSchema = {
+                        fields: [
+                            {key: "led",           parser: "string"},
+                            {key: "status",        parser: "string"},
+                            {key: "type",          parser: "string"},
+                            {key: "name",          parser: "string"},
+                            {key: "servicename",   parser: "string"},
+                            {key: "servicenameid", parser: "string"},
+                            {key: "events",        parser: "number"}
+                        ]
+                    };
+                    this.myConfigs = {paginated: false};
+                    this.myDataTable = new YAHOO.widget.DataTable("statusTable", this.myColumnDefs, this.myDataSource, this.myConfigs);
+                    this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow);
+                    this.myDataTable.subscribe("rowMouseoverEvent", function(e) { 
+                        // Only show service details if no rows are selected
+                        if (Service_table.myDataTable.getSelectedRows().length == 0) {
+                            myServiceDetailsPanel.show(e.target, Service_table.myDataTable.getRecord(e.target).getData("name")); 
+                        }
+                    });
+                    this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
+                    this.myDataTable.subscribe("rowMouseoutEvent", function(e) {
+                        myServiceDetailsPanel.hide();
+                    });
+                    this.myDataTable.subscribe("rowClickEvent", this.myDataTable.onEventSelectRow);
+                    this.myDataTable.subscribe("rowClickEvent", function(e) {
+                        // Hide ServiceDetailsPanel when we are in service action mode
+                        myServiceDetailsPanel.hide();
+                    });
+                    this.myDataTable.subscribe("tableKeyEvent", function(e) { 
+                        // Unselect all rows if ESC was pressed
+                        if (e.event.keyCode == 27) {
+                            this.unselectAllRows();
+                        }
+                    });
+                };  
+
+                <?cs if:System ?>
+                // CPU Usage Chart
+                var cpuDataSource = [
+                    { type: "user",   rate: <?cs var:#System.cpu.user ?> },
+                    { type: "system", rate: <?cs var:#System.cpu.system ?> },
+                    { type: "wait",   rate: <?cs var:#System.cpu.wait ?>},
+                    { type: "idle",   rate: <?cs var:(100 - #System.cpu.user - #System.cpu.system - #System.cpu.wait) ?> }
+                ];
+                var cpuData = new YAHOO.util.LocalDataSource(cpuDataSource);
+                cpuData.responseType = YAHOO.util.LocalDataSource.TYPE_JSARRAY;
+                cpuData.responseSchema = {
+                    fields: [
+                        {key: "type", parser: "string"},
+                        {key: "rate", parser: "number"}
+                    ]
+                };
+                var myCPUChart = new YAHOO.widget.PieChart( "cpu", cpuData,
+                {
+                    dataField       : "rate",
+                    categoryField   : "type",
+                    <?cs if:(System.monitor == "1" && #System.cpu.user != -1) ?>
+                    //                                 yellow,   orange,   red,      green
+                    series          : [{style:{colors:[0xffff00, 0xff9900, 0xdd0000, 0x00dd00]}}],
+                    <?cs else ?>
+                    //                                 gray,     gray,     gray,     gray
+                    series          : [{style:{colors:[0xdddddd, 0xdddddd, 0xdddddd, 0xdddddd]}}],
+                    <?cs /if ?>
+                    dataTipFunction : percentTip,
+                    wmode: "opaque"
+                });
+
+                // Memory Usage Chart
+                var memoryDataSource = [
+                    { type: "used", rate: <?cs var:#System.memory ?> },
+                    { type: "free", rate: <?cs var:(100 - #System.memory) ?> }
+                ];
+                var memoryData = new YAHOO.util.LocalDataSource(memoryDataSource);
+                memoryData.responseType = YAHOO.util.LocalDataSource.TYPE_JSARRAY;
+                memoryData.responseSchema = {
+                    fields: [
+                        {key: "type", parser: "string"},
+                        {key: "rate", parser: "number"}
+                    ]
+                };
+                var myMemoryChart = new YAHOO.widget.PieChart( "memory", memoryData,
+                {
+                    dataField       : "rate",
+                    categoryField   : "type",
+                    //                                  blue,     green
+                    series          : [{style :{colors:[0x0000dd, 0x00dd00]}}],
+                    dataTipFunction : percentTip,
+                    wmode: "opaque"
+                });
+
+                // Swap Usage Chart
+                var swapDataSource = [
+                { type: "used", rate: <?cs var:#System.swap ?> },
+                { type: "free", rate: <?cs var:(100 - #System.swap) ?> }
+                ];
+                var swapData = new YAHOO.util.LocalDataSource(swapDataSource);
+                swapData.responseType = YAHOO.util.LocalDataSource.TYPE_JSARRAY;
+                swapData.responseSchema = {
+                    fields: [
+                        {key: "type", parser: "string"},
+                        {key: "rate", parser: "number"}
+                    ]
+                };
+                var mySwapChart = new YAHOO.widget.PieChart( "swap", swapData,
+                {
+                    dataField       : "rate",
+                    categoryField   : "type",
+                    //                                  blue,     green
+                    series          : [{style :{colors:[0x0000dd, 0x00dd00]}}],
+                    dataTipFunction : percentTip,
+                    wmode: "opaque"
+                });
+
+                <?cs /if ?> // if System
+
+                function processTip( item, index, series ) {
+                    var toolTipText = item.process + ":\n" + item[series.xField] + '%';
+                    return toolTipText;
+                }
+
+                <?cs if:ProcessCPU ?>
+                // Process CPU Usage Chart
+                var processCpuDataSource =  [
+                <?cs set:i = 0 ?>
+                <?cs each:service = Service ?>
+                    <?cs if:(service.type == "Process" && service.monitor == "1" && #service.PrivateDetail.1.value > 0) ?>
+                        <?cs if:i != 0 ?>,<?cs /if ?> {
+                            process : "<?cs var:service.name ?>",
+                            <?cs each:detail = service.PrivateDetail ?><?cs if:detail.name == "cpu" ?>cpu : <?cs var:detail.value ?><?cs /if ?><?cs /each ?>
+                        }
+                        <?cs set:i = 1 ?>
+                    <?cs /if ?>
+                <?cs /each ?>
+                ];
+                processCpuDataSource.sort(function(a,b) { return b.cpu - a.cpu});
+                var processCpuData = new YAHOO.util.LocalDataSource(processCpuDataSource);
+                processCpuData.responseType = YAHOO.util.LocalDataSource.TYPE_JSARRAY;
+                processCpuData.responseSchema = {
+                    fields: [
+                        {key: "process", parser: "string"},
+                        {key: "cpu",     parser: "number"}
+                    ]
+                };
+                var processCpuSeriesDef = [
+                    { xField: "cpu", displayName: "cpu usage" }
+                ];
+                var processcpuAxis = new YAHOO.widget.CategoryAxis();
+                processcpuAxis.labelFunction = "formatCategoryLabel";
+                var myProcessCpuChart = new YAHOO.widget.BarChart( "processcpu", processCpuData,
+                {
+                    series          : processCpuSeriesDef,
+                    yField          : "process",
+                    yAxis           : processcpuAxis,
+                    dataTipFunction : processTip,
+                    wmode: "opaque"
+                });
+                <?cs /if ?> // if ProcessCPU
+
+                <?cs if:ProcessMemory ?>
+                // Process memory Usage Chart
+                var processMemoryDataSource =  [
+                <?cs set:i = 0 ?>
+                <?cs each:service = Service ?>
+                    <?cs if:(service.type == "Process" && service.monitor == "1" && #service.PrivateDetail.0.value > 0) ?>
+                        <?cs if:i != 0 ?>,<?cs /if ?> {
+                            process : "<?cs var:service.name ?>",
+                            <?cs each:detail = service.PrivateDetail ?><?cs if:detail.name == "memory" ?>memory : <?cs var:detail.value ?><?cs /if ?><?cs /each ?>
+                        }
+                        <?cs set:i = 1 ?>
+                    <?cs /if ?>
+                <?cs /each ?>
+                ];
+                processMemoryDataSource.sort(function(a,b) { return b.memory - a.memory});
+                var processMemoryData = new YAHOO.util.LocalDataSource(processMemoryDataSource);
+                processMemoryData.responseType = YAHOO.util.LocalDataSource.TYPE_JSARRAY;
+                processMemoryData.responseSchema = {
+                    fields: [
+                        {key: "process", parser: "string"},
+                        {key: "memory",  parser: "number"}
+                    ]
+                };
+                var processMemorySeriesDef = [
+                    { xField: "memory", displayName: "memory usage" }
+                ];
+                var processmemoryAxis = new YAHOO.widget.CategoryAxis();
+                processmemoryAxis.labelFunction = "formatCategoryLabel";
+                var myProcessMemoryChart = new YAHOO.widget.BarChart( "processmemory", processMemoryData,
+                {
+                    series          : processMemorySeriesDef,
+                    yField          : "process",
+                    yAxis           : processmemoryAxis,
+                    dataTipFunction : processTip,
+                    wmode: "opaque"
+                });
+
+                <?cs /if ?> // if ProcessMemory
+
+                <?cs if:Filesystem ?>
+                function filesystemTip( item, index, series ) {
+                    var toolTipText = series.displayName + " (" + item.filesystem + "):\n" + item[series.xField] + '%';
+                    return toolTipText;
+                }
+                // Filesystem Usage Chart
+                var filesystemDataSource =  [
+                <?cs set:i = 0 ?>
+                <?cs each:service = Service ?>
+                    <?cs if:(service.type == "Filesystem" && service.monitor == "1") ?>
+                        <?cs if:i != 0 ?>,<?cs /if ?> {
+                            filesystem : "<?cs var:service.name ?>"
+                            <?cs each:detail = service.PrivateDetail ?>
+                                ,<?cs var:detail.name ?> : "<?cs var:detail.value ?>"
+                            <?cs /each ?>
+                        }
+                        <?cs set:i = 1 ?>
+                    <?cs /if ?>
+                <?cs /each ?>
+                ];
+                var filesystemData = new YAHOO.util.LocalDataSource(filesystemDataSource);
+                filesystemData.responseType = YAHOO.util.LocalDataSource.TYPE_JSARRAY;
+                filesystemData.responseSchema = {
+                    fields: [
+                        {key: "filesystem", parser: "string"},
+                        {key: "space",      parser: "number"},
+                        {key: "inode",      parser: "number"}
+                    ]
+                };
+                var filesystemSeriesDef = [
+                    { xField: "space", displayName: "space usage"  },
+                    { xField: "inode", displayName: "inodes usage" }
+                ];
+                var myFilesystemChart = new YAHOO.widget.BarChart( "filesystem", filesystemData,
+                {
+                    series          : filesystemSeriesDef,
+                    yField          : "filesystem",
+                    dataTipFunction : filesystemTip,
+                    wmode: "opaque"
+                });
+                <?cs /if ?> // if FileSystem
+
+                <?cs if:ports ?>
+                function portresponseTip( item, index, series ) {
+                    var toolTipText = item.tip + ":\n" + item.portresponse + "ms";
+                    return toolTipText;
+                }
+                // Port Response Time Chart
+                var portresponseDataSource = [
+                <?cs set:i = 0 ?>
+                <?cs each:service = Service ?>
+                    <?cs if:(service.monitor == "1") ?>
+                        <?cs each:detail = service.PrivateDetail ?>
+                            <?cs if:detail.name == "portresponse" ?>
+                                <?cs if:i != 0 ?>,<?cs /if ?> {
+                                    portnumber   : "<?cs var:detail.hostname ?>:<?cs var:detail.portnumber ?>/<?cs var:detail.type ?>",
+                                    portresponse : <?cs var:detail.value ?> * 1000,
+                                    tip          : "<?cs var:detail.hostname ?>:<?cs var:detail.portnumber ?>/<?cs var:detail.type ?>"
+                                }
+                                <?cs set:i = 1 ?>
+                            <?cs /if ?>
+                        <?cs /each ?>
+                    <?cs /if ?>
+                <?cs /each ?>
+                ];
+                portresponseDataSource.sort(function(a,b) { return b.portresponse - a.portresponse});
+                var portresponseData = new YAHOO.util.LocalDataSource(portresponseDataSource);
+                portresponseData.responseType = YAHOO.util.LocalDataSource.TYPE_JSARRAY;
+                portresponseData.responseSchema = {
+                    fields: [
+                        {key: "portnumber",   parser: "string"},
+                        {key: "portresponse", parser: "number"},
+                        {key: "tip",          parser: "string"}
+                    ]
+                };
+                var portresponseSeriesDef = [
+                    { xField: "portresponse", displayName: "response time" }
+                ];
+                var responseXAxis = new YAHOO.widget.NumericAxis();
+                responseXAxis.minimum = 0;
+                var responseYAxis = new YAHOO.widget.CategoryAxis();
+                responseYAxis.labelFunction = "formatCategoryLabel";
+                var myPortresponseChart = new YAHOO.widget.BarChart("portresponse", portresponseData,
+                {
+                    series          : portresponseSeriesDef,
+                    yField          : "portnumber",
+                    xAxis           : responseXAxis,
+                    yAxis           : responseYAxis,
+                    dataTipFunction : portresponseTip,
+                    wmode: "opaque"
+                });
+                <?cs /if ?> // if ports
+
+                function doAction(e) { 
+                    var rows = Service_table.myDataTable.getSelectedRows();
+                    if (! rows.length)
+                    return alert("Please select a row");
+                    YAHOO.util.Dom.setStyle(document.body, 'cursor', 'wait');
+                    var f = document.actionForm;
+                    var a = document.createElement('input'); 
+                    a.setAttribute('type', 'hidden');
+                    a.setAttribute('name', 'action'); 
+                    a.setAttribute('value', e.target.innerHTML);
+                    f.appendChild(a);
+                    for (var i = 0; i < rows.length; i++) {     
+                        var s = document.createElement('input'); 
+                        s.setAttribute('type', 'hidden');
+                        s.setAttribute('name', 'service'); 
+                        s.setAttribute('value', Service_table.myDataTable.getRecord(rows[i]).getData("name"));
+                        f.appendChild(s);
+                    }
+                    f.submit();
+                } 
+
+                // Service details popout panel
+                var myServiceDetailsPanel = function() {
+                    var myServiceDetailsData = {<?cs set:i = 0 ?><?cs each:service = Service ?><?cs set:j = 0 ?><?cs if:i != 0 ?>,<?cs /if ?>"<?cs var:service.name ?>":[<?cs each:detail = service.Detail ?><?cs if:j != 0 ?>,<?cs /if ?>{name:"<?cs var:detail.name ?>", value:"<?cs var:detail.value ?>"}<?cs set:j = 1 ?><?cs /each ?>]<?cs set:i = 1 ?><?cs /each ?>};
+                    var myPanel = new YAHOO.widget.Panel("myServiceDetailsPanel", {
+                        width               : "300px", 
+                        fixedcenter         : false,
+                        visible             : true,
+                        constraintoviewport : false,
+                        modal               : false,
+                        underlay            : "none",
+                        close               : false
+                    });
+                    return {
+                        show: function(target, name) {
+                            var myDetails = myServiceDetailsData[name];
+                            var myInfo = "";
+                            for (var i = 0; i < myDetails.length; i++) {     
+                                myInfo += "<strong>" + myDetails[i].name + "</strong>: " + myDetails[i].value + "<br>";
+                            }
+                            if (! myInfo) return;
+                            myPanel.cfg.setProperty("context",[target.id,"tl","tr", null, [10, -15]]);
+                            myPanel.setBody(myInfo);
+                            myPanel.render("statusTable");
+                            myPanel.show();
+                        },
+                        hide:function() {
+                            myPanel.hide();
+                        }
+                    };
+                }();
+
+
+                var stopButton = new YAHOO.widget.Button("Stop");
+                var startButton = new YAHOO.widget.Button("Start");
+                var restartButton = new YAHOO.widget.Button("Restart");
+                var monitorButton = new YAHOO.widget.Button("Monitor");
+                var unmonitorButton = new YAHOO.widget.Button("Unmonitor");
+                stopButton.addListener("click", doAction);
+                startButton.addListener("click", doAction);
+                restartButton.addListener("click", doAction);
+                monitorButton.addListener("click", doAction);
+                unmonitorButton.addListener("click", doAction);
+
+            }); // onDOMReady
+        } // onSuccess
+    }); // loader.insert
+
+    // --------------------------------------------------------------- Page functions
+
+    function toggleRowSelection() { 
+        var rowSelectModeText = document.getElementById("rowselectmode");
+        if (rowSelectModeText.innerHTML == "Unselect All") {
+            Service_table.myDataTable.unselectAllRows();
+            rowSelectModeText.innerHTML = "Select All"
+        } else {
+            rows =  Service_table.myDataTable.getRecordSet();
+            var length = rows.getLength();
+            for (var i = 0; i < length; i++) {
+                Service_table.myDataTable.selectRow(rows.getRecord(i));
+            }
+            rowSelectModeText.innerHTML = "Unselect All"
+        }
+    }
+
+    </script>
+
+    <?cs /if ?> <!-- if:!Monit_IOError -->
+
+</body>
+</html>

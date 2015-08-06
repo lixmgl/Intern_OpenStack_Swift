@@ -1,0 +1,1 @@
+link ../../../../../share/pyshared/keystone/policy/__init__.py

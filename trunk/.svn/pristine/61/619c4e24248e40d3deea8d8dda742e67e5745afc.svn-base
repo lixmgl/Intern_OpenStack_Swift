@@ -1,0 +1,1 @@
+link ../../../../../share/pyshared/keystone/catalog/__init__.py

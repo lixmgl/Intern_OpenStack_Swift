@@ -1,0 +1,8 @@
+Package: cisco-csapi
+Version: 12.05 
+Section: base
+Priority: optional
+Architecture: all
+Depends: apache2 (>= 2.2), libapache2-mod-wsgi (>=3.3), python-glance, python-keystoneclient, python-novaclient, python-swift, python-melangeclient, python-openstack-common, python-quantumclient
+Maintainer: Chad Malfait cmalfait@cisco.com
+Description: csapi-compute service cloud api build on libcloud

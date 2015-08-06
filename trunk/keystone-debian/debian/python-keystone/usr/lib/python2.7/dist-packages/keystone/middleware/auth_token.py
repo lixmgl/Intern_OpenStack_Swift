@@ -1,0 +1,1 @@
+link ../../../../../share/pyshared/keystone/middleware/auth_token.py

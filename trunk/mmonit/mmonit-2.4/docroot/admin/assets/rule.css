@@ -1,0 +1,101 @@
+table {
+    margin  : 0;
+    padding : 0;
+    border  : none;
+}
+.controls {
+    visibility : hidden;
+    display    : inline;
+    float      : right;
+    cursor     : pointer;
+    margin     : 0;
+    padding    : 0;
+}
+#ruleTable,
+#actionTable {
+    width : 680px;
+}
+td {
+    vertical-align : top;
+}
+.rulerowmenu,
+.actionrowmenu {
+    font-size   : 11px;
+    min-height  : 1.5em;
+    text-align  : left;
+    white-space : nowrap;
+    /*  Restrict the width of the label to 12em. */
+    width       : 12em;
+    /* Hide the overflow if the text label exceeds 12em in width. */
+    overflow    : hidden;
+    /* 
+    IE and Safari support the ability to add ellipsis when the text 
+    label exceeds 12em in width.
+    */
+    text-overflow : ellipsis;
+    margin-right  : 3.5px;
+}    
+.actionrowmenu { 
+    width : 17em;
+    float : left;
+}
+form li div,
+form li span
+{
+    padding : 0 0 0px;
+}
+button
+{
+    /*
+        Suppress the focus outline since Safari will outline even the
+        text that is clipped by the application of the "overflow" property
+        in the follow style rule.
+    */
+    outline : none;
+}
+button em
+{
+    font-family : Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-style  : normal;
+    display     : block;
+    text-align  : left;
+    white-space : nowrap;
+    font-size   : 11px;
+
+    /*  Restrict the width of the label. */
+    width : 14em;
+
+    /* Hide the overflow if the text label exceeds 10em in width. */
+    overflow : hidden;
+
+    /*
+        IE and Safari support the ability to add ellipsis when the text
+        label exceeds 14em in width.
+    */
+    text-overflow : ellipsis;
+}
+.error {
+    padding:5px 0 0 5px;
+}
+.target-field {
+    width: 370px;
+    margin-right: 10px!important;
+}
+
+/* Program settings panel */
+#programsettingspanel .bd ul {
+ list-style-type:none;
+}
+#programsettingspanel .bd li {
+    padding-top:10px;
+}
+#programsettingspanel .bd label {
+	margin:0 0 2px 0;
+	padding-top:3px;
+	display:block;
+}
+#programsettingspanel h2 {color:inherit;}
+#help li {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}

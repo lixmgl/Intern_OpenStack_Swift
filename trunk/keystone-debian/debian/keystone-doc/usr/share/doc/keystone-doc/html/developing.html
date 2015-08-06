@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Developing with Keystone &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="next" title="Keystone Architecture" href="architecture.html" />
+    <link rel="prev" title="keystone-manage" href="man/keystone-manage.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="architecture.html" title="Keystone Architecture"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="man/keystone-manage.html" title="keystone-manage"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Developing with Keystone</a><ul>
+<li><a class="reference internal" href="#contributing-code">Contributing Code</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#running-keystone">Running Keystone</a></li>
+<li><a class="reference internal" href="#interacting-with-keystone">Interacting with Keystone</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#running-tests">Running Tests</a><ul>
+<li><a class="reference internal" href="#test-structure">Test Structure</a></li>
+<li><a class="reference internal" href="#testing-schema-migrations">Testing Schema Migrations</a></li>
+<li><a class="reference internal" href="#writing-tests">Writing Tests</a></li>
+<li><a class="reference internal" href="#further-testing">Further Testing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-documentation">Building the Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="man/keystone-manage.html"
+                                  title="previous chapter">keystone-manage</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="architecture.html"
+                                  title="next chapter">Keystone Architecture</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/developing.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="developing-with-keystone">
+<h1>Developing with Keystone<a class="headerlink" href="#developing-with-keystone" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="contributing-code">
+<h2>Contributing Code<a class="headerlink" href="#contributing-code" title="Permalink to this headline">¶</a></h2>
+<p>To contribute code, sign up for a Launchpad account and sign a contributor
+license agreement, available on the <a class="reference external" href="http://wiki.openstack.org/CLA">http://wiki.openstack.org/CLA</a>. Once
+the CLA is signed you can contribute code through the Gerrit version control
+system which is related to your Launchpad account.</p>
+<p>To contribute tests, docs, code, etc, refer to our <a class="reference external" href="http://wiki.openstack.org/GerritJenkinsGithub">Gerrit-Jenkins-Github Workflow</a>.</p>
+<div class="section" id="setup">
+<h3>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
+<p>Get your development environment set up according to <a class="reference internal" href="setup.html"><em>Setting up a Keystone development environment</em></a>. The
+instructions from here will assume that you have installed keystone into a
+virtualenv. If you chose not to, simply exclude &#8220;tools/with_venv.sh&#8221; from the
+example commands below.</p>
+</div>
+<div class="section" id="running-keystone">
+<h3>Running Keystone<a class="headerlink" href="#running-keystone" title="Permalink to this headline">¶</a></h3>
+<p>To run the keystone Admin and API server instances, use:</p>
+<div class="highlight-python"><pre>$ tools/with_venv.sh bin/keystone-all</pre>
+</div>
+<p>this runs keystone with the configuration the etc/ directory of the project.
+See <a class="reference internal" href="configuration.html"><em>Configuring Keystone</em></a> for details on how Keystone is configured. By default,
+keystone is configured with KVS backends, so any data entered into keystone run
+in this fashion will not persist across restarts.</p>
+</div>
+<div class="section" id="interacting-with-keystone">
+<h3>Interacting with Keystone<a class="headerlink" href="#interacting-with-keystone" title="Permalink to this headline">¶</a></h3>
+<p>You can interact with Keystone through the command line using
+<a class="reference internal" href="man/keystone-manage.html"><em>keystone-manage</em></a> which allows you to establish tenants, users, etc.</p>
+<p>You can also interact with Keystone through its REST API. There is a python
+keystone client library <a class="reference external" href="https://github.com/openstack/python-keystoneclient">python-keystoneclient</a> which interacts exclusively
+through the REST API, and which keystone itself uses to provide its
+command-line interface.</p>
+<p>When initially getting set up, after you&#8217;ve configured which databases to use,
+you&#8217;re probably going to need to run the following to your database schema in
+place:</p>
+<div class="highlight-python"><pre>$ bin/keystone-manage db_sync</pre>
+</div>
+</div>
+</div>
+<div class="section" id="running-tests">
+<h2>Running Tests<a class="headerlink" href="#running-tests" title="Permalink to this headline">¶</a></h2>
+<p>To run the full suites of tests maintained within Keystone, run:</p>
+<div class="highlight-python"><pre>$ ./run_tests.sh</pre>
+</div>
+<p>This shows realtime feedback during test execution, iterates over
+multiple configuration variations, and uses external projects to do
+light integration testing to verify the keystone API against other projects.</p>
+<div class="section" id="test-structure">
+<h3>Test Structure<a class="headerlink" href="#test-structure" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">./run_test.sh</span></tt> uses its python cohort (<tt class="docutils literal"><span class="pre">run_tests.py</span></tt>) to iterate
+through the <tt class="docutils literal"><span class="pre">tests</span></tt> directory, using Nosetest to collect the tests and
+invoke them using an OpenStack custom test running that displays the tests
+as well as the time taken to
+run those tests.</p>
+<p>Within the tests directory, the general structure of the tests is a basic
+set of tests represented under a test class, and then subclasses of those
+tests under other classes with different configurations to drive different
+backends through the APIs.</p>
+<p>For example, <tt class="docutils literal"><span class="pre">test_backend.py</span></tt> has a sequence of tests under the class
+<tt class="docutils literal"><span class="pre">IdentityTests</span></tt> that will work with the default drivers as configured in
+this projects etc/ directory. <tt class="docutils literal"><span class="pre">test_backend_sql.py</span></tt> subclasses those tests,
+changing the configuration by overriding with configuration files stored in
+the tests directory aimed at enabling the SQL backend for the Identity module.</p>
+<p>Likewise, <tt class="docutils literal"><span class="pre">test_cli.py</span></tt> takes advantage of the tests written aainst
+<tt class="docutils literal"><span class="pre">test_keystoneclient</span></tt> to verify the same tests function through different
+drivers.</p>
+</div>
+<div class="section" id="testing-schema-migrations">
+<h3>Testing Schema Migrations<a class="headerlink" href="#testing-schema-migrations" title="Permalink to this headline">¶</a></h3>
+<p>The application of schema migrations can be tested using SQLAlchemy Migrate’s
+built-in test runner, one migration at a time.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This may leave your database in an inconsistent state; attempt this in non-production environments only!</p>
+</div>
+<p>This is useful for testing the <em>next</em> migration in sequence (both forward &amp;
+backward) in a database under version control:</p>
+<div class="highlight-python"><pre>python keystone/common/sql/migrate_repo/manage.py test \
+--url=sqlite:///test.db \
+--repository=keystone/common/sql/migrate_repo/</pre>
+</div>
+<p>This command references to a SQLite database (test.db) to be used. Depending on
+the migration, this command alone does not make assertions as to the integrity
+of your data during migration.</p>
+</div>
+<div class="section" id="writing-tests">
+<h3>Writing Tests<a class="headerlink" href="#writing-tests" title="Permalink to this headline">¶</a></h3>
+<p>To add tests covering all drivers, update the base test class
+(<tt class="docutils literal"><span class="pre">test_backend.py</span></tt>, <tt class="docutils literal"><span class="pre">test_legacy_compat.py</span></tt>, and
+<tt class="docutils literal"><span class="pre">test_keystoneclient.py</span></tt>).</p>
+<p>To add new drivers, subclass the <tt class="docutils literal"><span class="pre">test_backend.py</span></tt> (look towards
+<tt class="docutils literal"><span class="pre">test_backend_sql.py</span></tt> or <tt class="docutils literal"><span class="pre">test_backend_kvs.py</span></tt> for examples) and update the
+configuration of the test class in <tt class="docutils literal"><span class="pre">setUp()</span></tt>.</p>
+</div>
+<div class="section" id="further-testing">
+<h3>Further Testing<a class="headerlink" href="#further-testing" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://devstack.org/">devstack</a> is the <em>best</em> way to quickly deploy keystone with the rest of the
+OpenStack universe and should be critical step in your development workflow!</p>
+<p>You may also be interested in either the
+<a class="reference external" href="https://github.com/openstack/openstack-ci">OpenStack Continuous Integration Project</a> or the
+<a class="reference external" href="https://github.com/openstack/tempest">OpenStack Integration Testing Project</a>.</p>
+</div>
+</div>
+<div class="section" id="building-the-documentation">
+<h2>Building the Documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The documentation is all generated with Sphinx from within the docs directory.
+To generate the full set of HTML documentation:</p>
+<blockquote>
+<div>cd docs
+make autodoc
+make html
+make man</div></blockquote>
+<p>the results are in the docs/build/html and docs/build/man directories
+respectively.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="architecture.html" title="Keystone Architecture"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="man/keystone-manage.html" title="keystone-manage"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

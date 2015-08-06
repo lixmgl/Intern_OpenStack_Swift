@@ -1,0 +1,2 @@
+check program keystone_e2e with path "/opt/monit/scripts/keystone_e2e.bash"
+        if status != 0 then alert

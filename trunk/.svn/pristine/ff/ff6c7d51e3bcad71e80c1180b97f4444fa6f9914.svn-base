@@ -1,0 +1,25 @@
+#!/bin/bash
+
+INST_DIR=/opt/collectd
+
+echo "Removing previous build..."
+if [ -d ${INST_DIR} ]; then 
+    rm -rf ${INST_DIR}
+fi
+
+cd ../collectd-5.1.0
+
+echo "Removing old build artifacts..."
+./clean.sh
+
+echo "Building collectd..."
+./build.sh
+./configure --enable-python --prefix=${INST_DIR}
+
+echo "Compiling..."
+make
+
+echo "Finishing build to directory ${INST_DIR}"
+make install 
+
+cp ../build/collectd_rc ${INST_DIR}/bin

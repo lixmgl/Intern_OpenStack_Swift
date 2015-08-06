@@ -1,0 +1,1 @@
+link ../../../../share/pyshared/keystone/config.py

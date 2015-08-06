@@ -1,0 +1,42 @@
+10
+
+dir
+376
+svn://engsvnserv4.corp.webex.com/openstack/trunk/monit/puppet-module/files/conf
+svn://engsvnserv4.corp.webex.com/openstack
+delete
+
+
+2012-06-14T16:17:21.330349Z
+270
+autumnw
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+4a083582-653f-4f4c-8dd4-6b54de6a16f1
+
+common
+dir
+
+
+
+delete
+
+customized
+dir
+
+
+
+delete
+

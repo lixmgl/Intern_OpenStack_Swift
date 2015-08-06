@@ -1,0 +1,37 @@
+'''
+Created on Jul 18, 2012
+
+@author: autumn
+'''
+
+from swiftconsole.common.utils import exec_command
+
+
+def __print_ouput__(output):
+    lines = output.split('\n')
+    for line in lines:
+        dict_obj = eval(line)
+        for node, ret in dict_obj:
+            ret_code = ret['retcode']
+            if ret_code == 0:
+                print "%s (OK) : %s" % (node, ret['output'])
+            else:
+                print "%s (ERR) : %s" % (node, ret['errors'])
+
+def show_ring(ring):
+    """
+    Params:
+        ring: The ring name, could be account/container/object
+    """
+    cmd = "salt -G 'servertype:swift-ringbuilder' ringinfor.%s_ring" % ring
+    retcode, output, errors, interval = exec_command(cmd)
+    if retcode != 0:
+        print "Error : %s" % errors
+    else:
+        __print_ouput__(output)
+        
+
+if __name__ == '__main__':
+    show_ring('account')
+    
+    

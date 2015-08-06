@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Extensions &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="../index.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Extensions</a><ul>
+<li><a class="reference internal" href="#built-in-extensions">Built-in Extensions</a></li>
+<li><a class="reference internal" href="#enabling-disabling-extensions">Enabling &amp; Disabling Extensions</a></li>
+<li><a class="reference internal" href="#creating-new-extensions">Creating New Extensions</a></li>
+<li><a class="reference internal" href="#which-extensions-are-enabled">Which extensions are enabled?</a></li>
+</ul>
+</li>
+</ul>
+
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/old/extensions.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="extensions">
+<h1>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h1>
+<p>Extensions support adding features and functions to OpenStack APIs at any time, without prior
+approval or waiting for a new API and release cycles.</p>
+<p>The extension framework is in development and documented in <a class="reference external" href="http://docs.openstack.org/trunk/openstack-compute/developer/openstack-api-extensions/content/ch02s01.html">extensions</a> and <a class="reference external" href="http://www.slideshare.net/RackerWilliams/openstack-extensions">extensionspresentation</a>.</p>
+<p>This document describes the extensions included with Keystone, how to enable and disable them,
+and briefly touches on how to write your own extensions.</p>
+<div class="section" id="built-in-extensions">
+<h2>Built-in Extensions<a class="headerlink" href="#built-in-extensions" title="Permalink to this headline">¶</a></h2>
+<p>Keystone ships with a number of extensions found under the
+<tt class="docutils literal"><span class="pre">keystone/contib/extensions</span></tt> folder.</p>
+<p>The following built-in extensions are included:</p>
+<p>OS-KSADM</p>
+<blockquote>
+<div><p>This is an extensions that supports managing users, tenants, and roles
+through the API. Without this extensions, the ony way to manage those
+objects is through keystone-manage or directly in the underlying database.</p>
+<p>This is an Admin API extension only.</p>
+</div></blockquote>
+<p>OS-KSCATALOG</p>
+<blockquote>
+<div><p>This extensions supports managing Endpoints and prrovides the Endpoint
+Template mechanism for managing bulk endpoints.</p>
+<p>This is an Admin API extension only.</p>
+</div></blockquote>
+<p>OS-EC2</p>
+<blockquote>
+<div><p>This extension adds support for EC2 credentials.</p>
+<p>This is an Admin and Service API extension.</p>
+</div></blockquote>
+<p>RAX-GRP</p>
+<blockquote>
+<div><p>This extension adds functionality the enables groups.</p>
+<p>This is an Admin and Service API extension.</p>
+</div></blockquote>
+<p>RAX-KEY</p>
+<blockquote>
+<div><p>This extensions adds support for authentication with an API Key (the core
+Keystone API only supports username/password credentials)</p>
+<p>This is an Admin and Service API extension.</p>
+</div></blockquote>
+<p>HP-IDM</p>
+<blockquote>
+<div><p>This extension adds capability to filter roles with optional service IDs
+for token validation to mitigate security risks with role name conflicts.
+See <a class="reference external" href="https://bugs.launchpad.net/keystone/+bug/890411">https://bugs.launchpad.net/keystone/+bug/890411</a> for more details.</p>
+<p>This is an Admin API extension. Applicable to validate token (GET)
+and check token (HEAD) APIs only.</p>
+</div></blockquote>
+<p>OS-KSVALIDATE</p>
+<blockquote>
+<div><p>This extensions supports admin calls to /tokens without having to specify
+the token ID in the URL. Instead, the ID is supplied in a header called
+X-Subject-Token. This is provided as an alternative to address any security
+concerns that arise when token IDs are passed as part of the URL which is
+often (and by default) logged to insecure media.</p>
+<p>This is an Admin API extension only.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The included extensions are in the process of being rewritten. Currently
+osksadm, oskscatalog, hpidm, and osksvalidate work with this new
+extensions design.</p>
+</div>
+</div>
+<div class="section" id="enabling-disabling-extensions">
+<h2>Enabling &amp; Disabling Extensions<a class="headerlink" href="#enabling-disabling-extensions" title="Permalink to this headline">¶</a></h2>
+<p>The Keystone conf file has a property called extensions. This property holds
+the list of supported extensions that you want enabled. If you want to
+add/remove an extension from being supported, add/remove the extension key
+from this property. The key is the name of the folder of the extension
+under the keystone/contrib/extensions folder.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you want to load different extensions in the service API than the Admin API
+you need to use different config files.</p>
+</div>
+</div>
+<div class="section" id="creating-new-extensions">
+<h2>Creating New Extensions<a class="headerlink" href="#creating-new-extensions" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first"><strong>Adopt a unique organization abbreviation.</strong></p>
+<p>This prefix should uniquely identify your organization within the community.
+The goal is to avoid schema and resource collisions with similiar extensions.
+(e.g. <tt class="docutils literal"><span class="pre">OS</span></tt> for OpenStack, <tt class="docutils literal"><span class="pre">RAX</span></tt> for Rackspace, or <tt class="docutils literal"><span class="pre">HP</span></tt> for Hewlett-Packard)</p>
+</li>
+<li><p class="first"><strong>Adopt a unique extension abbreviation.</strong></p>
+<p>Select an abbreviation to identify your extension, and append to
+your organization prefix using a hyphen (<tt class="docutils literal"><span class="pre">-</span></tt>), by convention
+(e.g. <tt class="docutils literal"><span class="pre">OS-KSADM</span></tt> (for OpenStack&#8217;s Keystone Administration extension).</p>
+<p>This combination is referred to as your extension&#8217;s prefix.</p>
+</li>
+<li><p class="first"><strong>Determine the scope of your extension.</strong></p>
+<p>Extensions can enhance the Admin API, Service API or both.</p>
+</li>
+<li><p class="first"><strong>Create a new module.</strong></p>
+<p>Create a module to isolate your namespace based on the extension prefix
+you selected:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">keystone</span><span class="o">/</span><span class="n">contrib</span><span class="o">/</span><span class="n">extensions</span><span class="o">/</span><span class="n">admin</span>
+</pre></div>
+</div>
+<p>... and/or:</p>
+<div class="highlight-python"><pre>keystone/contrib/extensions/service/</pre>
+</div>
+<p>... based on which API you are enhancing.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In the future, we will support loading external extensions.</p>
+</div>
+</li>
+<li><p class="first">Add static extension files for JSON (<tt class="docutils literal"><span class="pre">*.json</span></tt>) and XML
+(<tt class="docutils literal"><span class="pre">*.xml</span></tt>) to the new extension module.</p>
+<p>Refer to <a class="reference external" href="https://github.com/openstack/keystone/blob/master/keystone/content/admin/identityadminguide.pdf?raw=true">Service Guide</a>
+<a class="reference external" href="https://github.com/openstack/keystone/blob/master/keystone/content/common/samples/extension.json">Sample extension XML</a>
+<a class="reference external" href="https://github.com/openstack/keystone/blob/master/keystone/content/common/samples/extension.xml">Sample extension JSON</a> for the the content and structure.</p>
+</li>
+<li><p class="first">If your extension is adding additional methods override the base class
+<tt class="docutils literal"><span class="pre">BaseExtensionHandler</span></tt>, name it <tt class="docutils literal"><span class="pre">ExtensionHandler</span></tt>, and add your methods.</p>
+</li>
+<li><p class="first"><strong>Document your work.</strong></p>
+<p>Provide documentation to support your extension.</p>
+<p>Extensions documentation, WADL, and XSD files can be stored in the
+<tt class="docutils literal"><span class="pre">keystone/content</span></tt> folder.</p>
+</li>
+<li><p class="first">Add your extension name to the list of supported extensions in The
+<tt class="docutils literal"><span class="pre">keystone.conf</span></tt> file.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="which-extensions-are-enabled">
+<h2>Which extensions are enabled?<a class="headerlink" href="#which-extensions-are-enabled" title="Permalink to this headline">¶</a></h2>
+<p>Discover which extensions are available (service API):</p>
+<div class="highlight-python"><pre>curl http://localhost:5000/v2.0/extensions</pre>
+</div>
+<p>... or (admin API):</p>
+<div class="highlight-python"><pre>curl http://localhost:35357/v2.0/extensions</pre>
+</div>
+<p>The response will list the extensions available.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">keystone 2012.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+swift (6.0.0) precise; urgency=low
+
+  * Initial release.
+
+ -- Autumn Wang <autumn@cisco.com>  Mon, 11 Jun 2012 14:24:17 -0700

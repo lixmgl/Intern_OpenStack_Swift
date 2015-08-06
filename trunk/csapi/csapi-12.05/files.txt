@@ -1,0 +1,76 @@
+/code.py
+	urls: 
+		/: GET
+
+/auth.py: /token/vX
+	urls:
+		/: POST
+ 
+/identity.py: /identity/vX
+	urls: 
+		/: GET
+		/org/%org_id%: GET, POST, PUT, DELETE
+		/user/%user_id%: GET, POST, PUT, DELETE
+		/role/%role_id%: GET, POST, PUT, DELETE
+		/policy/%policy_id%: GET, POST, PUT, DELETE
+		/service/%service_id%: GET, POST, PUT, DELETE
+		/org/%org_id%/user/%user_id%: GET, PUT, DELETE
+		/org/%org_id%/user/%user_id%/role/%role_id%: GET, PUT, DELETE
+		/org/%org_id%/user/%user_id%/service/%service_id%: GET, PUT, DELETE
+		/role/%role%/policy/%policy_id%: GET, PUT, DELETE
+
+/compute.py
+	urls:
+		/: GET
+		/%org_id%: GET
+		/%org_id%/instance/%instance_id%: GET, POST, PUT, DELETE
+		/%org_id%/network/%network_id%: GET, POST, PUT, DELETE
+		/%org_id%/volume/%volume_id%: GET, POST, PUT, DELETE
+		/%org_id%/key/%key_id%: GET, POST, PUT, DELETE
+		/%org_id%/ruleset/%ruleset_id%: GET, POST, PUT, DELETE
+		
+/objectstore.py
+	urls:
+		/: GET
+		/%org_id%: GET
+		/%org_id%/container/%container_id%: GET, POST, PUT, DELETE
+		/%org_id%/container/%container_id%/object/%object_id: GET, PUT, DELETE
+
+/image.py
+	urls:
+		/: GET
+		/image/%image_id%: GET, PUT, POST, DELETE
+		/image/%image_id%/member/%member_id%: GET, PUT, POST, DELETE
+
+/api/
+	identity.py
+		classes:
+			org
+			user
+			role
+			service
+			policy
+			org-user-role
+			org-user-service
+			role-policy
+
+	compute.py
+		classes:
+			instance
+			network
+			volume
+			key
+			ruleset
+
+	objectstore.py
+		classes:
+			container
+			object
+
+	image.py
+		classes:
+			image
+			member-assoc
+
+
+	

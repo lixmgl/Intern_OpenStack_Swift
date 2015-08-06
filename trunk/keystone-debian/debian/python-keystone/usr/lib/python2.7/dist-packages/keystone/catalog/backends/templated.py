@@ -1,0 +1,1 @@
+link ../../../../../../share/pyshared/keystone/catalog/backends/templated.py

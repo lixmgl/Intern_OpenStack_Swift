@@ -1,0 +1,77 @@
+10
+
+dir
+350
+svn://engsvnserv4.corp.webex.com/openstack/trunk/swift/test
+svn://engsvnserv4.corp.webex.com/openstack
+
+
+
+2012-04-08T15:21:16.057130Z
+88
+autumnw
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+4a083582-653f-4f4c-8dd4-6b54de6a16f1
+
+__init__.py
+file
+
+
+
+
+2012-07-03T17:28:37.558000Z
+a1dee07c98e66e903bf15e5ac51843ee
+2012-04-08T15:21:16.057130Z
+88
+autumnw
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1068
+
+functional
+dir
+
+functionalnosetests
+dir
+
+probe
+dir
+
+testclient
+dir
+
+unit
+dir
+

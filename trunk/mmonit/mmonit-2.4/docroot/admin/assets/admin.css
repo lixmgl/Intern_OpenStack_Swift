@@ -1,0 +1,102 @@
+table {
+    border: none;
+}
+th {
+    border: none;
+    padding-right:  20px;
+    vertical-align: top;
+    font-weigth: bold;
+}
+td {
+    text-align: left;
+    border: none;
+    vertical-align: top;
+}
+hr {
+    width:        290px;
+    margin-right: 20px;
+    margin-top:   20px;
+}
+tr.vspace td, tr.vspace th {padding-top:10px;}
+#mailserverlabel, #jabberserverlabel, #messageformatlabel {
+    width:      100%;
+    font-style: normal;
+    display:    block;
+    text-align: center;
+}
+.yui-button .first-child {
+    padding: 0 0 0 2px;
+}
+#auth-fields  {
+    padding: 10px;
+    background-color: #f0f0fc;
+    border: 1px inset #ccc;
+}
+.yui-dt table {
+    width: 100%;
+}
+.Buttons {
+    padding: 10px 0;
+}
+#info {
+    padding: 0 20px; 
+    max-width: 300px;
+    vertical-align: top;
+	-webkit-border-top-right-radius: 11px;
+	-moz-border-radius-topright: 11px;
+	-webkit-border-top-left-radius: 11px;
+	-moz-border-radius-topleft: 11px;
+}
+#info h2 {
+    font-size: 18px;
+    margin: 20px 0px 5px 0px;
+}
+#info ul {
+    list-style:none;
+}
+#info li {
+    line-height: 10px; 
+    margin: 15px 0; 
+    padding: 0 0 0 20px; 
+    background: transparent url('../../img/leds.png') no-repeat  0px 0px;
+}
+#info li:hover {
+    background: transparent url('../../img/leds.png') no-repeat  0px -10px;
+}
+* {
+    outline: none;
+}
+input:focus, textarea:focus {
+    background-color: rgb(254,254,238);
+}
+.whitespace {
+    padding-top: 15px;
+}
+button em
+{
+    font-family : Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-style  : normal;
+    display     : block;
+    text-align  : left;
+    white-space : nowrap;
+    font-size   : 11px;
+
+    /*  Restrict the width of the label. */
+    width : 14em;
+
+    /* Hide the overflow if the text label exceeds 10em in width. */
+    overflow : hidden;
+
+    /*
+        IE and Safari support the ability to add ellipsis when the text
+        label exceeds 14em in width.
+    */
+    text-overflow : ellipsis;
+}
+
+.yui-content {
+    background: #f1f9ff!important;
+}
+
+#feed h4 {color:#999;font-size:13px;font-weight:normal;}
+#feed p {color:#333;margin-bottom:5px;}

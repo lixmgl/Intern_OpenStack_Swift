@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<!-- *******************************************************************   
+ *        Copyright (c) 2009-2012 Cisco Systems, Inc.   
+ *        All rights reserved.   
+ ******************************************************************** -->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Compute Table</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=8,chrome=1" />
+		
+		<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-base.css">
+		<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-xwt.css">	
+		<link rel="stylesheet" type="text/css" href="../../../../xwt/themes/reboot2/reboot2-explorer.css">
+	
+    	<script type="text/javascript" djConfig="isDebug: false, parseOnLoad: true" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			dojo.require("xwt.widget.table.Table");
+			dojo.require("xwt.widget.table.Toolbar");
+			dojo.require("xwt.widget.tests.table.store.SampleExtendedIFWS");
+			dojo.require("xwt.widget.layout.Dialog");
+			dojo.require("dijit.form.Button");
+			dojo.require("dijit.form.TextBox");
+			dojo.require("dijit.form.NumberTextBox");
+			dojo.require("xwt.widget.form.DropDown");
+			dojo.require("dijit.layout.BorderContainer");
+			dojo.require("dijit.layout.ContentPane");
+			dojo.require("xwt.widget.notification.ValidationTextBox");
+			dojo.require("xwt.widget.tests.table.TableTestEditWidget");
+			dojo.require("xwt.widget.tests.table.ValidatingDialog");			
+
+			data = {};
+			dojo.xhrGet({url:"/portal/compute/compute.json", sync:true, handleAs:"json"}).addCallback(function(results){
+				data = results;
+			});
+			
+			// load the store */
+			dataStore = new xwt.widget.tests.table.store.SampleExtendedIFWS({
+				data: data,
+				filterOnServer:false
+			});
+
+			//	default new item
+			defItem = {
+				"ID":"",
+				"Name":"" ,
+				"Private":"", 
+				"Public":"", 
+				"State":"", 
+                                "Console":"",
+                                "Dashboard":"",
+			};
+
+			//	column structure.
+			columns = [
+			{
+				attr: "uuid",
+				label: "ID",
+				width: 250,
+				alignment: "right",
+				vAlignment:"middle",
+				sortable: true,
+				sorted: "ascending",
+				filterable: true,
+				editable: false
+			},
+			{
+				attr: "name",
+				label: "Name",
+				width: 96,
+				vAlignment: "middle",
+				editable: true,
+				sortable: true
+			},
+			{
+				attr: "private",
+				label: "Private",
+				width: 96,
+				vAlignment: "middle",
+				editable: true,
+				sortable: true
+			},
+			{
+				attr: "public",
+				label: "Public",
+				width: 96,
+				vAlignment: "middle",
+				editable: true,
+				sortable: true
+			},
+			{
+				attr: "state",
+				label: "State",
+				width: 96,
+				vAlignment: "middle",
+				editable: true,
+				sortable: true
+			},
+			{
+				attr: "console",
+				label: "Console",
+				width: 96,
+				vAlignment: "middle",
+				editable: false,
+				sortable: true
+			},
+			{
+				attr: "dashboard",
+				label: "Dashboard",
+				width: 96,
+				vAlignment:"middle",
+				editable: false,
+				sortable: true
+			}
+			];
+
+			dojo.addOnLoad(function(){
+				var table = dijit.byId("table");
+				
+				dojo.connect(table.store, "onDelete", function(item){
+					table = dijit.byId("table")
+					compute_id = table.store.getIdentity(item)
+					var xhrArgs = {
+						url: "/portal/compute/delete",
+						content: {"id":uuid},
+						handleAs: "text",
+						load: function(data) {
+							setTimeout(stop, 100);
+						},
+						error: function(error) {
+							setTimeout(stop, 100);
+							alert("Failed to delete node")
+						}
+					}
+					var deferred = dojo.xhrPost(xhrArgs);
+				});
+				
+				dojo.connect(table.store, "onNew", function(item){
+					isNew = true
+				});
+
+				dojo.connect(table, "onCommit", function(item, value){
+					table = dijit.byId("table")
+					name = value["name"]
+					compute_id = table.store.getIdentity(item)
+					
+					if (isNew == true){
+						var xhrArgs = {
+							url: "/portal/compute/new",
+							content: {"id":uuid},
+							handleAs: "text",
+							load: function(data) {
+								setTimeout(stop, 100);
+							},
+							error: function(error) {
+								setTimeout(stop, 100);
+								alert("Failed to create node: " + error.status)
+							}
+						}
+						var deferred = dojo.xhrPost(xhrArgs);
+						isNew = false
+					} else {
+				        var xhrArgs = {
+							url: "/portal/compute/edit",
+							content: {"name":name, "id":uuid},
+							handleAs: "text",
+							load: function(data) {
+								setTimeout(stop, 100);
+							},
+							error: function(error) {
+								setTimeout(stop, 100);
+								alert("Failed to update node: " + error.status)
+							}
+						}
+						var deferred = dojo.xhrPost(xhrArgs);
+					}
+					data = {};
+					dojo.xhrGet({url:"compute/compute.json", sync:true, handleAs:"json"}).addCallback(function(results){
+						data = results;
+					});
+					
+					table.data = data
+					table.refresh()
+					table.render(true)
+				});            
+			});
+		</script>
+    </head>
+    <body class="reboot2">
+    	<center>
+	    	<div style="float: center; width:870px">
+				<div id="global" dojoType="xwt.widget.table.GlobalToolbar" title="Nodes" tableId="table" displayTotalRecords="true" showButtons="refresh, settings"></div>
+				<div align="left" id="context" dojoType="xwt.widget.table.ContextualToolbar" tableId="table" quickFilter=false>
+					<div align="left" dojoType="xwt.widget.table.ContextualButtonGroup" showButtons="edit,add,delete"></div>
+				</div>
+				<table id="table" jsid="table" dojoType="xwt.widget.table.Table" store="dataStore" query="''"
+					selectMultiple="false" selectModel="input" selectAllOption="false" structure="columns" showIndex="false"
+					immediateCommit="true" rowsPerPage="25" quickViewDelay="1500" 
+					filters="filters" filterDelay="1500" filterOnServer=false style="float: center; height: 620px; width: 850px; overflow: hidden">
+				</table>
+			</div>
+	</body>
+</html>

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+PROGRAM=swiftstats
+
+echo "Removing auto restart script....."
+rm -f /etc/init.d/statsdpy /etc/rc5.d/S99${PROGRAM}
+
+PYTHON_DIST="/usr/lib/python2.7/dist-packages"
+
+if [ -d "$PYTHON_DIST" ];
+then
+	rm -fr $PYTHON_DIST/${PROGRAM}*
+fi

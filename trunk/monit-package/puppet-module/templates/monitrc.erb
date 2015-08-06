@@ -1,0 +1,19 @@
+set daemon 120            
+set logfile /var/log/monit.log
+set idfile /var/lib/monit/id
+set statefile /var/lib/monit/state
+set eventqueue
+      basedir /var/lib/monit/events 
+      slots 5000                     
+
+set mmonit http://monit:pass1234@10.100.18.150:8080/collector
+
+set httpd port 2812 and
+    use address <%= @ipaddress %>  # only accept connection from localhost
+    allow localhost        # allow localhost to connect to the server and
+    allow 10.100.18.150
+    allow admin:wsj2002      # require user 'admin' with password 'monit'
+    allow @monit           # allow users of group 'monit' to connect (rw)
+    allow @users readonly  # allow users of group 'users' to connect readonly
+
+include /etc/monit/conf.d/*

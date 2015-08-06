@@ -1,0 +1,19 @@
+s3 Package
+==========
+
+:mod:`s3` Package
+-----------------
+
+.. automodule:: keystone.contrib.s3
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`core` Module
+------------------
+
+.. automodule:: keystone.contrib.s3.core
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

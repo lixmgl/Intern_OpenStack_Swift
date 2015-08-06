@@ -1,0 +1,66 @@
+[ADMIN]
+admin_tenant_id=b3c18bc8a54f4f1c93afe949f790d5c6
+admin_user_id=c1657a46f39d4e42823daa25631a1ccb
+admin_role_id=cc71b24cb0e14cd98472c1a997ab350d
+
+[HOST]
+host=10.100.18.144
+
+[AUTH]
+auth_service=http://10.100.18.144:5000/v2.0/
+auth_admin=http://10.100.18.144:35357/v2.0/
+auth_ip=10.100.18.144
+auth_port=5000
+auth_admin_port=35357
+auth_service_name=Identity Service
+auth_password_version=2.0_password
+auth_token_version=2.0
+
+[COMPUTE]
+compute_service=http://10.100.18.144:8774/v1.1/
+
+[IMAGE]
+image_service=http://10.100.18.144:9292/v1
+image_ip=10.100.18.144
+image_port=9292
+
+[OBJECT]
+object_service=http://10.100.18.148:8080/v1
+object_ip=10.100.18.148
+object_port=8080
+object_root=/v1
+
+[PORTAL]
+portal_ip=10.100.18.140
+portal_port=80
+portal_root=/portal
+
+[CSAPI]
+csapi_ip=10.100.18.144
+csapi_port=8082
+csapi_root=/csapi
+csapi_version=12.05
+
+[GRAPHITE]
+graphite_ip=10.100.18.140
+graphite_port=8081
+graphite_root=/
+
+[MONIT]
+monit_ip=10.100.18.150
+monit_port=8080
+monit_root=/
+
+[MODULES]
+metrics={"name": "metrics", "icon": "monitor", "label": "Cloud Metrics", "url": "/portal/metrics" }
+health={"name": "health", "icon": "alert", "label": "Cloud Health", "url": "/portal/health" }
+image={"name": "images", "icon": "upload", "label": "Manage Images", "url": "/portal/image" }
+object={"name": "object", "icon": "newbucket", "label": "Manage Object Containers", "url": "/portal/object" }
+compute={"name": "compute", "icon": "newcompute", "label": "Manage Compute Instances", "url": "/portal/compute" }
+project={"name": "project", "icon": "projmgmt", "label": "Manage Projects", "url": "/portal/project" }
+search={"name": "search", "icon": "search", "label": "Search Internet", "url": "http://www.google.com" }
+
+[VERSION]
+org_name=Cloud Services
+product_name=Cloud Management Platform
+product_version=12.05 (Alpha)

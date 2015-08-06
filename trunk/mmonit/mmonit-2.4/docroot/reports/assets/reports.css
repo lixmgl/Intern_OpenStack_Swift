@@ -1,0 +1,85 @@
+/* Range */
+#range-selector {
+    padding: 10px 0 0 0;
+    margin-bottom: 50px;
+}
+#range-value {
+    color: #333;
+    float:right;
+    font-size:15px;
+	padding: 10px;
+	line-height:48px; /* same as h1 */
+	font-family: "Courier New", Courier;
+	text-shadow: none;
+}
+/* Range slider */
+#slider-background  {
+    display: inline-block;
+    background: transparent url(../../reports/assets/slider-background.png) no-repeat 0 0; 
+    width: 262px;
+    height: 54px;
+    position: relative; 
+    outline:none; 
+}
+#slider-background-blue  {
+    z-index:1;
+    background: transparent url(../../reports/assets/slider-background-blue.png) no-repeat 0 0; 
+    width: 10px;
+    height: 8px;
+    outline:none; 
+    position:absolute;
+    left:0px;
+    top:47px;
+}
+#slider-thumb {
+    z-index:10;
+    left:0px;
+    top:39px;
+    position: absolute; 
+}
+#spinner {
+    border: none;
+    position: relative; 
+    top:15px;
+    left:280px;
+    visibility:hidden;
+}
+/* SLA Table */
+table table h2 {
+    color: #333;
+}
+table table td {
+    white-space:nowrap;
+    padding: 0 50px 0 0;
+}
+table table tr:first-child td {
+    padding-bottom: 40px;
+}
+#Uptime, #Downtime {
+    font-size:32px;
+    color: #999;
+    padding: 20px 0 15px 0;
+}
+#mytable table {
+    width:100%;
+}
+.caption {
+    font-size: 12px;
+    line-height: 1.3em;
+    padding: 8px 0;
+}
+
+#help {
+    float:right; 
+    margin: 5px 0;
+    position:relative;
+}
+#help li {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+/* YUI hacks */
+/* Hide bottom paginator */
+#yui-dt0-paginator1 {
+    display: none!important;
+}

@@ -1,0 +1,35 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          graphite
+# Required-Start:    $network $named $remote_fs $syslog
+# Required-Stop:     $network $named $remote_fs $syslog
+# Should-Start:      puppet
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+### END INIT INFO                                                                                                                                          
+
+export PATH=/opt/graphite/bin:/opt/graphite/sbin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+export PYTHONPATH=/opt/graphite/lib/python2.7/site-packages:/opt/graphite/lib/carbon:/opt/graphite/lib/twisted/plugins:/opt/graphite/lib:$PYTHONPATH 
+
+case "$1" in
+    start)
+        /opt/graphite/bin/carbon-cache.py start
+        service apache2 start
+        ;;
+    stop)
+        service apache2 stop
+        pkill carbon-cache.py
+        ;;
+    restart)
+        service apache2 stop
+        pkill carbon-cache.py
+        sleep 1
+        /opt/graphite/bin/carbon-cache.py start
+        service apache2 start
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart}" >&2
+        exit 1
+        ;;
+esac

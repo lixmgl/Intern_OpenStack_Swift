@@ -1,0 +1,662 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ldap Package &mdash; keystone 2012.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.tweet.js"></script>
+    <link rel="top" title="keystone 2012.1-dev documentation" href="index.html" />
+    <link rel="up" title="backends Package" href="keystone.identity.backends.html" />
+    <link rel="next" title="middleware Package" href="keystone.middleware.html" />
+    <link rel="prev" title="backends Package" href="keystone.identity.backends.html" />
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#twitter_feed").tweet({
+                username: "openstack",
+                query: "from:openstack",
+                avatar_size: 32,
+                count: 10,
+                loading_text: "loading tweets..."
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.middleware.html" title="middleware Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keystone.identity.backends.html" title="backends Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" >keystone Package</a> &raquo;</li>
+          <li><a href="keystone.identity.html" >identity Package</a> &raquo;</li>
+          <li><a href="keystone.identity.backends.html" accesskey="U">backends Package</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">ldap Package</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">ldap</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-keystone.identity.backends.ldap.core"><tt class="docutils literal"><span class="pre">core</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="keystone.identity.backends.html"
+                                  title="previous chapter">backends Package</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="keystone.middleware.html"
+                                  title="next chapter">middleware Package</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/keystone.identity.backends.ldap.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ldap-package">
+<h1>ldap Package<a class="headerlink" href="#ldap-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">ldap</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-keystone.identity.backends.ldap"></span></div>
+<div class="section" id="module-keystone.identity.backends.ldap.core">
+<span id="core-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">core</span></tt> Module<a class="headerlink" href="#module-keystone.identity.backends.ldap.core" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="keystone.identity.backends.ldap.core.ApiShim">
+<em class="property">class </em><tt class="descclassname">keystone.identity.backends.ldap.core.</tt><tt class="descname">ApiShim</tt><big>(</big><em>conf</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.ApiShim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Quick singleton-y shim to get around recursive dependencies.</p>
+<p>NOTE(termie): this should be removed and the cross-api code
+should be moved into the driver itself.</p>
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.ApiShim.role">
+<tt class="descname">role</tt><a class="headerlink" href="#keystone.identity.backends.ldap.core.ApiShim.role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.ApiShim.tenant">
+<tt class="descname">tenant</tt><a class="headerlink" href="#keystone.identity.backends.ldap.core.ApiShim.tenant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.ApiShim.user">
+<tt class="descname">user</tt><a class="headerlink" href="#keystone.identity.backends.ldap.core.ApiShim.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.identity.backends.ldap.core.ApiShimMixin">
+<em class="property">class </em><tt class="descclassname">keystone.identity.backends.ldap.core.</tt><tt class="descname">ApiShimMixin</tt><a class="headerlink" href="#keystone.identity.backends.ldap.core.ApiShimMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Mixin to share some ApiShim code. Remove me.</p>
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.ApiShimMixin.role_api">
+<tt class="descname">role_api</tt><a class="headerlink" href="#keystone.identity.backends.ldap.core.ApiShimMixin.role_api" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.ApiShimMixin.tenant_api">
+<tt class="descname">tenant_api</tt><a class="headerlink" href="#keystone.identity.backends.ldap.core.ApiShimMixin.tenant_api" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.ApiShimMixin.user_api">
+<tt class="descname">user_api</tt><a class="headerlink" href="#keystone.identity.backends.ldap.core.ApiShimMixin.user_api" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.identity.backends.ldap.core.Identity">
+<em class="property">class </em><tt class="descclassname">keystone.identity.backends.ldap.core.</tt><tt class="descname">Identity</tt><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.identity.html#keystone.identity.core.Driver" title="keystone.identity.core.Driver"><tt class="xref py py-class docutils literal"><span class="pre">keystone.identity.core.Driver</span></tt></a></p>
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.add_role_to_user_and_tenant">
+<tt class="descname">add_role_to_user_and_tenant</tt><big>(</big><em>user_id</em>, <em>tenant_id</em>, <em>role_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.add_role_to_user_and_tenant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.add_user_to_tenant">
+<tt class="descname">add_user_to_tenant</tt><big>(</big><em>tenant_id</em>, <em>user_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.add_user_to_tenant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.authenticate">
+<tt class="descname">authenticate</tt><big>(</big><em>user_id=None</em>, <em>tenant_id=None</em>, <em>password=None</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.authenticate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authenticate based on a user, tenant and password.</p>
+<p>Expects the user object to have a password field and the tenant to be
+in the list of tenants on the user.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.create_metadata">
+<tt class="descname">create_metadata</tt><big>(</big><em>user_id</em>, <em>tenant_id</em>, <em>metadata</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.create_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.create_role">
+<tt class="descname">create_role</tt><big>(</big><em>role_id</em>, <em>role</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.create_role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.create_tenant">
+<tt class="descname">create_tenant</tt><big>(</big><em>tenant_id</em>, <em>tenant</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.create_tenant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.create_user">
+<tt class="descname">create_user</tt><big>(</big><em>user_id</em>, <em>user</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.create_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.delete_role">
+<tt class="descname">delete_role</tt><big>(</big><em>role_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.delete_role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.get_connection">
+<tt class="descname">get_connection</tt><big>(</big><em>user=None</em>, <em>password=None</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.get_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.get_metadata">
+<tt class="descname">get_metadata</tt><big>(</big><em>user_id</em>, <em>tenant_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.get_role">
+<tt class="descname">get_role</tt><big>(</big><em>role_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.get_role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.get_roles_for_user_and_tenant">
+<tt class="descname">get_roles_for_user_and_tenant</tt><big>(</big><em>user_id</em>, <em>tenant_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.get_roles_for_user_and_tenant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.get_tenant">
+<tt class="descname">get_tenant</tt><big>(</big><em>tenant_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.get_tenant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.get_tenant_by_name">
+<tt class="descname">get_tenant_by_name</tt><big>(</big><em>tenant_name</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.get_tenant_by_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.get_tenants_for_user">
+<tt class="descname">get_tenants_for_user</tt><big>(</big><em>user_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.get_tenants_for_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.get_user">
+<tt class="descname">get_user</tt><big>(</big><em>user_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.get_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.get_user_by_name">
+<tt class="descname">get_user_by_name</tt><big>(</big><em>user_name</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.get_user_by_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.update_tenant">
+<tt class="descname">update_tenant</tt><big>(</big><em>tenant_id</em>, <em>tenant</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.update_tenant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.Identity.update_user">
+<tt class="descname">update_user</tt><big>(</big><em>user_id</em>, <em>user</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.Identity.update_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.identity.backends.ldap.core.RoleApi">
+<em class="property">class </em><tt class="descclassname">keystone.identity.backends.ldap.core.</tt><tt class="descname">RoleApi</tt><big>(</big><em>conf</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.ldap.html#keystone.common.ldap.core.BaseLdap" title="keystone.common.ldap.core.BaseLdap"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.ldap.core.BaseLdap</span></tt></a>, <a class="reference internal" href="#keystone.identity.backends.ldap.core.ApiShimMixin" title="keystone.identity.backends.ldap.core.ApiShimMixin"><tt class="xref py py-class docutils literal"><span class="pre">keystone.identity.backends.ldap.core.ApiShimMixin</span></tt></a></p>
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.DEFAULT_MEMBER_ATTRIBUTE">
+<tt class="descname">DEFAULT_MEMBER_ATTRIBUTE</tt><em class="property"> = 'roleOccupant'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.DEFAULT_MEMBER_ATTRIBUTE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.DEFAULT_OBJECTCLASS">
+<tt class="descname">DEFAULT_OBJECTCLASS</tt><em class="property"> = 'organizationalRole'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.DEFAULT_OBJECTCLASS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.DEFAULT_OU">
+<tt class="descname">DEFAULT_OU</tt><em class="property"> = 'ou=Roles'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.DEFAULT_OU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.DEFAULT_STRUCTURAL_CLASSES">
+<tt class="descname">DEFAULT_STRUCTURAL_CLASSES</tt><em class="property"> = []</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.DEFAULT_STRUCTURAL_CLASSES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.add_user">
+<tt class="descname">add_user</tt><big>(</big><em>role_id</em>, <em>user_id</em>, <em>tenant_id=None</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.add_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.attribute_mapping">
+<tt class="descname">attribute_mapping</tt><em class="property"> = {'name': 'cn'}</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.attribute_mapping" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.create">
+<tt class="descname">create</tt><big>(</big><em>values</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.get">
+<tt class="descname">get</tt><big>(</big><em>id</em>, <em>filter=None</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.get_by_name">
+<tt class="descname">get_by_name</tt><big>(</big><em>name</em>, <em>filter=None</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.get_by_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.get_by_service">
+<tt class="descname">get_by_service</tt><big>(</big><em>service_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.get_by_service" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.get_by_service_get_page">
+<tt class="descname">get_by_service_get_page</tt><big>(</big><em>service_id</em>, <em>marker</em>, <em>limit</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.get_by_service_get_page" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.get_by_service_get_page_markers">
+<tt class="descname">get_by_service_get_page_markers</tt><big>(</big><em>service_id</em>, <em>marker</em>, <em>limit</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.get_by_service_get_page_markers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.get_role_assignments">
+<tt class="descname">get_role_assignments</tt><big>(</big><em>tenant_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.get_role_assignments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.list_global_roles_for_user">
+<tt class="descname">list_global_roles_for_user</tt><big>(</big><em>user_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.list_global_roles_for_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.list_tenant_roles_for_user">
+<tt class="descname">list_tenant_roles_for_user</tt><big>(</big><em>user_id</em>, <em>tenant_id=None</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.list_tenant_roles_for_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.model">
+<tt class="descname">model</tt><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Tenant</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.options_name">
+<tt class="descname">options_name</tt><em class="property"> = 'role'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.options_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.rolegrant_delete">
+<tt class="descname">rolegrant_delete</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.rolegrant_delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.rolegrant_get">
+<tt class="descname">rolegrant_get</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.rolegrant_get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.rolegrant_get_by_ids">
+<tt class="descname">rolegrant_get_by_ids</tt><big>(</big><em>user_id</em>, <em>role_id</em>, <em>tenant_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.rolegrant_get_by_ids" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.rolegrant_get_page">
+<tt class="descname">rolegrant_get_page</tt><big>(</big><em>marker</em>, <em>limit</em>, <em>user_id</em>, <em>tenant_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.rolegrant_get_page" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.rolegrant_get_page_markers">
+<tt class="descname">rolegrant_get_page_markers</tt><big>(</big><em>user_id</em>, <em>tenant_id</em>, <em>marker</em>, <em>limit</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.rolegrant_get_page_markers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.RoleApi.rolegrant_list_by_role">
+<tt class="descname">rolegrant_list_by_role</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.RoleApi.rolegrant_list_by_role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.identity.backends.ldap.core.TenantApi">
+<em class="property">class </em><tt class="descclassname">keystone.identity.backends.ldap.core.</tt><tt class="descname">TenantApi</tt><big>(</big><em>conf</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.ldap.html#keystone.common.ldap.core.BaseLdap" title="keystone.common.ldap.core.BaseLdap"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.ldap.core.BaseLdap</span></tt></a>, <a class="reference internal" href="#keystone.identity.backends.ldap.core.ApiShimMixin" title="keystone.identity.backends.ldap.core.ApiShimMixin"><tt class="xref py py-class docutils literal"><span class="pre">keystone.identity.backends.ldap.core.ApiShimMixin</span></tt></a></p>
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.DEFAULT_ID_ATTRIBUTE">
+<tt class="descname">DEFAULT_ID_ATTRIBUTE</tt><em class="property"> = 'cn'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.DEFAULT_ID_ATTRIBUTE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.DEFAULT_MEMBER_ATTRIBUTE">
+<tt class="descname">DEFAULT_MEMBER_ATTRIBUTE</tt><em class="property"> = 'member'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.DEFAULT_MEMBER_ATTRIBUTE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.DEFAULT_OBJECTCLASS">
+<tt class="descname">DEFAULT_OBJECTCLASS</tt><em class="property"> = 'groupOfNames'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.DEFAULT_OBJECTCLASS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.DEFAULT_OU">
+<tt class="descname">DEFAULT_OU</tt><em class="property"> = 'ou=Groups'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.DEFAULT_OU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.DEFAULT_STRUCTURAL_CLASSES">
+<tt class="descname">DEFAULT_STRUCTURAL_CLASSES</tt><em class="property"> = []</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.DEFAULT_STRUCTURAL_CLASSES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.add_user">
+<tt class="descname">add_user</tt><big>(</big><em>tenant_id</em>, <em>user_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.add_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.attribute_mapping">
+<tt class="descname">attribute_mapping</tt><em class="property"> = {'description': 'desc', 'name': 'ou'}</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.attribute_mapping" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.create">
+<tt class="descname">create</tt><big>(</big><em>values</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.delete">
+<tt class="descname">delete</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.get_by_name">
+<tt class="descname">get_by_name</tt><big>(</big><em>name</em>, <em>filter=None</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.get_by_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.get_role_assignments">
+<tt class="descname">get_role_assignments</tt><big>(</big><em>tenant_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.get_role_assignments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.get_user_tenants">
+<tt class="descname">get_user_tenants</tt><big>(</big><em>user_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.get_user_tenants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of tenants a user has access to</p>
+<p>Always includes default tenants.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.get_users">
+<tt class="descname">get_users</tt><big>(</big><em>tenant_id</em>, <em>role_id=None</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.get_users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.is_empty">
+<tt class="descname">is_empty</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.is_empty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.list_for_user_get_page">
+<tt class="descname">list_for_user_get_page</tt><big>(</big><em>user</em>, <em>marker</em>, <em>limit</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.list_for_user_get_page" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.list_for_user_get_page_markers">
+<tt class="descname">list_for_user_get_page_markers</tt><big>(</big><em>user</em>, <em>marker</em>, <em>limit</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.list_for_user_get_page_markers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.model">
+<tt class="descname">model</tt><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Tenant</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.options_name">
+<tt class="descname">options_name</tt><em class="property"> = 'tenant'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.options_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.remove_user">
+<tt class="descname">remove_user</tt><big>(</big><em>tenant_id</em>, <em>user_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.remove_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.TenantApi.update">
+<tt class="descname">update</tt><big>(</big><em>id</em>, <em>values</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.TenantApi.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.identity.backends.ldap.core.UserApi">
+<em class="property">class </em><tt class="descclassname">keystone.identity.backends.ldap.core.</tt><tt class="descname">UserApi</tt><big>(</big><em>conf</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="keystone.common.ldap.html#keystone.common.ldap.core.BaseLdap" title="keystone.common.ldap.core.BaseLdap"><tt class="xref py py-class docutils literal"><span class="pre">keystone.common.ldap.core.BaseLdap</span></tt></a>, <a class="reference internal" href="#keystone.identity.backends.ldap.core.ApiShimMixin" title="keystone.identity.backends.ldap.core.ApiShimMixin"><tt class="xref py py-class docutils literal"><span class="pre">keystone.identity.backends.ldap.core.ApiShimMixin</span></tt></a></p>
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.UserApi.DEFAULT_ID_ATTRIBUTE">
+<tt class="descname">DEFAULT_ID_ATTRIBUTE</tt><em class="property"> = 'cn'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.DEFAULT_ID_ATTRIBUTE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.UserApi.DEFAULT_OBJECTCLASS">
+<tt class="descname">DEFAULT_OBJECTCLASS</tt><em class="property"> = 'inetOrgPerson'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.DEFAULT_OBJECTCLASS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.UserApi.DEFAULT_OU">
+<tt class="descname">DEFAULT_OU</tt><em class="property"> = 'ou=Users'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.DEFAULT_OU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.UserApi.DEFAULT_STRUCTURAL_CLASSES">
+<tt class="descname">DEFAULT_STRUCTURAL_CLASSES</tt><em class="property"> = ['person']</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.DEFAULT_STRUCTURAL_CLASSES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.UserApi.attribute_ignore">
+<tt class="descname">attribute_ignore</tt><em class="property"> = ['tenant_id', 'enabled', 'tenants']</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.attribute_ignore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.UserApi.attribute_mapping">
+<tt class="descname">attribute_mapping</tt><em class="property"> = {'password': 'userPassword', 'name': 'sn'}</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.attribute_mapping" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.check_password">
+<tt class="descname">check_password</tt><big>(</big><em>user_id</em>, <em>password</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.check_password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.create">
+<tt class="descname">create</tt><big>(</big><em>values</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.delete">
+<tt class="descname">delete</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.get_by_email">
+<tt class="descname">get_by_email</tt><big>(</big><em>email</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.get_by_email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.get_by_name">
+<tt class="descname">get_by_name</tt><big>(</big><em>name</em>, <em>filter=None</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.get_by_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.get_by_tenant">
+<tt class="descname">get_by_tenant</tt><big>(</big><em>user_id</em>, <em>tenant_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.get_by_tenant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.UserApi.model">
+<tt class="descname">model</tt><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">User</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.UserApi.options_name">
+<tt class="descname">options_name</tt><em class="property"> = 'user'</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.options_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.update">
+<tt class="descname">update</tt><big>(</big><em>id</em>, <em>values</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.user_role_add">
+<tt class="descname">user_role_add</tt><big>(</big><em>values</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.user_role_add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.user_roles_by_tenant">
+<tt class="descname">user_roles_by_tenant</tt><big>(</big><em>user_id</em>, <em>tenant_id</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.user_roles_by_tenant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.users_get_by_tenant_get_page">
+<tt class="descname">users_get_by_tenant_get_page</tt><big>(</big><em>tenant_id</em>, <em>role_id</em>, <em>marker</em>, <em>limit</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.users_get_by_tenant_get_page" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.users_get_by_tenant_get_page_markers">
+<tt class="descname">users_get_by_tenant_get_page_markers</tt><big>(</big><em>tenant_id</em>, <em>role_id</em>, <em>marker</em>, <em>limit</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.users_get_by_tenant_get_page_markers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.users_get_page">
+<tt class="descname">users_get_page</tt><big>(</big><em>marker</em>, <em>limit</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.users_get_page" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="keystone.identity.backends.ldap.core.UserApi.users_get_page_markers">
+<tt class="descname">users_get_page_markers</tt><big>(</big><em>marker</em>, <em>limit</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserApi.users_get_page_markers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="keystone.identity.backends.ldap.core.UserRoleAssociation">
+<em class="property">class </em><tt class="descclassname">keystone.identity.backends.ldap.core.</tt><tt class="descname">UserRoleAssociation</tt><big>(</big><em>user_id=None</em>, <em>role_id=None</em>, <em>tenant_id=None</em>, <em>*args</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserRoleAssociation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Role Grant model.</p>
+<dl class="attribute">
+<dt id="keystone.identity.backends.ldap.core.UserRoleAssociation.hints">
+<tt class="descname">hints</tt><em class="property"> = {'maps': {'roleId': 'role_id', 'userId': 'user_id', 'tenantId': 'tenant_id'}, 'contract_attributes': ['id', 'role_id', 'user_id', 'tenant_id'], 'types': [('user_id', &lt;type 'basestring'&gt;), ('tenant_id', &lt;type 'basestring'&gt;)]}</em><a class="headerlink" href="#keystone.identity.backends.ldap.core.UserRoleAssociation.hints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="keystone.middleware.html" title="middleware Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keystone.identity.backends.html" title="backends Package"
+             >previous</a> |</li>
+        <li><a href="index.html">keystone 2012.1-dev documentation</a> &raquo;</li>
+          <li><a href="modules.html" >keystone</a> &raquo;</li>
+          <li><a href="keystone.html" >keystone Package</a> &raquo;</li>
+          <li><a href="keystone.identity.html" >identity Package</a> &raquo;</li>
+          <li><a href="keystone.identity.backends.html" >backends Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, OpenStack, LLC.
+      Last updated on Fri Jun 8 10:00:02 2012, commit 84a7f37.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

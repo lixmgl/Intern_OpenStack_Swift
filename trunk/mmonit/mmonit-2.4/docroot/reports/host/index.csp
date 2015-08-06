@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <link href="../../css/main.css" media="screen" rel="Stylesheet">
+    <link href="../../reports/assets/reports.css" media="screen" rel="Stylesheet">
+
+    <script src="../../js/mmonit.js"></script>
+    <script src="../../build/yuiloader/yuiloader-min.js"></script>
+    <script src="../../reports/assets/reports.js"></script>
+
+    <title>
+        M/Monit Reports | Host 
+    </title>
+
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="Wrapper">
+        <div id="Header">
+            <div id="Logout" title="Logout">
+                <a href="../../login/logout.csp"></a>
+            </div>
+            <h1 id="Logo">
+                <a href="../../"></a>
+            </h1>
+            <div>
+                <ul id="Nav">
+                    <li>
+                            <a href="../../index.csp"><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="../../status/"><span>Status</span></a>
+                        <ul>
+                            <li><a href="../../status/">Overview</a></li>
+                            <li><a href="../../status/topography">Topography</a></li>
+                        </ul>
+                    </li>
+                    <li id="current">
+                        <a href="../../reports/"><span>Reports</span></a>
+                    </li>
+                    <li>
+                        <a href="../../admin/"><span>Admin</span></a>
+                        <ul>
+                            <li><a href="../../admin/">Overview</a></li>
+                            <li><a href="../../admin/hosts/">Hosts</a></li>
+                            <li><a href="../../admin/groups/">Groups</a></li>
+                            <li><a href="../../admin/users/">Users</a></li>
+                            <li><a href="../../admin/rules/">Alerts</a></li>
+        				</ul>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Header -->
+        
+        <div id="Title">
+            <div class="sub-menu">
+                <ul class="piped">
+                    <li class="first" ><a href="../../reports/">Overview</a></li>
+                    <li><a href="../../reports/events/">Events</a></li>
+                </ul>
+            </div>
+            <h1>Reports for <?cs var:Host.name ?><div id="range-value"></div></h1>
+        </div> <!-- Title -->
+        
+        <div id="Main" class="clearfix">
+            
+            <div id="Area">
+                
+                <div id="mytabs" class="yui-navset" style="visibility:hidden">
+                    <ul class="yui-nav">
+                        <li class="selected"><a href="#tab1"><em>Services</em></a></li>
+                    </ul>            
+                    <div class="yui-content">
+                        <div id="tab1" style="padding: 10px;">
+                            <!-- SLA table -->
+                            <table>
+                                <tr>
+                                    <td>
+                                        <!-- Range selector -->
+                                        <div id="range-selector">
+                                            <div tabindex="-1" id="slider-background" class="yui-h-slider">
+                                                <span id="slider-background-blue"></span>
+                                                <div id="slider-thumb" class="yui-slider-thumb">
+                                                    <img src="../../reports/assets/slider-thumb.png" width="21" height="21" alt="Thumb">
+                                                </div>
+                                                <img src="../../img/spinner.gif" id="spinner">
+                                            </div>
+                                        </div>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <h2>Services Uptime</h2>
+                                                    <div id="Uptime">0%</div>
+                                                    <p>Average uptime of all services</p>
+                                                </td>
+                                                <td>
+                                                    <h2>Services Downtime</h2>
+                                                    <div id="Downtime">0</div>
+                                                    <p>Average downtime of all services</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width:100%">
+                                            <div id="mytable"></div>
+                                            <div class="caption dark-grey-text">
+                                                Service Uptime/Downtime for the range.
+                                                <a href="#" onclick="this.innerHTML=MMONIT.layer.toggle('help') ? 'Less...' : 'More...';return false;">More...</a>
+                                                <div id="help" style="display:none;">
+                                                    <p>
+                                                        This table show uptime/downtime of services monitored by Monit on the host
+                                                        <?cs var:Host.name ?>. The uptime in the table above is based on both
+                                                        succeeded and failed events. Resolution is in minutes and the combined
+                                                        downtime for a service must accumulate to at least one minute to appear as
+                                                        downtime for the service in the table.
+                                                    </p>
+                                                    <div>
+                                                        <p>
+                                                            How uptime/downtime is calculated:
+                                                        </p>
+                                                        <ol>
+                                                            <li>
+                                                                If a matching failed and succeeded event is found within the selected range,
+                                                                the difference in time between the two events are counted as downtime.
+                                                            </li>
+                                                            <li>
+                                                                For open ended failed events, that is; failed events without a matching
+                                                                succeed event, the downtime is counted as the difference between
+                                                                <em>now</em> and the failed event's
+                                                                timestamp.
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                    <p>
+                                                        This report work around the fact that Monit does not maintain services (failed)
+                                                        state over a Monit restart/reload nor during service un-monitoring. This may add
+                                                        some inaccuracy to the computed downtime, though in practice it should work well.
+                                                        However, because of these exceptions this report is a beta and the numbers should
+                                                        be seen as more informative than authoritative.
+                                                    </p>
+                                                    <div>
+                                                        <p>
+                                                            Grayed out entries:
+                                                        </p>
+                                                        <ul>
+                                                            <li>
+                                                                If the host is inactive or ignored all services in the table are grey.
+                                                            </li>
+                                                            <li>
+                                                                Services that are in an unmonitored state are marked as grey. Their
+                                                                uptime/downtime is set to zero unless they have actual downtime within the
+                                                                selected date range. Unmonitored services are not included in the total
+                                                                average numbers <em>unless</em> they have downtime.
+                                                            </li>
+                                                            <li>
+                                                                Services that once existed in your Monit control file (.monitrc) and since
+                                                                has been removed may show up if the selected range is wide enough.
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <p>
+                                                        The Events column show number of events for the service <i>within</i> the selected
+                                                        range. Clicking the event link brings up the events log with drill-down filters
+                                                        preset to only show events for the service and within the selected range.
+                                                    </p>
+                                                    
+                                                </div> <!-- help -->
+                                            </div> <!-- caption -->
+                                    </td>
+                                </tr>
+                            </table>
+                        </div> <!-- tab1 -->
+                    </div> <!-- yui-content -->
+                </div> <!-- mytabs -->
+                
+                
+            </div> <!-- Area -->
+
+        </div> <!-- Main -->
+    </div> <!-- Wrapper -->
+    
+    <div id="Footer">
+        <div class="toleft dark-grey-text">
+             Logged in as <?cs var:Request.RemoteUser ?>
+        </div>
+        <div class="toright">
+            <ul class="piped">
+                <li class="first">Copyright &copy; 2011 <a href="http://www.tildeslash.com/">Tildeslash</a>. All Rights Reserved.</li>
+                <li><a href="http://mmonit.com/">M/Monit</a></li>
+                <li><a href="http://mmonit.com/monit/">Monit</a></li>
+                <li><a href="http://mmonit.com/wiki/">Wiki</a></li>
+            </ul>
+        </div>
+    </div> <!-- Footer -->
+
+    <script>
+    var loader = new YAHOO.util.YUILoader();
+    loader.loadOptional = true;
+    loader.base = '../../build/';
+    loader.addModule({
+        name: "hostcss",
+        type:"css",
+        fullpath:"../../reports/assets/host.css",
+        after:['tabview']
+    });
+    loader.require('slider', 'animation', 'datasource', 'datatable', 'dom', 'tabview', 'hostcss');
+    loader.insert({
+        filter: 'DEBUG',
+        onSuccess: function() {
+            YAHOO.util.Event.onDOMReady(function() {
+                
+                var tabView = new YAHOO.widget.TabView('mytabs');
+                MMONIT.layer.vshow('mytabs');
+                
+                /* Datatable Formatter: Add events link if we have events */
+                var myEventsFormatter = function(elCell, oRecord, oColumn, oData) {
+                    if (parseInt(oRecord.getData("events")) > 0)
+                        elCell.innerHTML = '<a href="../events/?Events_Host=<?cs var:Host.name ?>' + '&Events_ServiceNameId='+oRecord.getData("id") + '&Events_DateFrom=' + myReportConfig.dateFrom + '&Events_Sort=date&Events_Dir=asc">' + oRecord.getData("events") + '</a>';
+                    else
+                        elCell.innerHTML = oRecord.getData("events");
+                };
+ 
+                var myReportConfig = {
+                    columnLabel:"Service",
+                    searchLabel:'Find service..',
+                    homepath:"../../../",
+                    datasource:"../../json/reports/host/overview?hostid=<?cs var:Host.id ?>",
+                    eventsLinkFormatter: myEventsFormatter,
+                    rowsclickable:false,
+                    rowsperpage:<?cs alt:session.Report_Rows ?>15<?cs /alt ?>
+                };
+                
+                Report.start(myReportConfig);
+                                
+            }); // onDOMReady
+        } // onSuccess
+    }); // loader.insert
+    </script>
+
+</body>
+
+</html>
+

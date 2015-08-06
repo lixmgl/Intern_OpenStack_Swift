@@ -1,0 +1,8 @@
+Package: cisco-graphite
+Version: 0.10.0 
+Section: base
+Priority: optional
+Architecture: all
+Depends: memcached, python-cairo, python-pysqlite2, python-memcache, python-ldap, python-django-tagging, libapache2-mod-python, libapache2-mod-wsgi, python-txamqp
+Maintainer: Chad Malfait cmalfait@cisco.com
+Description: cisco-graphite

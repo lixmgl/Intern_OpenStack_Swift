@@ -1,0 +1,87 @@
+import swiftconsole.ui.commands as _commands
+import argparse
+
+def parse_argument(args):
+
+    if args.func == "show_ring":
+        ring = args.ring
+        if ring == None:
+            print "the following arguments are required: ring"
+            return
+        else:
+            _commands.show_ring(ring)
+    elif args.func == "push_config":
+        servertype = args.servertype
+        if servertype == None:
+            print "the following arguments are required: servertype"
+            return
+        else:
+            _commands.push_config(servertype)
+    elif args.func == "node_status":
+        servertype = args.servertype
+        if servertype == None:
+            print "the following arguments are required: servertype"
+            return
+        else:
+            _commands.node_status(servertype)
+    elif args.func == "remove_storagenode":
+        node = args.node
+        if node == None:
+            print "the following arguments are required: node"
+            return
+        else:
+            _commands.remove_storagenode(node) 
+    elif args.func == "add_storagenode":
+        node = args.node
+        if node == None:
+            print "the following arguments are required: node"
+            return
+        else:
+            _commands.add_storagenode(node) 
+    elif args.func == "remove_device":
+        devices = args.devices
+        if devices == None:
+            print "the following arguments are required: devices"
+            return
+        else:
+            _commands.remove_device(devices)
+    elif args.func == "add_device":
+        devices = args.devices
+        if devices == None:
+            print "the following arguments are required: devices"
+            return
+        else:
+            _commands.add_device(devices)
+    else:
+        func_name = args.func
+        _commands.__dict__[func_name]()
+
+    return
+            
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="swiftconsole commands!")
+    parser.add_argument("func",
+                        type=str,
+                        choices=["show_ring", "push_config", "rebuild_ring", "push_ring", "rebalance_ring", "remove_device", "add_device", "remove_storagenode", "add_storagenode", "node_status"],
+                        help="one swiftconsole command")
+    parser.add_argument("-r",
+                        "--ring",
+                        type=str,
+                        choices=["account", "container", "object"],
+                        help="accout/container/object")
+    parser.add_argument("-d",
+                        "--devices",
+                        type=str,
+                        help="devices: The list of devices which we want to remove: ['IP:PORT/sda6',.....]")
+    parser.add_argument("-t",
+                        "--servertype",
+                        type=str,
+                        choices=["storage-node", "proxy-node", "all"],
+                        help="storage-node/proxy-node/all")
+    parser.add_argument("-n",
+                        "--node",
+                        type=str,
+                        help="hostname of the storage node")
+    arguments = parser.parse_args()
+
+    parse_argument(arguments)

@@ -1,0 +1,1 @@
+link ../../../../../../share/pyshared/keystone/contrib/admin_crud/core.py

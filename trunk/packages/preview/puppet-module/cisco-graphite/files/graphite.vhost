@@ -1,0 +1,30 @@
+Listen 8081
+
+WSGISocketPrefix run/wsgi
+
+<VirtualHost *:8081>
+        ServerName graphite
+        DocumentRoot "/opt/graphite/webapp"
+        ErrorLog /opt/graphite/storage/log/webapp/error.log
+        CustomLog /opt/graphite/storage/log/webapp/access.log common
+
+        WSGIScriptAlias / /opt/graphite/conf/graphite.wsgi 
+
+        Alias /content/ /opt/graphite/webapp/content/
+        <Location "/content/">
+                SetHandler None
+        </Location>
+
+        Alias /media/ "/usr/lib/python2.7/dist-packages/django/contrib/admin/media/"
+        <Location "/media/">
+                SetHandler None
+        </Location>
+
+        # The graphite.wsgi file has to be accessible by apache. It won't
+        # be visible to clients because of the DocumentRoot though.
+        <Directory /opt/graphite/conf/>
+                Order deny,allow
+                Allow from all
+        </Directory>
+
+</VirtualHost>
